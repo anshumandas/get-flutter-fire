@@ -1,3 +1,5 @@
+// ignore_for_file: inference_failure_on_instance_creation
+
 import 'package:get/get.dart';
 
 import '../middleware/auth_middleware.dart';
@@ -39,7 +41,7 @@ class AppPages {
             EnsureNotAuthedMiddleware(),
           ],
           name: _Paths.LOGIN,
-          page: () => LoginView(),
+          page: () => const LoginView(),
           binding: LoginBinding(),
         ),
         GetPage(

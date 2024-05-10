@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:get/get.dart';
 
 import '../../services/auth_service.dart';

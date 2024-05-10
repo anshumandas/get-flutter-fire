@@ -10,6 +10,9 @@ dependencies:
   get: 4.6.6
   flutter: 
     sdk: flutter
+  firebase_core: ^2.31.0
+  firebase_ui_auth: ^1.14.0
+  firebase_auth: ^4.19.5
 
 dev_dependencies: 
   flutter_lints: 3.0.2

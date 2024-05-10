@@ -1,3 +1,5 @@
+// ignore_for_file: inference_failure_on_function_invocation
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -5,18 +7,20 @@ import '../../../routes/app_pages.dart';
 import '../controllers/products_controller.dart';
 
 class ProductsView extends GetView<ProductsController> {
+  const ProductsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: controller.loadDemoProductsFromSomeWhere,
-        label: Text('Add'),
+        label: const Text('Add'),
       ),
       body: Column(
         children: [
-          Hero(
+          const Hero(
             tag: 'heroLogo',
-            child: const FlutterLogo(),
+            child: FlutterLogo(),
           ),
           Expanded(
             child: Obx(
