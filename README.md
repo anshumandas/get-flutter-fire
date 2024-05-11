@@ -18,4 +18,5 @@ Step 3: Integrate FlutterFire Authentication
 - To compile the code ensure that you generate your own firebase_options.dart by running
 
   `flutterfire configure`
-  Step 4: Add Google OAuth [https://firebase.google.com/codelabs/firebase-auth-in-flutter-apps#6]. Note ensure you do the steps for Android and iOS as the code for it is not in Github
+
+Step 4: Add Google OAuth [https://firebase.google.com/codelabs/firebase-auth-in-flutter-apps#6]. Note ensure you do the steps for Android and iOS as the code for it is not in Github
