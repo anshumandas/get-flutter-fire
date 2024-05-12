@@ -1,8 +1,10 @@
-// ignore_for_file: inference_failure_on_instance_creation
-
 import 'package:get/get.dart';
 
 import '../middleware/auth_middleware.dart';
+import '../modules/cart/bindings/cart_binding.dart';
+import '../modules/cart/views/cart_view.dart';
+import '../modules/checkout/bindings/checkout_binding.dart';
+import '../modules/checkout/views/checkout_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -20,6 +22,8 @@ import '../modules/root/views/root_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 
+// ignore_for_file: inference_failure_on_instance_creation
+
 part 'app_routes.dart';
 
 class AppPages {
@@ -30,7 +34,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: '/',
-      page: () => RootView(),
+      page: () => const RootView(),
       binding: RootBinding(),
       participatesInRootNavigator: true,
       preventDuplicates: true,
@@ -38,7 +42,7 @@ class AppPages {
         GetPage(
           middlewares: [
             //only enter this route when not authed
-            EnsureNotAuthedMiddleware(),
+            EnsureNotAuthedOrGuestMiddleware(),
           ],
           name: _Paths.LOGIN,
           page: () => const LoginView(),
@@ -47,7 +51,7 @@ class AppPages {
         GetPage(
           preventDuplicates: true,
           name: _Paths.HOME,
-          page: () => HomeView(),
+          page: () => const HomeView(),
           bindings: [
             HomeBinding(),
           ],
@@ -55,30 +59,65 @@ class AppPages {
           children: [
             GetPage(
               name: _Paths.DASHBOARD,
-              page: () => DashboardView(),
+              page: () => const DashboardView(),
               binding: DashboardBinding(),
             ),
             GetPage(
               middlewares: [
                 //only enter this route when authed
-                EnsureAuthMiddleware(),
+                EnsureAuthedAndNotGuestMiddleware(),
               ],
               name: _Paths.PROFILE,
-              page: () => ProfileView(),
+              page: () => const ProfileView(),
               title: 'Profile',
               transition: Transition.size,
               binding: ProfileBinding(),
             ),
             GetPage(
+              middlewares: [
+                //if not logged in then enter as guest
+                EnsureGuestMiddleware(),
+              ],
+              name: _Paths.CART,
+              page: () => const CartView(),
+              title: 'Cart',
+              transition: Transition.fade,
+              binding: CartBinding(),
+              children: [
+                GetPage(
+                  name: _Paths.CART_DETAILS,
+                  page: () => const ProductDetailsView(),
+                  binding: ProductDetailsBinding(),
+                  middlewares: [
+                    //only enter this route when authed
+                    EnsureAuthMiddleware(),
+                  ],
+                )
+              ],
+            ),
+            GetPage(
+              middlewares: [
+                //only enter this route when authed
+                EnsureAuthedAndNotGuestMiddleware(),
+              ],
+              name: _Paths.CHECKOUT,
+              page: () => const CheckoutView(),
+              binding: CheckoutBinding(),
+            ),
+            GetPage(
+              middlewares: [
+                //only enter this route when admin
+                EnsureAdminMiddleware(),
+              ],
               name: _Paths.PRODUCTS,
-              page: () => ProductsView(),
+              page: () => const ProductsView(),
               title: 'Products',
               transition: Transition.zoom,
               binding: ProductsBinding(),
               children: [
                 GetPage(
                   name: _Paths.PRODUCT_DETAILS,
-                  page: () => ProductDetailsView(),
+                  page: () => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
                   middlewares: [
                     //only enter this route when authed

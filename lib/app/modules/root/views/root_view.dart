@@ -22,7 +22,7 @@ class RootView extends GetView<RootController> {
             title: Text(title ?? ''),
             centerTitle: true,
             actions: [
-              Container(
+              Obx(() => Container(
                   margin: const EdgeInsets.only(right: 15),
                   child: IconButton(
                       // padding: EdgeInsets.zero,
@@ -37,7 +37,7 @@ class RootView extends GetView<RootController> {
                           AuthService.to.logout();
                         }
                         Get.rootDelegate.toNamed(Routes.LOGIN);
-                      }))
+                      })))
             ],
             // automaticallyImplyLeading: false, //removes drawer
           ),

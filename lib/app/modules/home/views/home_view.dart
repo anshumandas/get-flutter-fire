@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/services/auth_service.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
@@ -16,7 +17,8 @@ class HomeView extends GetView<HomeController> {
         //This router outlet handles the appbar and the bottom navigation bar
         final currentLocation = currentRoute?.location;
         var currentIndex = 0;
-        if (currentLocation?.startsWith(Routes.PRODUCTS) == true) {
+        if (currentLocation?.startsWith(Routes.PRODUCTS) == true ||
+            currentLocation?.startsWith(Routes.CART) == true) {
           currentIndex = 2;
         }
         if (currentLocation?.startsWith(Routes.PROFILE) == true) {
@@ -37,25 +39,27 @@ class HomeView extends GetView<HomeController> {
                 case 1:
                   delegate.toNamed(Routes.PROFILE);
                 case 2:
-                  delegate.toNamed(Routes.PRODUCTS);
+                  AuthService.to.isAdmin
+                      ? delegate.toNamed(Routes.PRODUCTS)
+                      : delegate.toNamed(Routes.CART);
                 default:
               }
             },
-            items: const [
+            items: [
               // _Paths.HOME + [Empty]
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
               ),
               // _Paths.HOME + Routes.PROFILE
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.account_box_rounded),
                 label: 'Profile',
               ),
               // _Paths.HOME + _Paths.PRODUCTS
               BottomNavigationBarItem(
-                icon: Icon(Icons.account_box_rounded),
-                label: 'Products',
+                icon: const Icon(Icons.trolley),
+                label: AuthService.to.isAdmin ? 'Products' : 'Cart',
               ),
             ],
           ),
