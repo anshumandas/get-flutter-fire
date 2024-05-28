@@ -33,6 +33,7 @@ class AuthService extends GetxService {
   }
 
   void logout() {
+    //TODO if anonymous then delete the user after signout
     _auth.signOut();
     _firebaseUser.value = null;
   }

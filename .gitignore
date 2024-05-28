@@ -61,11 +61,9 @@ android/app/src/main/res/values-night/styles.xml
 android/app/src/profile/AndroidManifest.xml
 android/gradle/wrapper/gradle-wrapper.properties
 ios/.gitignore
-ios/Flutter/AppFrameworkInfo.plist
 ios/Flutter/Debug.xcconfig
 ios/Flutter/Release.xcconfig
 ios/Runner/AppDelegate.swift
-ios/Runner/Info.plist
 ios/Runner/Runner-Bridging-Header.h
 ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
 ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
@@ -114,7 +112,6 @@ macos/Flutter/Flutter-Release.xcconfig
 macos/Flutter/GeneratedPluginRegistrant.swift
 macos/Runner/AppDelegate.swift
 macos/Runner/DebugProfile.entitlements
-macos/Runner/Info.plist
 macos/Runner/MainFlutterWindow.swift
 macos/Runner/Release.entitlements
 macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png

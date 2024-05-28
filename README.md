@@ -22,3 +22,20 @@ Step 3: Integrate FlutterFire Authentication
 Step 4: Add Google OAuth [https://firebase.google.com/codelabs/firebase-auth-in-flutter-apps#6]. Note ensure you do the steps for Android and iOS as the code for it is not in Github
 
 Step 5: Add Guest User/Anonymous login with a Cart and Checkout use case [https://firebase.google.com/docs/auth/flutter/anonymous-auth]
+
+* TODO delete unlinked anonymous user post logout
+
+Step 6: Add ImagePicker and Firebase Storage for profile image
+
+* Create PopupMenu button for web [https://api.flutter.dev/flutter/material/PopupMenuButton-class.html]
+* BottomSheet for phones and single file button for desktops
+* GetX and Image Picker [https://stackoverflow.com/questions/66559553/flutter-imagepicker-with-getx]
+* Add FilePicker [https://medium.com/@onuaugustine07/pick-any-file-file-picker-flutter-f82c0144e27c]
+* Firebase Storage [https://mercyjemosop.medium.com/select-and-upload-images-to-firebase-storage-flutter-6fac855970a9] and [https://firebase.google.com/docs/storage/flutter/start]
+
+  Modify the Firebase Rules
+  `service firebase.storage { match /b/{bucket}/o { match /{allPaths=**} { allow write: if request.auth.uid != null; allow read: if true; } } }`
+
+  Fix CORS [https://stackoverflow.com/questions/37760695/firebase-storage-and-access-control-allow-origin]
+  
+* PList additions [https://medium.com/unitechie/flutter-tutorial-image-picker-from-camera-gallery-c27af5490b74]
