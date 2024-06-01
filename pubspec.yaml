@@ -32,5 +32,8 @@ flutter:
     - family: SocialIcons
       fonts:
         - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
+  assets:
+    - assets/images/flutterfire_300x.png
+    - assets/images/dash.png
   uses-material-design: true
 

@@ -29,7 +29,7 @@ class LoginView extends GetView<LoginController> {
             padding: const EdgeInsets.all(20),
             child: AspectRatio(
               aspectRatio: 1,
-              child: Image.asset('flutterfire_300x.png'),
+              child: Image.asset('assets/images/flutterfire_300x.png'),
             ),
           );
         },
@@ -55,7 +55,7 @@ class LoginView extends GetView<LoginController> {
             padding: const EdgeInsets.all(20),
             child: AspectRatio(
               aspectRatio: 1,
-              child: Image.asset('flutterfire_300x.png'),
+              child: Image.asset('assets/images/flutterfire_300x.png'),
             ),
           );
         },
@@ -72,7 +72,7 @@ class LoginView extends GetView<LoginController> {
             padding: const EdgeInsets.all(20),
             child: AspectRatio(
               aspectRatio: 1,
-              child: Image.asset('flutterfire_300x.png'),
+              child: Image.asset('assets/images/flutterfire_300x.png'),
             ),
           );
         },
@@ -96,7 +96,7 @@ class LoginView extends GetView<LoginController> {
             padding: const EdgeInsets.all(20),
             child: AspectRatio(
               aspectRatio: 1,
-              child: Image.asset('flutterfire_300x.png'),
+              child: Image.asset('assets/images/flutterfire_300x.png'),
             ),
           );
         },

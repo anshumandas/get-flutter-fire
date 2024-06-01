@@ -78,48 +78,55 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
 //This should be a modal bottom sheet if on Mobile (See https://mercyjemosop.medium.com/select-and-upload-images-to-firebase-storage-flutter-6fac855970a9)
 
   void _showPicker(context) {
-    Get.bottomSheet(Container(
-      height: 150,
-      color: Colors.greenAccent,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
-              onTap: () async {
-                Get.back();
-                widget.callback(await getImage(ImageSource.gallery));
-              }),
-          ListTile(
-              leading: const Icon(Icons.photo_camera),
-              title: const Text('Camera'),
-              onTap: () async {
-                Get.back();
-                widget.callback(await getImage(ImageSource.camera));
-              }),
-          ListTile(
-              leading: const Icon(Icons.file_upload),
-              title: const Text('File'),
-              onTap: () async {
-                Get.back();
-                widget.callback(await getFile());
-                // Navigator.of(context).pop();
-              }),
-        ],
+    Get.bottomSheet(
+      SizedBox(
+        height: 180,
+        child: ListView(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text(
+                  'Gallery',
+                ),
+                onTap: () async {
+                  Get.back();
+                  widget.callback(await getImage(ImageSource.gallery));
+                }),
+            ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () async {
+                  Get.back();
+                  widget.callback(await getImage(ImageSource.camera));
+                }),
+            ListTile(
+                leading: const Icon(Icons.file_upload),
+                title: const Text('File'),
+                hoverColor: Colors.black,
+                onTap: () async {
+                  Get.back();
+                  widget.callback(await getFile());
+                  // Navigator.of(context).pop();
+                }),
+          ],
+        ),
       ),
-    ));
+      backgroundColor: Colors.white,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return !(GetPlatform.isAndroid || GetPlatform.isIOS)
-        ? IconButton(
-            onPressed: () async => widget.callback(await getFile()),
-            icon: const Icon(Icons.image),
-            tooltip: 'Pick an Image from',
-          )
-        : Get.mediaQuery.orientation == Orientation.portrait
+    return
+        // !(GetPlatform.isAndroid || GetPlatform.isIOS)
+        //     ? IconButton(
+        //         onPressed: () async => widget.callback(await getFile()),
+        //         icon: const Icon(Icons.image),
+        //         tooltip: 'Pick an Image from',
+        //       )
+        //     :
+        Get.mediaQuery.orientation == Orientation.portrait
             // : Get.context!.isPortrait
             ? IconButton(
                 onPressed: () => _showPicker(context),

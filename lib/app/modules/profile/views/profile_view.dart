@@ -27,7 +27,8 @@ class ProfileView extends GetView<ProfileController> {
       avatar: controller.photoURL == null
           ? Align(
               //we can add a check for the image availabity, default placeholder is shown by the FlutterFire plugin
-              child: Image.asset('dash.png', width: 300, fit: BoxFit.fitWidth),
+              child: Image.asset('assets/images/dash.png',
+                  width: 300, fit: BoxFit.fitWidth),
             )
           : Image.network(controller.photoURL!,
               width: 300,
