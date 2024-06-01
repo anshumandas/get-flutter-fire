@@ -23,7 +23,7 @@ Step 4: Add Google OAuth [https://firebase.google.com/codelabs/firebase-auth-in-
 
 Step 5: Add Guest User/Anonymous login with a Cart and Checkout use case [https://firebase.google.com/docs/auth/flutter/anonymous-auth]
 
-* TODO delete unlinked anonymous user post logout
+* delete unlinked anonymous user post logout
 
 Step 6: Add ImagePicker and Firebase Storage for profile image
 
@@ -37,5 +37,4 @@ Step 6: Add ImagePicker and Firebase Storage for profile image
   `service firebase.storage { match /b/{bucket}/o { match /{allPaths=**} { allow write: if request.auth.uid != null; allow read: if true; } } }`
 
   Fix CORS [https://stackoverflow.com/questions/37760695/firebase-storage-and-access-control-allow-origin]
-  
 * PList additions [https://medium.com/unitechie/flutter-tutorial-image-picker-from-camera-gallery-c27af5490b74]
