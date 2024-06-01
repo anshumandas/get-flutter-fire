@@ -103,7 +103,6 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
             ListTile(
                 leading: const Icon(Icons.file_upload),
                 title: const Text('File'),
-                hoverColor: Colors.black,
                 onTap: () async {
                   Get.back();
                   widget.callback(await getFile());
@@ -118,15 +117,13 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // !(GetPlatform.isAndroid || GetPlatform.isIOS)
-        //     ? IconButton(
-        //         onPressed: () async => widget.callback(await getFile()),
-        //         icon: const Icon(Icons.image),
-        //         tooltip: 'Pick an Image from',
-        //       )
-        //     :
-        Get.mediaQuery.orientation == Orientation.portrait
+    return !(GetPlatform.isAndroid || GetPlatform.isIOS)
+        ? IconButton(
+            onPressed: () async => widget.callback(await getFile()),
+            icon: const Icon(Icons.image),
+            tooltip: 'Pick an Image from',
+          )
+        : Get.mediaQuery.orientation == Orientation.portrait
             // : Get.context!.isPortrait
             ? IconButton(
                 onPressed: () => _showPicker(context),
