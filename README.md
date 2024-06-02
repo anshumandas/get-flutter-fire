@@ -38,3 +38,12 @@ Step 6: Add ImagePicker and Firebase Storage for profile image
 
   Fix CORS [https://stackoverflow.com/questions/37760695/firebase-storage-and-access-control-allow-origin]
 * PList additions [https://medium.com/unitechie/flutter-tutorial-image-picker-from-camera-gallery-c27af5490b74]
+
+Step 7: Additional Auth flow items
+
+1. Add a Change Password Screen. The Flutter Fire package does not have this screen.
+1. Add ReCaptcha to login flow for password authentication
+1. Add Phone verification [https://firebase.google.com/docs/auth/flutter/phone-auth]
+1. Add 2FA with SMS Pin. This screen is available in the Flutter Fire package
+
+TODO Step 8: Add User Roles using Custom Claims. This requires upgrade of plan as we need to use Firebase Functions

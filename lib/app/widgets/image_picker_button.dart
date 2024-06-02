@@ -118,10 +118,10 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
   @override
   Widget build(BuildContext context) {
     return !(GetPlatform.isAndroid || GetPlatform.isIOS)
-        ? IconButton(
+        ? TextButton.icon(
             onPressed: () async => widget.callback(await getFile()),
             icon: const Icon(Icons.image),
-            tooltip: 'Pick an Image from',
+            label: const Text('Pick an Image'),
           )
         : Get.mediaQuery.orientation == Orientation.portrait
             // : Get.context!.isPortrait

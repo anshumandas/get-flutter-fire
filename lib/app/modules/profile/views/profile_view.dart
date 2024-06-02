@@ -5,11 +5,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../widgets/change_password_dialog.dart';
 import '../../../widgets/image_picker_button.dart';
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
+  ShapeBorder get shape => const CircleBorder();
+  double get size => 120;
+  Color get placeholderColor => Colors.grey;
+
+  Widget _imageFrameBuilder(
+    BuildContext context,
+    Widget? child,
+    int? frame,
+    bool? _,
+  ) {
+    if (frame == null) {
+      return Container(color: placeholderColor);
+    }
+
+    return child!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +41,32 @@ class ProfileView extends GetView<ProfileController> {
       // appBar: AppBar(
       //   title: const Text('User Profile'),
       // ),
-      avatar: controller.photoURL == null
-          ? Align(
-              //we can add a check for the image availabity, default placeholder is shown by the FlutterFire plugin
-              child: Image.asset('assets/images/dash.png',
-                  width: 300, fit: BoxFit.fitWidth),
-            )
-          : Image.network(controller.photoURL!,
-              width: 300,
-              fit: BoxFit
-                  .fitWidth), //null will give the profile image component but it does not refresh the pic when changed
+      avatar: SizedBox(
+        //null will give the profile image component but it does not refresh the pic when changed
+        height: size,
+        width: size,
+        child: ClipPath(
+          clipper: ShapeBorderClipper(shape: shape),
+          clipBehavior: Clip.hardEdge,
+          child: controller.photoURL != null
+              ? Image.network(
+                  controller.photoURL!,
+                  width: size,
+                  height: size,
+                  cacheWidth: size.toInt(),
+                  cacheHeight: size.toInt(),
+                  fit: BoxFit.contain,
+                  frameBuilder: _imageFrameBuilder,
+                )
+              : Center(
+                  child: Image.asset(
+                    'assets/images/dash.png',
+                    width: size,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+        ),
+      ),
       // showDeleteConfirmationDialog: true, //this does not work properly. Possibly a bug in FlutterFire
       actions: [
         SignedOutAction((context) {
@@ -55,10 +88,13 @@ class ProfileView extends GetView<ProfileController> {
       children: [
         //This is to show that we can add custom content here
         const Divider(),
-        const Hero(
-          tag: 'heroLogo',
-          child: FlutterLogo(),
-        ),
+        controller.currentUser?.email != null
+            ? TextButton.icon(
+                onPressed: callChangePwdDialog,
+                label: const Text('Change Password'),
+                icon: const Icon(Icons.password_rounded),
+              )
+            : const SizedBox.shrink(),
         ImagePickerButton((String? path) async {
           if (path != null) {
             //Upload to Store
@@ -71,5 +107,15 @@ class ProfileView extends GetView<ProfileController> {
         })
       ],
     );
+  }
+
+  void callChangePwdDialog() {
+    var dlg = ChangePasswordDialog(controller.currentUser!);
+    Get.defaultDialog(
+        title: "Change Password",
+        content: dlg,
+        textConfirm: "Submit",
+        textCancel: "Cancel",
+        onConfirm: dlg.onSubmit);
   }
 }
