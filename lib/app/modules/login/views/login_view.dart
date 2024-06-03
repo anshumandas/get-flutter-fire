@@ -19,47 +19,51 @@ class LoginView extends GetView<LoginController> {
 
   Widget loginScreen() {
     if (!controller.isLoggedIn) {
-      return SignInScreen(
-        providers: [
-          EmailAuthProvider(),
-          GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
-        ],
-        headerBuilder: (context, constraints, shrinkOffset) {
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: Image.asset('assets/images/flutterfire_300x.png'),
-            ),
-          );
-        },
-        subtitleBuilder: (context, action) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: action == AuthAction.signIn
-                ? const Text('Welcome to Get Flutter Fire, please sign in!')
-                : const Text('New to Get Flutter Fire, please sign up!'),
-          );
-        },
-        footerBuilder: (context, action) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 16),
-            child: Text(
-              'By signing in, you agree to our terms and conditions.',
-              style: TextStyle(color: Colors.grey),
-            ),
-          );
-        },
-        sideBuilder: (context, shrinkOffset) {
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: Image.asset('assets/images/flutterfire_300x.png'),
-            ),
-          );
-        },
-      );
+      return !(GetPlatform.isAndroid || GetPlatform.isIOS) &&
+              controller.robot.isTrue
+          ? recaptcha()
+          : SignInScreen(
+              providers: [
+                EmailAuthProvider(),
+                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
+              ],
+              headerBuilder: (context, constraints, shrinkOffset) {
+                return Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Image.asset('assets/images/flutterfire_300x.png'),
+                  ),
+                );
+              },
+              subtitleBuilder: (context, action) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: action == AuthAction.signIn
+                      ? const Text(
+                          'Welcome to Get Flutter Fire, please sign in!')
+                      : const Text('New to Get Flutter Fire, please sign up!'),
+                );
+              },
+              footerBuilder: (context, action) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Text(
+                    'By signing in, you agree to our terms and conditions.',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                );
+              },
+              sideBuilder: (context, shrinkOffset) {
+                return Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Image.asset('assets/images/flutterfire_300x.png'),
+                  ),
+                );
+              },
+            );
     } else if (controller.isAnon) {
       return RegisterScreen(
         showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
@@ -106,5 +110,14 @@ class LoginView extends GetView<LoginController> {
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate.offNamed(thenTo ?? Routes.HOME);
     return const Scaffold();
+  }
+
+  Widget recaptcha() {
+    //TODO: Use RecaptchaVrifier of FirebaseAuth
+    return Scaffold(
+        body: TextButton(
+      onPressed: () => controller.robot.value = false,
+      child: const Text("Are you a Robot?"),
+    ));
   }
 }
