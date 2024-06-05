@@ -50,8 +50,7 @@ class EnsureAdminMiddleware extends GetMiddleware {
     // you can do whatever you want here
     // but it's preferable to make this method fast
 
-    if (!AuthService.to.isLoggedInValue || true) {
-      //TODO: also add admin role check
+    if (!AuthService.to.isLoggedInValue || AuthService.to.isAdmin) {
       final newRoute = Routes.LOGIN_THEN(route.location);
       return GetNavConfig.fromRoute(newRoute);
     }

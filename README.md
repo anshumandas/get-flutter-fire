@@ -51,4 +51,7 @@ Step 7: Additional Auth flow items
 
 Step 8: Add Firebase Emulator to test on laptop instead of server so that we can use Functions without upgrading the plan to Blaze. See [https://firebase.google.com/docs/emulator-suite/install_and_configure]
 
-Step 9: TODO - Add User Roles using Custom Claims. This requires upgrade of plan as we need to use Firebase Functions
+Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we need to use Firebase Functions
+
+1. In Emulator we can add user via http://127.0.0.1:4000/auth and add custom claim via UI as  {"role":"admin"}. The effect is shown via Product page in Nav instead of Cart page for admin user.
+2. TODO - add Function to add the custom claim based on app request by another admin

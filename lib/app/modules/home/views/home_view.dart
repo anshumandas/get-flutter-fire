@@ -32,14 +32,14 @@ class HomeView extends GetView<HomeController> {
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,
-            onTap: (value) {
+            onTap: (value) async {
               switch (value) {
                 case 0:
                   delegate.toNamed(Routes.HOME);
                 case 1:
                   delegate.toNamed(Routes.PROFILE);
                 case 2:
-                  AuthService.to.isAdmin
+                  await AuthService.to.isAdmin
                       ? delegate.toNamed(Routes.PRODUCTS)
                       : delegate.toNamed(Routes.CART);
                 default:

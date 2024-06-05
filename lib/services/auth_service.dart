@@ -3,23 +3,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+import '../constants.dart';
+
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Rxn<User> _firebaseUser = Rxn<User>();
+  final Rxn<String> _userRole = Rxn<String>();
 
   User? get user => _firebaseUser.value;
 
   @override
   onInit() {
     super.onInit();
+    if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
     _firebaseUser.bindStream(_auth.authStateChanges());
+    _auth.authStateChanges().listen((User? user) {
+      if (user == null) {
+        _userRole.value = null;
+      } else {
+        user.getIdTokenResult().then((token) {
+          _userRole.value = token.claims?["role"];
+        });
+      }
+    });
   }
 
   bool get isLoggedInValue => user != null;
 
-  bool get isAdmin => user != null && false; //TODO
+  bool get isAdmin => user != null && _userRole.value == "admin";
 
   bool get isAnon => user != null && user!.isAnonymous;
 
