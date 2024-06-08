@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  * Import function triggers from their respective submodules:
  *
@@ -8,10 +9,10 @@
  */
 
 // const {onRequest} = require("firebase-functions/v2/https");
-// const logger = require("firebase-functions/logger");
+const logger = require("firebase-functions/logger");
 
-// // Create and deploy your first functions
-// // https://firebase.google.com/docs/functions/get-started
+// Create and deploy functions
+// See: https://firebase.google.com/docs/functions/get-started
 
 // exports.helloWorld = onRequest((request, response) => {
 //   logger.info("Hello logs!", {structuredData: true});
@@ -19,11 +20,27 @@
 // });
 
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+// const {HttpsError} = require("firebase-functions/v2/identity");
 
-exports.makeUppercase = functions.firestore.document("/messages/{documentId}")
-    .onCreate((snap, context) => {
-      const original = snap.data().original;
-      console.log("Uppercasing", context.params.documentId, original);
-      const uppercase = original.toUpperCase();
-      return snap.ref.set({uppercase}, {merge: true});
-    });
+// const app =
+admin.initializeApp();
+
+exports.addUser = functions.auth.user().onCreate((user) => {
+  // This is used to provide admin role to the first user that gets created
+  logger.info("added user: ", user);
+});
+
+exports.beforeUserCreated = functions.auth.user().beforeCreate(async (user, context) => {
+  // Only users of a specific domain can sign up.
+  // if (user && user.email && !user.email.includes("@acme.com")) {
+  //   throw new HttpsError("invalid-argument", "Unauthorized email");
+  // }
+  const listUsersResult = await admin.auth().listUsers(2);
+  if (listUsersResult.users.length == 0) {
+    return {
+      displayName: "Admin",
+      customClaims: {"role": "admin"},
+    };
+  }
+});

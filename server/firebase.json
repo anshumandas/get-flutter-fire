@@ -66,9 +66,6 @@
     "eventarc": {
       "port": 9299
     },
-    "dataconnect": {
-      "port": 9399
-    },
     "ui": {
       "enabled": true,
       "port": 4000

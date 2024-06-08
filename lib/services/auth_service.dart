@@ -11,6 +11,7 @@ class AuthService extends GetxService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Rxn<User> _firebaseUser = Rxn<User>();
   final Rxn<String> _userRole = Rxn<String>();
+  final Rx<bool> robot = RxBool(true);
 
   User? get user => _firebaseUser.value;
 
@@ -30,6 +31,9 @@ class AuthService extends GetxService {
     });
   }
 
+  bool get isEmailVerified =>
+      user != null && (user!.email == null || user!.emailVerified);
+
   bool get isLoggedInValue => user != null;
 
   bool get isAdmin => user != null && _userRole.value == "admin";
@@ -44,9 +48,20 @@ class AuthService extends GetxService {
     // this is not needed as we are using Firebase UI for the login part
   }
 
+  void sendVerificationMail(bool signOut) async {
+    await _auth.currentUser?.sendEmailVerification();
+
+    Get.snackbar(
+      'Alert!',
+      'Please verify your email and login again.',
+    );
+
+    if (signOut) _auth.signOut();
+  }
+
   void logout() {
     _auth.signOut();
-    _auth.currentUser?.delete();
+    if (isAnon) _auth.currentUser?.delete();
     _firebaseUser.value = null;
   }
 

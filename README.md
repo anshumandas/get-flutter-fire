@@ -45,13 +45,17 @@ Step 7: Additional Auth flow items
 2. TODO: Add ReCaptcha to login flow for password authentication for Web only
    * Phone Auth on Web has a ReCaptcha already [https://firebase.flutter.dev/docs/auth/phone/]. Tried to use that library but it is very cryptic.
    * Use the following instead [https://stackoverflow.com/questions/60675575/how-to-implement-recaptcha-into-a-flutter-app] or [https://medium.com/cloudcraftz/securing-your-flutter-web-app-with-google-recaptcha-b556c567f409] or [https://pub.dev/packages/g_recaptcha_v3]
-3. TODO: Add Phone verification [https://firebase.google.com/docs/auth/flutter/phone-auth]
+3. TODO: Add the Verify Email in Signup flow. Ensure Reset Password has Email verification
+4. TODO: Add Phone verification [https://firebase.google.com/docs/auth/flutter/phone-auth]
    * See [https://github.com/firebase/flutterfire/issues/4189].
-4. TODO: Add 2FA with SMS Pin. This screen is available in the Flutter Fire package
+5. TODO: Add 2FA with SMS Pin. This screen is available in the Flutter Fire package
 
 Step 8: Add Firebase Emulator to test on laptop instead of server so that we can use Functions without upgrading the plan to Blaze. See [https://firebase.google.com/docs/emulator-suite/install_and_configure]
 
 Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we need to use Firebase Functions
 
 1. In Emulator we can add user via http://127.0.0.1:4000/auth and add custom claim via UI as  {"role":"admin"}. The effect is shown via Product page in Nav instead of Cart page for admin user.
-2. TODO - add Function to add the custom claim based on app request by another admin
+2. Add Function to add the custom claim to make the first user the admin using the Admin SDK
+3. TODO: Enforce verify email. Note! for Emulator check the console to verify using the link provided as email is not sent.
+4. TODO: Add Roles of Seller and Buyer. Change Navigation to accomodate Admin, Buyer, Seller screens
+5. TODO: add CRUD Functions to call Admin SDK by admin user from app
