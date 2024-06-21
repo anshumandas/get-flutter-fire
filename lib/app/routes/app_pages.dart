@@ -17,6 +17,8 @@ import '../modules/products/bindings/products_binding.dart';
 import '../modules/products/views/products_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/register/bindings/register_binding.dart';
+import '../modules/register/views/register_view.dart';
 import '../modules/root/bindings/root_binding.dart';
 import '../modules/root/views/root_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
@@ -47,6 +49,15 @@ class AppPages {
           name: _Paths.LOGIN,
           page: () => const LoginView(),
           binding: LoginBinding(),
+        ),
+        GetPage(
+          middlewares: [
+            //only enter this route when authed
+            EnsureAuthedAndNotGuestMiddleware(),
+          ],
+          name: _Paths.REGISTER,
+          page: () => const RegisterView(),
+          binding: RegisterBinding(),
         ),
         GetPage(
           preventDuplicates: true,

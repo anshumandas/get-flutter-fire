@@ -161,3 +161,4 @@ windows/runner/resources/app_icon.ico
 lib/firebase_options.dart
 pubspec.lock
 pubspec.lock
+server/functions/firebase_options.json

@@ -38,7 +38,7 @@ class ProfileView extends GetView<ProfileController> {
     return AuthService.to.isLoggedInValue
         ? ProfileScreen(
             // We are using the Flutter Fire Profile Screen now but will change in subsequent steps.
-            // The issues are highlighted in commnets here
+            // The issues are highlighted in comments here
 
             // appBar: AppBar(
             //   title: const Text('User Profile'),

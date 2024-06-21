@@ -250,13 +250,13 @@ packages:
     source: hosted
     version: "1.14.0"
   firebase_ui_localizations:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_ui_localizations
-      sha256: "71a3c586565c43dadc058898a0afd8efc5b3a163485a3570b98a0e4555cabec1"
+      sha256: a7faa62e2d56cb38aae270a8f05c1a8518b04b06dd0f0cc2d4974e4b4782de1c
       url: "https://pub.dev"
     source: hosted
-    version: "1.11.0"
+    version: "1.12.0"
   firebase_ui_oauth:
     dependency: transitive
     description:

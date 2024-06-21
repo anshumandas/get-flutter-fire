@@ -16,10 +16,13 @@ abstract class Routes {
   Routes._();
   static String LOGIN_THEN(String afterSuccessfulLogin) =>
       '$LOGIN?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
+  static String REGISTER_THEN(String afterSuccessfulLogin) =>
+      '$REGISTER?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
   static String PRODUCT_DETAILS(String productId) => '$PRODUCTS/$productId';
   static String CART_DETAILS(String productId) => '$CART/$productId';
   static const CART = _Paths.HOME + _Paths.CART;
   static const CHECKOUT = _Paths.HOME + _Paths.CHECKOUT;
+  static const REGISTER = _Paths.REGISTER;
 }
 
 abstract class _Paths {
@@ -33,4 +36,5 @@ abstract class _Paths {
   static const DASHBOARD = '/dashboard';
   static const CART = '/cart';
   static const CHECKOUT = '/checkout';
+  static const REGISTER = '/register';
 }

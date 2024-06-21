@@ -8,5 +8,14 @@ const double defaultPadding = 16.0;
 
 const useEmulator = true;
 
+const useRecaptcha = false;
+
+const sendMailFromClient =
+    true; // set this true if in server using custom claim status
+
 const emulatorHost =
     "127.0.0.1"; // GetPlatform.isAndroid ? "10.0.2.2" : "127.0.0.1"; //This is not required due to automaticHostMapping
+
+const baseUrl = useEmulator ? "http://127.0.0.1" : "your domain";
+
+const bundleID = "com.example";

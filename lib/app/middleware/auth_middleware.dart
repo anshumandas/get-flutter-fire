@@ -7,9 +7,20 @@ import '../routes/app_pages.dart';
 
 Future<GetNavConfig?> loginVerify(bool check, GetNavConfig route,
     Future<GetNavConfig?> Function(GetNavConfig) redirector) async {
-  final newRoute = Routes.LOGIN_THEN(route.location);
+  final newRoute = route.location == Routes.LOGIN
+      ? Routes.LOGIN
+      : Routes.LOGIN_THEN(route.location);
   if (check) {
     return GetNavConfig.fromRoute(newRoute);
+  }
+
+  // Below could be used if the login was happening without verification.
+  // This will never get reached if server is sending error in login due to non verification
+  // With customClaims status == "creating", it will reach here for SignUp case only
+  if (!AuthService.to.isEmailVerified && !AuthService.to.registered.value) {
+    return GetNavConfig.fromRoute(route.location == Routes.REGISTER
+        ? Routes.REGISTER
+        : Routes.REGISTER_THEN(route.location));
   }
 
   return await redirector(route);
@@ -31,7 +42,8 @@ class EnsureNotAuthedOrGuestMiddleware extends GetMiddleware {
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
     if (AuthService.to.isLoggedInValue && !AuthService.to.isAnon) {
       //NEVER navigate to auth screen, when user is already authed
-      return GetNavConfig.fromRoute(Routes.HOME);
+      return GetNavConfig.fromRoute(
+          AuthService.to.registered.value ? Routes.HOME : Routes.REGISTER);
     }
     return await super.redirectDelegate(route);
   }
