@@ -10,9 +10,9 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "18"
+    "node": "20"
   },
-  "main": "index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "axios": "^1.7.2",
     "firebase": "^10.12.2",

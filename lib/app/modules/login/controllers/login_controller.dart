@@ -15,7 +15,8 @@ class LoginController extends GetxController {
 
   bool get isAnon => AuthService.to.isAnon;
 
-  bool get isRegistered => AuthService.to.registered.value;
+  bool get isRegistered =>
+      AuthService.to.registered.value || AuthService.to.isEmailVerified;
 
   // @override
   // onInit() {

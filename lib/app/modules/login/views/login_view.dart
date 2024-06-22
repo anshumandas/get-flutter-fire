@@ -81,10 +81,8 @@ class LoginView extends GetView<LoginController> {
     } else {
       final thenTo = Get
           .rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
-      Get.rootDelegate.offNamed(thenTo ??
-          (LoginController.to.registered.value
-              ? Routes.HOME
-              : Routes.REGISTER));
+      Get.rootDelegate.offNamed(
+          thenTo ?? (controller.isRegistered ? Routes.HOME : Routes.REGISTER));
       ui = const Scaffold();
     }
     return ui;

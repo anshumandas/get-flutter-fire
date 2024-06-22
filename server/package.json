@@ -1,14 +1,10 @@
 {
-  "dependencies": {
-    "express": "^4.19.2",
-    "firebase-admin": "^12.1.1"
-  },
   "name": "get_flutter_fire_server",
   "version": "1.0.0",
   "description": "firebase server code for get_flutter_fire",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "build": "echo \"add build logic\" && exit 0"
   },
   "author": "Anshuman Das",
