@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/checkout_controller.dart';
+import '../controllers/users_controller.dart';
 
-class CheckoutView extends GetView<CheckoutController> {
-  const CheckoutView({super.key});
+class UsersView extends GetView<UsersController> {
+  const UsersView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CheckoutView'),
+        title: const Text('UsersView'),
         centerTitle: true,
       ),
       body: const Center(
         child: Text(
-          'CheckoutView is working',
+          'UsersView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),

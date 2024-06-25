@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 
-import '../../../../models/demo_product.dart';
+import '../../../../models/product.dart';
 
 class ProductsController extends GetxController {
-  final products = <DemoProduct>[].obs;
+  final products = <Product>[].obs;
 
   void loadDemoProductsFromSomeWhere() {
     products.add(
-      DemoProduct(
+      Product(
         name: 'Product added on: ${DateTime.now().toString()}',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
       ),

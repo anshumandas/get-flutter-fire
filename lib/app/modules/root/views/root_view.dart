@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/auth_service.dart';
+
 import '../../../routes/app_pages.dart';
+import '../../../routes/screens.dart';
 import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
@@ -15,7 +17,7 @@ class RootView extends GetView<RootController> {
   Widget build(BuildContext context) {
     return GetRouterOutlet.builder(
       builder: (context, delegate, current) {
-        final title = current?.location;
+        final title = current!.location;
         return Scaffold(
           drawer: const DrawerWidget(),
           appBar: AppBar(
@@ -36,13 +38,13 @@ class RootView extends GetView<RootController> {
                         if (AuthService.to.isLoggedInValue) {
                           AuthService.to.logout();
                         }
-                        Get.rootDelegate.toNamed(Routes.LOGIN);
+                        Get.rootDelegate.toNamed(Screen.LOGIN.route);
                       })))
             ],
             // automaticallyImplyLeading: false, //removes drawer
           ),
           body: GetRouterOutlet(
-            initialRoute: Routes.HOME,
+            initialRoute: AppPages.INITIAL,
             // anchorRoute: '/',
             // filterPages: (afterAnchor) {
             //   return afterAnchor.take(1);

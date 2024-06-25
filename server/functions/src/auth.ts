@@ -14,17 +14,17 @@
 
 import { debug } from "firebase-functions/logger";
 import { auth as functionAuth } from "firebase-functions";
-import admin from "firebase-admin";
-import { config, auth } from "./init";
 import { UserRecord } from "firebase-admin/auth";
 import { AuthUserRecord, AuthEventContext } from "firebase-functions/lib/common/providers/identity";
 import { connectAuthEmulator, sendEmailVerification, signInWithCustomToken } from "firebase/auth";
+import { adminAuth } from "./admin";
+import { config, auth } from "./init";
 
 const addUser = functionAuth.user().onCreate(async (user, context) => {
   // This is used to provide admin role to the first user that gets created
   debug("added user: ", user);
   if (user.customClaims?.status == "creating") { // this is using client side to send the verification mail
-    admin.auth().setCustomUserClaims(user.uid, { status: "created" });
+    adminAuth.setCustomUserClaims(user.uid, { status: "created" });
   } else if (!config.useCustomeVerificationEmail && user && user.email && !user.emailVerified) {
     // this is client side module and can create issues with server side quota limits
     await sendVerificationEmail(user, context);
@@ -34,7 +34,7 @@ async function checkUserExistsSendVerification(user: AuthUserRecord, context: Au
   var email: String = user.email!;
   if (!email.endsWith(".verify")) return null;
   try {
-    const userRecord = await admin.auth().getUserByEmail(email.substring(0, email.length - 7));
+    const userRecord = await adminAuth.getUserByEmail(email.substring(0, email.length - 7));
     debug("existing user: ", user);
     // we could save the last email sent time in another DB to stop multiple sends
     await sendVerificationEmail(userRecord, context);
@@ -65,7 +65,7 @@ const beforeUserCreated = functionAuth.user().beforeCreate(async (user, context)
       };
     } else if (!config.adminEmail) {
       // ake the first user admin if admin email is not specified in config
-      const listUsersResult = await admin.auth().listUsers(2);
+      const listUsersResult = await adminAuth.listUsers(2);
       if (listUsersResult.users.length == 0) {
         return {
           displayName: "Admin",
@@ -107,7 +107,7 @@ const beforeSignIn = functionAuth.user().beforeSignIn((user, _context) => {
 
 // TODO: use the below to verify auth token before any CRUD requests in a middleware
 const verifyIdToken = function (idToken: string) {
-  admin.auth().verifyIdToken(idToken).then((decodedToken) => {
+  adminAuth.verifyIdToken(idToken).then((decodedToken) => {
     if (decodedToken.email_verified) {
       // Email verified. Grant access.
     } else {
@@ -125,7 +125,7 @@ async function sendVerificationEmail(user: any, context: any) {
   if (!config.useCustomeVerificationEmail) {
     // If using Emulator don't forget to add this
     const emulator = process.env.FUNCTIONS_EMULATOR === "true";
-    const customToken = await admin.auth().createCustomToken(user.uid, user.customClaims);
+    const customToken = await adminAuth.createCustomToken(user.uid, user.customClaims);
     // debug(customToken);
     if (config.useClientSDK) {
       // This is a hack to use client side email sending function at server side, suggested in stackOverflow
@@ -161,7 +161,7 @@ async function sendVerificationEmail(user: any, context: any) {
     }
   } else {
     // Send custom email verification on sign-up.
-    const link = await admin.auth().generateEmailVerificationLink(user.email!); // you can provide actionCodeSettings also
+    const link = await adminAuth.generateEmailVerificationLink(user.email!); // you can provide actionCodeSettings also
     await sendCustomVerificationEmail(user.email, link, context?.locale);
     // we can throw error such that user does not get created till verification.
     // However, we need the user details like pwd and thus the user has to be created

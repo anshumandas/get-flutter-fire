@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/auth_service.dart';
-import '../../../routes/app_pages.dart';
+
+import '../../../routes/screens.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({
@@ -35,7 +36,7 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             title: const Text('Home'),
             onTap: () {
-              Get.rootDelegate.toNamed(Routes.HOME);
+              Get.rootDelegate.toNamed(Screen.HOME.route);
               //to close the drawer
 
               Navigator.of(context).pop();
@@ -44,7 +45,7 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             title: const Text('Settings'),
             onTap: () {
-              Get.rootDelegate.toNamed(Routes.SETTINGS);
+              Get.rootDelegate.toNamed(Screen.SETTINGS.route);
               //to close the drawer
 
               Navigator.of(context).pop();
@@ -60,7 +61,7 @@ class DrawerWidget extends StatelessWidget {
               ),
               onTap: () {
                 AuthService.to.logout();
-                Get.rootDelegate.toNamed(Routes.LOGIN);
+                Get.rootDelegate.toNamed(Screen.LOGIN.route);
                 //to close the drawer
 
                 Navigator.of(context).pop();
@@ -75,7 +76,7 @@ class DrawerWidget extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Get.rootDelegate.toNamed(Routes.LOGIN);
+                Get.rootDelegate.toNamed(Screen.LOGIN.route);
                 //to close the drawer
 
                 Navigator.of(context).pop();

@@ -1,10 +1,10 @@
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+// import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
 import '../../../../services/auth_service.dart';
-import '../../../widgets/login_widgets.dart';
+// import '../../../widgets/login_widgets.dart';
 import '../controllers/register_controller.dart';
 
 //ALso add a form to take additional info such as display name of other customer details mapped with uid in Firestore

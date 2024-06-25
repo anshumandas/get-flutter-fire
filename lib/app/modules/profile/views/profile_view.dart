@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/auth_service.dart';
-import '../../../routes/app_pages.dart';
+import '../../../routes/screens.dart';
 import '../../../widgets/change_password_dialog.dart';
 import '../../../widgets/image_picker_button.dart';
 import '../controllers/profile_controller.dart';
@@ -74,7 +74,7 @@ class ProfileView extends GetView<ProfileController> {
               SignedOutAction((context) {
                 Get.back();
                 controller.logout();
-                Get.rootDelegate.toNamed(Routes.PROFILE);
+                Get.rootDelegate.toNamed(Screen.PROFILE.route);
                 // Navigator.of(context).pop();
               }),
               AccountDeletedAction((context, user) {
@@ -83,7 +83,7 @@ class ProfileView extends GetView<ProfileController> {
                   //this is only called after the delete is done and not useful for confirmation of the delete action
                   title: 'Deleted Account of ${user.displayName}',
                   barrierDismissible: true,
-                  navigatorKey: Get.nestedKey(Routes.HOME),
+                  navigatorKey: Get.nestedKey(Screen.HOME.route),
                 );
               })
             ],

@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
-
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/models/role.dart';
 
 import '../../services/auth_service.dart';
 import '../routes/app_pages.dart';
@@ -59,13 +59,13 @@ class EnsureAuthedAndNotGuestMiddleware extends GetMiddleware {
   }
 }
 
-class EnsureAdminMiddleware extends GetMiddleware {
+class EnsureRoleMiddleware extends GetMiddleware {
+  Role role;
+  EnsureRoleMiddleware(this.role);
+
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
-    // you can do whatever you want here
-    // but it's preferable to make this method fast
-
-    if (!AuthService.to.isLoggedInValue || AuthService.to.isAdmin) {
+    if (!AuthService.to.isLoggedInValue || !AuthService.to.hasRole(role)) {
       final newRoute = Routes.LOGIN_THEN(route.location);
       return GetNavConfig.fromRoute(newRoute);
     }
@@ -73,7 +73,7 @@ class EnsureAdminMiddleware extends GetMiddleware {
   }
 }
 
-class EnsureGuestMiddleware extends GetMiddleware {
+class EnsureAuthOrGuestMiddleware extends GetMiddleware {
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
     // you can do whatever you want here

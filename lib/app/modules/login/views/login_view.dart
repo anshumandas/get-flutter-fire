@@ -6,7 +6,8 @@ import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../firebase_options.dart';
-import '../../../routes/app_pages.dart';
+
+import '../../../routes/screens.dart';
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
 
@@ -81,8 +82,8 @@ class LoginView extends GetView<LoginController> {
     } else {
       final thenTo = Get
           .rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
-      Get.rootDelegate.offNamed(
-          thenTo ?? (controller.isRegistered ? Routes.HOME : Routes.REGISTER));
+      Get.rootDelegate.offNamed(thenTo ??
+          (controller.isRegistered ? Screen.HOME : Screen.REGISTER).route);
       ui = const Scaffold();
     }
     return ui;

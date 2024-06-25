@@ -6,8 +6,9 @@ import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../app/routes/app_pages.dart';
+import '../app/routes/screens.dart';
 import '../constants.dart';
+import '../models/role.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
@@ -15,11 +16,12 @@ class AuthService extends GetxService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late Rxn<EmailAuthCredential> credential = Rxn<EmailAuthCredential>();
   final Rxn<User> _firebaseUser = Rxn<User>();
-  final Rxn<String> _userRole = Rxn<String>();
+  final Rx<Role> _userRole = Rx<Role>(Role.buyer);
   final Rx<bool> robot = RxBool(useRecaptcha);
   final RxBool registered = false.obs;
 
   User? get user => _firebaseUser.value;
+  Role get maxRole => _userRole.value;
 
   @override
   onInit() {
@@ -27,11 +29,9 @@ class AuthService extends GetxService {
     if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
     _firebaseUser.bindStream(_auth.authStateChanges());
     _auth.authStateChanges().listen((User? user) {
-      if (user == null) {
-        _userRole.value = null;
-      } else {
+      if (user != null) {
         user.getIdTokenResult().then((token) {
-          _userRole.value = token.claims?["role"];
+          _userRole.value = Role.fromString(token.claims?["role"]);
         });
       }
     });
@@ -42,7 +42,9 @@ class AuthService extends GetxService {
 
   bool get isLoggedInValue => user != null;
 
-  bool get isAdmin => user != null && _userRole.value == "admin";
+  bool get isAdmin => user != null && _userRole.value == Role.admin;
+
+  bool hasRole(Role role) => user != null && _userRole.value == role;
 
   bool get isAnon => user != null && user!.isAnonymous;
 
@@ -113,7 +115,7 @@ class AuthService extends GetxService {
     final thenTo =
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate
-        .offAndToNamed(thenTo ?? Routes.PROFILE); //Profile has the forms
+        .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
   }
 
   void logout() {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/services/auth_service.dart';
 
-import '../../../routes/app_pages.dart';
+import '../../../routes/screens.dart';
 import '../controllers/cart_controller.dart';
 
 class CartView extends GetView<CartController> {
@@ -16,7 +16,7 @@ class CartView extends GetView<CartController> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.rootDelegate.toNamed(Routes.CHECKOUT),
+        onPressed: () => Get.rootDelegate.toNamed(Screen.CHECKOUT.route),
         backgroundColor: Colors.blue,
         child: const Icon(
           Icons.check_outlined,
