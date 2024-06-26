@@ -26,18 +26,19 @@ Future<GetNavConfig?> loginVerify(bool check, GetNavConfig route,
   return await redirector(route);
 }
 
-class EnsureAuthMiddleware extends GetMiddleware {
-  @override
-  Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
-    // you can do whatever you want here
-    // but it's preferable to make this method fast
+// class EnsureAuthMiddleware extends GetMiddleware {
+//   @override
+//   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
+//     // you can do whatever you want here
+//     // but it's preferable to make this method fast
 
-    return await loginVerify(
-        !AuthService.to.isLoggedInValue, route, super.redirectDelegate);
-  }
-}
+//     return await loginVerify(
+//         !AuthService.to.isLoggedInValue, route, super.redirectDelegate);
+//   }
+// }
 
 class EnsureNotAuthedOrGuestMiddleware extends GetMiddleware {
+  //AccessLevel.notAuthed
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
     if (AuthService.to.isLoggedInValue && !AuthService.to.isAnon) {
@@ -50,6 +51,7 @@ class EnsureNotAuthedOrGuestMiddleware extends GetMiddleware {
 }
 
 class EnsureAuthedAndNotGuestMiddleware extends GetMiddleware {
+  //AccessLevel.authenticated
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
     return await loginVerify(
@@ -60,6 +62,7 @@ class EnsureAuthedAndNotGuestMiddleware extends GetMiddleware {
 }
 
 class EnsureRoleMiddleware extends GetMiddleware {
+  //AccessLevel.roleBased
   Role role;
   EnsureRoleMiddleware(this.role);
 
@@ -74,6 +77,7 @@ class EnsureRoleMiddleware extends GetMiddleware {
 }
 
 class EnsureAuthOrGuestMiddleware extends GetMiddleware {
+  //AccessLevel.guest
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
     // you can do whatever you want here

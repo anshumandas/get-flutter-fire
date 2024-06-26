@@ -9,6 +9,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    var route = controller.chosenRole.value.tabs[0].route;
     return GetRouterOutlet.builder(
       builder: (context, delegate, currentRoute) {
         //This router outlet handles the appbar and the bottom navigation bar
@@ -16,9 +17,9 @@ class HomeView extends GetView<HomeController> {
             controller.chosenRole.value.getCurrentIndexFromRoute(currentRoute);
         return Scaffold(
           body: GetRouterOutlet(
-            initialRoute: controller.chosenRole.value.tabs[0].route,
+            initialRoute: route,
             // anchorRoute: Routes.HOME,
-            key: Get.nestedKey(Routes.HOME),
+            key: Get.nestedKey(route),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentIndex,

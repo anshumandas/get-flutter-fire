@@ -76,7 +76,7 @@ Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we 
    1. Added Access level in increasing order of role order => Buyer then Seller then Admin
    2. Created Navigation for each of Admin, Buyer, Seller screens
    3. TODO: Allow switch from lower role Navigation to Navigation view till the given role of the user
-   4. TODO: Also allow a Premium user flag for Buyer and Seller, to add features which are not Navigation linked. Add a button Upgrade to Premium in Drawer that leads to Payment screen
+   4. TODO: Also allow a Plan attribute (e.g. Premium user flag) for Buyer and Seller, to add features which are not Navigation linked. Add a button Upgrade to Plan in Drawer that leads to Payment screen. Also certain aspects of premium plan can be visible that leads to upgrade plan screen via middleware
 
 Step 10: TODO: CRUD
 

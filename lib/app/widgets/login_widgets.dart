@@ -1,6 +1,10 @@
 // ignore_for_file: inference_failure_on_function_invocation
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../services/auth_service.dart';
+import '../routes/screens.dart';
 
 class LoginWidgets {
   static Widget headerBuilder(context, constraints, shrinkOffset) {
@@ -35,5 +39,28 @@ class LoginWidgets {
         child: Image.asset('assets/images/flutterfire_300x.png'),
       ),
     );
+  }
+}
+
+class LoginLogoutToggle extends StatelessWidget {
+  const LoginLogoutToggle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => IconButton(
+        // padding: EdgeInsets.zero,
+        // constraints: const BoxConstraints(),
+        tooltip: (AuthService.to.isLoggedInValue) ? 'Logout' : 'Login',
+        icon: (AuthService.to.isLoggedInValue)
+            ? const Icon(Icons.logout)
+            : const Icon(Icons.login),
+        onPressed: () {
+          if (AuthService.to.isLoggedInValue) {
+            AuthService.to.logout();
+          }
+          Get.rootDelegate.toNamed(Screen.LOGIN.route);
+        }));
   }
 }

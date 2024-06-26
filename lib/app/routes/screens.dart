@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_flutter_fire/app/widgets/login_widgets.dart';
 
 import '../../models/role.dart';
 
@@ -43,12 +44,9 @@ enum Screen {
       accessor: AccessedBy.drawer,
       accessLevel: AccessLevel.authenticated),
   LOGIN('/login',
-      icon: Icons.login,
-      toggleIcon: Icons.logout,
-      label: "Login",
-      toggleLabel: "Logout",
+      widget: LoginLogoutToggle(),
       accessor: AccessedBy.bottomSheet,
-      accessLevel: AccessLevel.public),
+      accessLevel: AccessLevel.notAuthed),
   CART('/cart',
       icon: Icons.trolley,
       label: "Cart",
@@ -94,23 +92,19 @@ enum Screen {
       parent: MY_PRODUCTS, accessLevel: AccessLevel.roleBased),
   ;
 
-  const Screen(
-    this.path, {
-    this.icon,
-    this.label,
-    this.parent,
-    this.accessor = AccessedBy.singleTap,
-    this.accessLevel = AccessLevel.authenticated,
-    this.toggleIcon,
-    this.toggleLabel,
-  });
+  const Screen(this.path,
+      {this.icon,
+      this.label,
+      this.parent,
+      this.accessor = AccessedBy.singleTap,
+      this.accessLevel = AccessLevel.authenticated,
+      this.widget});
   final String path;
   final IconData? icon;
-  final IconData? toggleIcon;
   final String? label;
-  final String? toggleLabel;
   final AccessedBy accessor;
   final Screen? parent;
+  final Widget? widget;
   final AccessLevel
       accessLevel; //if false it is role based. true means allowed for all
   Iterable<Screen> get children =>

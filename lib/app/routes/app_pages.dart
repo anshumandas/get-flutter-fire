@@ -57,10 +57,10 @@ class AppPages {
       preventDuplicates: true,
       children: [
         Screen.LOGIN.getPage(
-          middlewares: [
-            //only enter this route when not authed. This is override of role mentioned
-            EnsureNotAuthedOrGuestMiddleware(),
-          ],
+          // middlewares: [
+          //   //only enter this route when not authed.
+          //   EnsureNotAuthedOrGuestMiddleware(),
+          // ],
           page: () => const LoginView(),
           binding: LoginBinding(),
         ),

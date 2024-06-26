@@ -2,9 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../services/auth_service.dart';
-
 import '../../../routes/app_pages.dart';
 import '../../../routes/screens.dart';
 import '../controllers/root_controller.dart';
@@ -17,29 +14,24 @@ class RootView extends GetView<RootController> {
   Widget build(BuildContext context) {
     return GetRouterOutlet.builder(
       builder: (context, delegate, current) {
-        final title = current!.location;
+        final title = current!.currentPage!.title;
         return Scaffold(
           drawer: const DrawerWidget(),
           appBar: AppBar(
             title: Text(title ?? ''),
             centerTitle: true,
+            leading: GetPlatform.isIOS // Since Web and Android have back button
+                    &&
+                    current.locationString.contains(RegExp(r'(\/[^\/]*){3,}'))
+                ? BackButton(
+                    onPressed: () =>
+                        Get.rootDelegate.popRoute(), //Navigator.pop(context),
+                  )
+                : null,
             actions: [
-              Obx(() => Container(
+              Container(
                   margin: const EdgeInsets.only(right: 15),
-                  child: IconButton(
-                      // padding: EdgeInsets.zero,
-                      // constraints: const BoxConstraints(),
-                      tooltip:
-                          (AuthService.to.isLoggedInValue) ? 'Logout' : 'Login',
-                      icon: (AuthService.to.isLoggedInValue)
-                          ? const Icon(Icons.logout)
-                          : const Icon(Icons.login),
-                      onPressed: () {
-                        if (AuthService.to.isLoggedInValue) {
-                          AuthService.to.logout();
-                        }
-                        Get.rootDelegate.toNamed(Screen.LOGIN.route);
-                      })))
+                  child: Screen.LOGIN.widget)
             ],
             // automaticallyImplyLeading: false, //removes drawer
           ),

@@ -29,19 +29,16 @@ extension ScreenExtension on Screen {
               bindings: bindings,
               children: children ?? const []);
 
-  List<GetMiddleware>? defaultMiddlewares(Role? role) =>
-      (parent == null || parent!.accessLevel.index < accessLevel.index)
-          ? switch (accessLevel) {
-              AccessLevel.public => null,
-              AccessLevel.guest => [EnsureAuthOrGuestMiddleware()],
-              AccessLevel.authenticated => [
-                  EnsureAuthedAndNotGuestMiddleware()
-                ],
-              AccessLevel.roleBased => [
-                  EnsureRoleMiddleware(role ?? Role.buyer)
-                ],
-              AccessLevel.masked => throw UnimplementedError(),
-              AccessLevel.secret => throw UnimplementedError(),
-            }
-          : null;
+  List<GetMiddleware>? defaultMiddlewares(Role? role) => (parent == null ||
+          parent!.accessLevel.index < accessLevel.index)
+      ? switch (accessLevel) {
+          AccessLevel.public => null,
+          AccessLevel.guest => [EnsureAuthOrGuestMiddleware()],
+          AccessLevel.authenticated => [EnsureAuthedAndNotGuestMiddleware()],
+          AccessLevel.roleBased => [EnsureRoleMiddleware(role ?? Role.buyer)],
+          AccessLevel.masked => throw UnimplementedError(), //not for screens
+          AccessLevel.secret => throw UnimplementedError(), //not for screens
+          AccessLevel.notAuthed => [EnsureNotAuthedOrGuestMiddleware()],
+        }
+      : null;
 }
