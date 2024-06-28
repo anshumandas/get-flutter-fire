@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../models/role.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/products_controller.dart';
 
@@ -11,11 +12,15 @@ class ProductsView extends GetView<ProductsController> {
 
   @override
   Widget build(BuildContext context) {
+    var arg = Get.rootDelegate.arguments();
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: controller.loadDemoProductsFromSomeWhere,
-        label: const Text('Add'),
-      ),
+      floatingActionButton:
+          (arg != null && Get.rootDelegate.arguments()["role"] == Role.seller)
+              ? FloatingActionButton.extended(
+                  onPressed: controller.loadDemoProductsFromSomeWhere,
+                  label: const Text('Add'),
+                )
+              : null,
       body: Column(
         children: [
           const Hero(
@@ -35,8 +40,8 @@ class ProductsView extends GetView<ProductsController> {
                     final item = controller.products[index];
                     return ListTile(
                       onTap: () {
-                        Get.rootDelegate
-                            .toNamed(Routes.PRODUCT_DETAILS(item.id));
+                        Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(
+                            item.id)); //we could use Get Parameters
                       },
                       title: Text(item.name),
                       subtitle: Text(item.id),

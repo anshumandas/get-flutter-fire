@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../routes/app_pages.dart';
-import '../../../routes/screens.dart';
+import '../../../../models/screens.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -9,9 +8,13 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    var route = controller.chosenRole.value.tabs[0].route;
     return GetRouterOutlet.builder(
       builder: (context, delegate, currentRoute) {
+        var arg = Get.rootDelegate.arguments();
+        if (arg != null) {
+          controller.chosenRole.value = arg["role"];
+        }
+        var route = controller.chosenRole.value.tabs[0].route;
         //This router outlet handles the appbar and the bottom navigation bar
         int currentIndex =
             controller.chosenRole.value.getCurrentIndexFromRoute(currentRoute);

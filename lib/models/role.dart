@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../app/routes/screens.dart';
+import 'screens.dart';
 
 enum AccessLevel {
   public, //available without any login
@@ -41,7 +41,7 @@ enum Role {
   bool hasAccessOf(String role) => index >= fromString(role).index;
 
   List<Screen> get tabs => permissions
-      .where((screen) => screen.accessor == AccessedBy.navigator)
+      .where((screen) => screen.accessor == AccessedVia.navigator)
       .toList(); //the ones in tab
 
   int getCurrentIndexFromRoute(GetNavConfig? currentRoute) {
@@ -55,6 +55,6 @@ enum Role {
   }
 
   void routeTo(int value, GetDelegate delegate) {
-    delegate.toNamed(tabs[value].route);
+    delegate.toNamed(tabs[value].route, arguments: {'role': this});
   }
 }

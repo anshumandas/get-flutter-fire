@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/services/auth_service.dart';
 import '../../../routes/app_pages.dart';
-import '../../../routes/screens.dart';
+import '../../../../models/screens.dart';
 import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
@@ -16,6 +17,7 @@ class RootView extends GetView<RootController> {
       builder: (context, delegate, current) {
         final title = current!.currentPage!.title;
         return Scaffold(
+          key: controller.scaffoldKey,
           drawer: const DrawerWidget(),
           appBar: AppBar(
             title: Text(title ?? ''),
@@ -27,13 +29,18 @@ class RootView extends GetView<RootController> {
                     onPressed: () =>
                         Get.rootDelegate.popRoute(), //Navigator.pop(context),
                   )
-                : null,
+                : AuthService.to.isLoggedInValue
+                    ? IconButton(
+                        icon: const Icon(Icons.person),
+                        onPressed: () => controller.openDrawer(),
+                      )
+                    : null,
             actions: [
               Container(
                   margin: const EdgeInsets.only(right: 15),
                   child: Screen.LOGIN.widget)
             ],
-            // automaticallyImplyLeading: false, //removes drawer
+            automaticallyImplyLeading: false, //removes drawer icon
           ),
           body: GetRouterOutlet(
             initialRoute: AppPages.INITIAL,

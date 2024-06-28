@@ -36,7 +36,7 @@ import '../modules/tasks/bindings/tasks_binding.dart';
 import '../modules/tasks/views/tasks_view.dart';
 import '../modules/users/bindings/users_binding.dart';
 import '../modules/users/views/users_view.dart';
-import 'screens.dart';
+import '../../models/screens.dart';
 
 // ignore_for_file: inference_failure_on_instance_creation
 
@@ -87,7 +87,8 @@ class AppPages {
         ),
         Screen.HOME.getPage(
           page: () => const HomeView(),
-          preventDuplicates: true,
+          preventDuplicates:
+              false, //needs to be false for dynamic screens which get loaded with arguments
           bindings: [
             HomeBinding(),
           ],
@@ -118,6 +119,7 @@ class AppPages {
                 Screen.PRODUCT_DETAILS.getPage(
                   page: () => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
+                  preventDuplicates: false,
                 ),
               ],
             ),
@@ -137,6 +139,7 @@ class AppPages {
                 Screen.CART_DETAILS.getPage(
                   page: () => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
+                  preventDuplicates: false,
                 ),
                 Screen.CHECKOUT.getPage(
                   // middlewares: [
@@ -156,6 +159,7 @@ class AppPages {
                 Screen.MY_PRODUCT_DETAILS.getPage(
                   page: () => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
+                  preventDuplicates: false,
                 ),
               ],
             ),
@@ -167,6 +171,7 @@ class AppPages {
                 Screen.TASK_DETAILS.getPage(
                   page: () => const TaskDetailsView(),
                   binding: TaskDetailsBinding(),
+                  preventDuplicates: false,
                   // middlewares: [
                   //   //only enter this route when authed
                   //   EnsureRoleMiddleware(Role.admin),

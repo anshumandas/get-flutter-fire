@@ -1,20 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RootController extends GetxController {
-  //TODO: Implement RootController
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  void openDrawer() {
+    scaffoldKey.currentState!.openDrawer();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void closeDrawer() {
+    scaffoldKey.currentState!.openEndDrawer();
   }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
 }

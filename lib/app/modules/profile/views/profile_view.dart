@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/auth_service.dart';
-import '../../../routes/screens.dart';
+import '../../../../models/screens.dart';
 import '../../../widgets/change_password_dialog.dart';
 import '../../../widgets/image_picker_button.dart';
 import '../controllers/profile_controller.dart';

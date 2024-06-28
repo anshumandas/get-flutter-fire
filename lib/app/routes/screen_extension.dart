@@ -7,11 +7,12 @@ extension ScreenExtension on Screen {
           List<Bindings> bindings = const [],
           List<GetMiddleware>? middlewares,
           List<GetPage<dynamic>>? children,
-          bool preventDuplicates = false,
+          bool? preventDuplicates,
           Role? role}) =>
       binding != null
           ? GetPage(
-              preventDuplicates: preventDuplicates,
+              preventDuplicates:
+                  false, //preventDuplicates == null ? true : false,
               middlewares: middlewares ?? defaultMiddlewares(role),
               name: path,
               page: page,
@@ -20,7 +21,8 @@ extension ScreenExtension on Screen {
               binding: binding,
               children: children ?? const [])
           : GetPage(
-              preventDuplicates: preventDuplicates,
+              preventDuplicates:
+                  false, //preventDuplicates == null ? true : false,
               middlewares: middlewares,
               name: path,
               page: page,

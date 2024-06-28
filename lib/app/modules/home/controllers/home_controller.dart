@@ -4,8 +4,6 @@ import '../../../../models/role.dart';
 import '../../../../services/auth_service.dart';
 
 class HomeController extends GetxController {
-  static AuthService get to => Get.find();
-
   final Rx<Role> chosenRole = Rx<Role>(AuthService.to.maxRole);
 
   // Role get role => AuthService.to.maxRole;

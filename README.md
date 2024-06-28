@@ -75,8 +75,7 @@ Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we 
 6. Added Roles of Buyer and Seller.
    1. Added Access level in increasing order of role order => Buyer then Seller then Admin
    2. Created Navigation for each of Admin, Buyer, Seller screens
-   3. TODO: Allow switch from lower role Navigation to Navigation view till the given role of the user
-   4. TODO: Also allow a Plan attribute (e.g. Premium user flag) for Buyer and Seller, to add features which are not Navigation linked. Add a button Upgrade to Plan in Drawer that leads to Payment screen. Also certain aspects of premium plan can be visible that leads to upgrade plan screen via middleware
+   3. Allowed switch from lower role Navigation to Navigation view till the given role of the user
 
 Step 10: TODO: CRUD
 
@@ -84,6 +83,7 @@ Step 10: TODO: CRUD
 * Add this request data to Firebase Datastore
 * Create ListView with slidable tiles for approvals
 * Admin SDK used by admin user via workflow on this request data and is approved from app
+  * Allow a Plan attribute via Custome Claims (e.g. Premium user flag) for Buyer and Seller, to add features which are not Navigation linked. Add a button Upgrade to Plan in Drawer that leads to Payment screen. Also certain aspects of premium plan can be visible that leads to upgrade plan screen via middleware
 * Nested Category, Sub-Category tree creation
 
 Step 11: TODO: Theming and Custom Settings
@@ -100,5 +100,10 @@ Step 12: TODO: Firebase Remote Config for A/B testing
 2. Config for adding Search Bar at the Top vs a Bottom Navigation button
 
 Step 13: TODO: Large vs Small screen responsiveness
+
+* Drawer: Triggered by Top Left Icon (App Logo). For iOS this icon changes to back button when required. Contains allowed Role List, Screens specified as Drawer. Becomes Left Side Navigation for Horizontal Screens. Can have additional extreme left vertical Navigation Strip. Bottom Navigation Bar also folds into this strip in Horizontal Screens.
+* Top Right Icon: used for Login and post Login triggers BottomSheet/Context Menu for Persona Change, Profile, Settings, Change Password, Logout
+* Search Bar (Toggle Button for phones) on Top Center with Title
+* Status Bottom Bar for desktops only instead of SnackBars
 
 Step 14: TODO: Make own login flow screens. Remove firebase library reference from all but auth_service

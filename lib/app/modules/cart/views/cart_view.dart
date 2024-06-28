@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/services/auth_service.dart';
 
-import '../../../routes/screens.dart';
+import '../../../../models/screens.dart';
 import '../controllers/cart_controller.dart';
 
 class CartView extends GetView<CartController> {
