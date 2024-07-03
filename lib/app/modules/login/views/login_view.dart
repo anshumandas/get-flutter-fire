@@ -70,6 +70,9 @@ class LoginView extends GetView<LoginController> {
             );
     } else if (controller.isAnon) {
       ui = RegisterScreen(
+        providers: [
+          MyEmailAuthProvider(),
+        ],
         showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
         showPasswordVisibilityToggle: true,
         headerBuilder: LoginWidgets.headerBuilder,
@@ -108,17 +111,12 @@ class LoginView extends GetView<LoginController> {
   List<FirebaseUIAction> getActions() {
     return [
       // AuthStateChangeAction<CredentialReceived>((context, state) {
-      //   print("***********Not Reaching*************");
-      //   print(state);
-      // }),
       AuthStateChangeAction<AuthFailed>((context, state) => LoginController.to
           .errorMessage(context, state, showReverificationButton)),
       // AuthStateChangeAction<SignedIn>((context, state) {
-      //   // print("signed In");
       //   // This is not required due to the AuthMiddleware
       // }),
       // EmailLinkSignInAction((context) {
-      //   // print("signed in by link");
       //   final thenTo = Get.rootDelegate.currentConfiguration!.currentPage!
       //       .parameters?['then'];
       //   Get.rootDelegate.offNamed(thenTo ?? Routes.PROFILE);

@@ -1,7 +1,7 @@
-// import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../models/access_level.dart';
 import '../../models/role.dart';
 import '../middleware/auth_middleware.dart';
 import '../modules/cart/bindings/cart_binding.dart';
@@ -38,8 +38,6 @@ import '../modules/users/bindings/users_binding.dart';
 import '../modules/users/views/users_view.dart';
 import '../../models/screens.dart';
 
-// ignore_for_file: inference_failure_on_instance_creation
-
 part 'app_routes.dart';
 part 'screen_extension.dart';
 
@@ -48,6 +46,8 @@ class AppPages {
 
   static const INITIAL = Routes.HOME;
 
+  //TODO create this using the information from Screen and Role data
+  //can use https://pub.dev/packages/freezed
   static final routes = [
     GetPage(
       name: '/',
@@ -57,27 +57,14 @@ class AppPages {
       preventDuplicates: true,
       children: [
         Screen.LOGIN.getPage(
-          // middlewares: [
-          //   //only enter this route when not authed.
-          //   EnsureNotAuthedOrGuestMiddleware(),
-          // ],
           page: () => const LoginView(),
           binding: LoginBinding(),
         ),
         Screen.REGISTER.getPage(
-          // Not required anymore
-          // middlewares: [
-          //   //only enter this route when authed
-          //   EnsureAuthedAndNotGuestMiddleware(),
-          // ],
           page: () => const RegisterView(),
           binding: RegisterBinding(),
         ),
         Screen.PROFILE.getPage(
-          // middlewares: [
-          //   //only enter this route when authed
-          //   EnsureAuthedAndNotGuestMiddleware(),
-          // ],
           page: () => const ProfileView(),
           binding: ProfileBinding(),
         ),
@@ -87,8 +74,6 @@ class AppPages {
         ),
         Screen.HOME.getPage(
           page: () => const HomeView(),
-          preventDuplicates:
-              false, //needs to be false for dynamic screens which get loaded with arguments
           bindings: [
             HomeBinding(),
           ],
@@ -98,10 +83,6 @@ class AppPages {
               binding: DashboardBinding(),
             ),
             Screen.USERS.getPage(
-              // middlewares: [
-              //   //only enter this route when admin
-              //   EnsureRoleMiddleware(Role.admin),
-              // ],
               role: Role.admin,
               page: () => const UsersView(),
               binding: UsersBinding(),
@@ -116,10 +97,9 @@ class AppPages {
               page: () => const ProductsView(),
               binding: ProductsBinding(),
               children: [
-                Screen.PRODUCT_DETAILS.getPage(
+                Screen.PRODUCT_DETAILS.getPages(
                   page: () => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
-                  preventDuplicates: false,
                 ),
               ],
             ),
@@ -129,25 +109,18 @@ class AppPages {
               binding: CategoriesBinding(),
             ),
             Screen.CART.getPage(
-              // middlewares: [
-              //   //if not logged in then enter as guest
-              //   EnsureAuthOrGuestMiddleware(),
-              // ],
               page: () => const CartView(),
               binding: CartBinding(),
+              role: Role.buyer,
               children: [
-                Screen.CART_DETAILS.getPage(
-                  page: () => const ProductDetailsView(),
-                  binding: ProductDetailsBinding(),
-                  preventDuplicates: false,
-                ),
                 Screen.CHECKOUT.getPage(
-                  // middlewares: [
-                  //   //only enter this route when authed
-                  //   EnsureAuthedAndNotGuestMiddleware(),
-                  // ],
+                  //if this is after cart details, it never gets reached
                   page: () => const CheckoutView(),
                   binding: CheckoutBinding(),
+                ),
+                Screen.CART_DETAILS.getPages(
+                  page: () => const ProductDetailsView(),
+                  binding: ProductDetailsBinding(),
                 ),
               ],
             ),
@@ -156,10 +129,9 @@ class AppPages {
               binding: MyProductsBinding(),
               role: Role.seller,
               children: [
-                Screen.MY_PRODUCT_DETAILS.getPage(
+                Screen.MY_PRODUCT_DETAILS.getPages(
                   page: () => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
-                  preventDuplicates: false,
                 ),
               ],
             ),
@@ -171,11 +143,6 @@ class AppPages {
                 Screen.TASK_DETAILS.getPage(
                   page: () => const TaskDetailsView(),
                   binding: TaskDetailsBinding(),
-                  preventDuplicates: false,
-                  // middlewares: [
-                  //   //only enter this route when authed
-                  //   EnsureRoleMiddleware(Role.admin),
-                  // ],
                 ),
               ],
             ),

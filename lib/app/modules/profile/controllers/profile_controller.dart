@@ -56,7 +56,6 @@ class ProfileController extends GetxController {
 
   Future<void> updatePhotoURL(String dest) async {
     _photoURL.value = await storage.ref().child(dest).getDownloadURL();
-    // print(pic);
     await currentUser?.updatePhotoURL(_photoURL.value);
     Get.snackbar('Success', 'Picture stored and linked');
   }

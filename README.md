@@ -57,8 +57,10 @@ Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we 
 1. In Emulator we can add user via http://127.0.0.1:4000/auth and add custom claim via UI as  {"role":"admin"}. The effect is shown via Product page in Nav instead of Cart page for admin user.
 2. Add Function to add the custom claim to make the first user the admin using the Admin SDK
 3. Registeration form to collect some data post signUp and enforce email verification from Client side.
+
    * Note! for Emulator check the console to verify using the link provided as email is not sent.
 4. Enforcing verify email using a button which appears when SignIn fails due to non verification.
+
    * Fixed the error handling message during login.
    * Coverted server side to Typescript
    * Enabled Resend verification mail button
@@ -70,14 +72,24 @@ Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we 
        * Note that the Server side beforeCreate function can also bypass user creation till verification but the user record (esp password) needs to be stored anyways, so bypassing user creation is not a good idea. Instead, we should use the verified tag in subsequent processing
        * Sending emails from server side is possible but by using the web client SDK.
 5. TODO: Other Items
+
    * TODO: Using autocomplete for emails is throwing error log in terminal. No impact but need to fix when all is done.
    * TODO: Add a job that removes all unverified users after a while automatically. This could be useful if you were victim of bot attacks, but adding the Recaptcha is better precaution. See [https://stackoverflow.com/questions/67148672/how-to-delete-unverified-e-mail-addresses-in-firebase-authentication-flutter/67150606#67150606]
 6. Added Roles of Buyer and Seller.
+
    1. Added Access level in increasing order of role order => Buyer then Seller then Admin
    2. Created Navigation for each of Admin, Buyer, Seller screens
    3. Allowed switch from lower role Navigation to Navigation view till the given role of the user
 
-Step 10: TODO: CRUD
+Step 10: TODO: Firebase Remote Config for A/B testing
+
+1. Complete the Screen enum based Navigation framework
+2. Config for Navigation element change
+   * A: Drawer for Account, Settings, Sign Out
+   * B: Hamburger that opens BottomSheet (Context Menu in larger screen) for the same options
+3. Config for adding Search Bar at the Top vs a Bottom Navigation button
+
+Step 11: TODO: CRUD
 
 * Users request role upgrade
 * Add this request data to Firebase Datastore
@@ -86,18 +98,11 @@ Step 10: TODO: CRUD
   * Allow a Plan attribute via Custome Claims (e.g. Premium user flag) for Buyer and Seller, to add features which are not Navigation linked. Add a button Upgrade to Plan in Drawer that leads to Payment screen. Also certain aspects of premium plan can be visible that leads to upgrade plan screen via middleware
 * Nested Category, Sub-Category tree creation
 
-Step 11: TODO: Theming and Custom Settings
+Step 12: TODO: Theming and Custom Settings
 
 * Add Persona (like that in Netflix) and create a Persona selection only for Buyer Role
 * Add Minimal (Three Color Gradient Pallette) Material Theme. Align it with Persona Templates (like Kids Template in Netflix)
 * Dark theme toggle setting based on each Persona of the logged in User
-
-Step 12: TODO: Firebase Remote Config for A/B testing
-
-1. Config for Navigation element change
-   * A: Drawer for Account, Settings, Sign Out
-   * B: Hamburger that opens BottomSheet (Context Menu in larger screen) for the same options
-2. Config for adding Search Bar at the Top vs a Bottom Navigation button
 
 Step 13: TODO: Large vs Small screen responsiveness
 
@@ -105,5 +110,6 @@ Step 13: TODO: Large vs Small screen responsiveness
 * Top Right Icon: used for Login and post Login triggers BottomSheet/Context Menu for Persona Change, Profile, Settings, Change Password, Logout
 * Search Bar (Toggle Button for phones) on Top Center with Title
 * Status Bottom Bar for desktops only instead of SnackBars
+* FAB vs Main Menu
 
 Step 14: TODO: Make own login flow screens. Remove firebase library reference from all but auth_service

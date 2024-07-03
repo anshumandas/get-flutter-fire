@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../services/auth_service.dart';
 import '../../models/screens.dart';
+import 'menu_sheet_button.dart';
 
 class LoginWidgets {
   static Widget headerBuilder(context, constraints, shrinkOffset) {
@@ -42,25 +43,59 @@ class LoginWidgets {
   }
 }
 
-class LoginLogoutToggle extends StatelessWidget {
-  const LoginLogoutToggle({
-    super.key,
-  });
+// class SwitchX extends GetxController {
+//   RxBool isLoginPage =
+//       (Get.rootDelegate.currentConfiguration!.currentPage!.name ==
+//               Screen.LOGIN.path)
+//           .obs; // our observable
+
+//   void toggle(Screen screen) {
+//     isLoginPage.value = screen == Screen.LOGIN;
+//   }
+// }
+
+class LoginBottomSheetToggle extends MenuSheetButton<Screen> {
+  const LoginBottomSheetToggle(this.current, {super.key});
+  final GetNavConfig current;
+
+  @override
+  Iterable<Screen> get values => Screen.sheet(null);
+
+  @override
+  Icon? get icon => (AuthService.to.isLoggedInValue)
+      ? values.length == 1
+          ? const Icon(Icons.logout)
+          : const Icon(Icons.menu)
+      : const Icon(Icons.login);
+
+  @override
+  String? get label => (AuthService.to.isLoggedInValue)
+      ? values.length == 1
+          ? 'Logout'
+          : 'Click for Options'
+      : 'Login';
+
+  // @override
+  // void callbackFunc(act) {
+  //   SwitchX controller = Get.find();
+  //   controller.toggle(Screen.LOGIN);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => IconButton(
-        // padding: EdgeInsets.zero,
-        // constraints: const BoxConstraints(),
-        tooltip: (AuthService.to.isLoggedInValue) ? 'Logout' : 'Login',
-        icon: (AuthService.to.isLoggedInValue)
-            ? const Icon(Icons.logout)
-            : const Icon(Icons.login),
-        onPressed: () {
-          if (AuthService.to.isLoggedInValue) {
-            AuthService.to.logout();
-          }
-          Get.rootDelegate.toNamed(Screen.LOGIN.route);
-        }));
+    // SwitchX controller =
+    //     Get.put(SwitchX(), permanent: true); //must make true else gives error
+    return Obx(() => (AuthService.to.isLoggedInValue)
+        ? builder(context)
+        : !(current.currentPage!.name == Screen.LOGIN.path)
+            ? IconButton(
+                onPressed: () async {
+                  await Screen.LOGIN.doAction();
+                  // controller.toggle(Screen.LOGIN);
+                },
+                icon: Icon(Screen.LOGIN.icon),
+                tooltip: Screen.LOGIN.label,
+              )
+            : const SizedBox.shrink()); //should be only for loggedin case
   }
 }

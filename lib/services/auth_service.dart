@@ -61,8 +61,6 @@ class AuthService extends GetxService {
       if (_auth.currentUser != null) {
         await _auth.currentUser?.sendEmailVerification();
       } else if (emailAuth != null) {
-        print("Will send a verification link");
-
         // Approach 1: sending email auth link requires deep linking which is
         // a TODO as the current Flutter methods are deprecated
         // sendSingInLink(emailAuth);

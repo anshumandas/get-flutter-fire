@@ -4,39 +4,19 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
-enum ImageSources { camera, gallery, file }
+import '../../models/action_enum.dart';
+import 'menu_sheet_button.dart';
 
-//TODO abstract out the menuOrBottomSheet component
+enum ImageSources implements ActionEnum {
+  camera(Icons.camera, 'Camera'),
+  gallery(Icons.photo_library, 'Gallery'),
+  file(Icons.file_upload, 'File');
 
-class ImagePickerButton extends StatefulWidget {
-  final ValueSetter<String?> callback;
-
-  const ImagePickerButton(this.callback, {super.key});
+  const ImageSources(this.icon, this.label);
 
   @override
-  State<ImagePickerButton> createState() => _ImagePickerButtonState();
-}
-
-class _ImagePickerButtonState extends State<ImagePickerButton> {
-  static List<PopupMenuEntry<ImageSources>> getItems(BuildContext context) {
-    return [
-      const PopupMenuItem<ImageSources>(
-        value: ImageSources.camera,
-        child: Text('Camera'),
-      ),
-      const PopupMenuItem<ImageSources>(
-        value: ImageSources.gallery,
-        child: Text('Gallery'),
-      ),
-      const PopupMenuItem<ImageSources>(
-        value: ImageSources.file,
-        child: Text('File'),
-      ),
-    ];
-  }
-
-  static Future<String?> select(ImageSources value) async {
-    switch (value) {
+  Future<dynamic> doAction() async {
+    switch (this) {
       case ImageSources.camera:
         return await getImage(ImageSource.camera);
       case ImageSources.gallery:
@@ -47,6 +27,11 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
     }
     return null;
   }
+
+  @override
+  final IconData? icon;
+  @override
+  final String? label;
 
   static Future<String?> getImage(ImageSource imageSource) async {
     final pickedFile = await ImagePicker().pickImage(source: imageSource);
@@ -74,68 +59,33 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
       return null;
     }
   }
+}
 
-//This should be a modal bottom sheet if on Mobile (See https://mercyjemosop.medium.com/select-and-upload-images-to-firebase-storage-flutter-6fac855970a9)
+class ImagePickerButton extends MenuSheetButton<ImageSources> {
+  final ValueSetter<String>? callback;
 
-  void _showPicker(context) {
-    Get.bottomSheet(
-      SizedBox(
-        height: 180,
-        child: ListView(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text(
-                  'Gallery',
-                ),
-                onTap: () async {
-                  Get.back();
-                  widget.callback(await getImage(ImageSource.gallery));
-                }),
-            ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('Camera'),
-                onTap: () async {
-                  Get.back();
-                  widget.callback(await getImage(ImageSource.camera));
-                }),
-            ListTile(
-                leading: const Icon(Icons.file_upload),
-                title: const Text('File'),
-                onTap: () async {
-                  Get.back();
-                  widget.callback(await getFile());
-                  // Navigator.of(context).pop();
-                }),
-          ],
-        ),
-      ),
-      backgroundColor: Colors.white,
-    );
+  const ImagePickerButton(
+      {super.key,
+      super.icon = const Icon(Icons.image),
+      super.label = 'Pick an Image',
+      this.callback});
+
+  @override
+  Iterable<ImageSources> get values => ImageSources.values;
+
+  @override
+  void callbackFunc(act) {
+    if (callback != null) callback!(act);
   }
 
   @override
   Widget build(BuildContext context) {
     return !(GetPlatform.isAndroid || GetPlatform.isIOS)
         ? TextButton.icon(
-            onPressed: () async => widget.callback(await getFile()),
-            icon: const Icon(Icons.image),
+            onPressed: () async => callbackFunc(await ImageSources.getFile()),
+            icon: icon,
             label: const Text('Pick an Image'),
           )
-        : Get.mediaQuery.orientation == Orientation.portrait
-            // : Get.context!.isPortrait
-            ? IconButton(
-                onPressed: () => _showPicker(context),
-                icon: const Icon(Icons.image),
-                tooltip: 'Pick an Image from',
-              )
-            : PopupMenuButton<ImageSources>(
-                itemBuilder: getItems,
-                icon: const Icon(Icons.image),
-                initialValue: ImageSources.gallery,
-                tooltip: 'Pick an Image from',
-                onSelected: (ImageSources value) async =>
-                    {widget.callback(await select(value))});
+        : builder(context);
   }
 }

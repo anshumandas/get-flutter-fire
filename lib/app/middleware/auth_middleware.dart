@@ -1,9 +1,8 @@
 // ignore_for_file: avoid_print
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/models/role.dart';
-
-import '../../services/auth_service.dart';
-import '../routes/app_pages.dart';
+import 'package:get_flutter_fire/services/auth_service.dart';
+import 'package:get_flutter_fire/app/routes/app_pages.dart';
 
 Future<GetNavConfig?> loginVerify(bool check, GetNavConfig route,
     Future<GetNavConfig?> Function(GetNavConfig) redirector) async {

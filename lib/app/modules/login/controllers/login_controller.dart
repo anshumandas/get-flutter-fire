@@ -17,11 +17,4 @@ class LoginController extends GetxController {
 
   bool get isRegistered =>
       AuthService.to.registered.value || AuthService.to.isEmailVerified;
-
-  // @override
-  // onInit() {
-  //   super.onInit();
-  //   showReverificationButton
-  //       .listen((value) => print("$value showReverificationButton set"));
-  // }
 }

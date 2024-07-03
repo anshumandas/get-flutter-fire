@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:get_flutter_fire/app/widgets/login_widgets.dart';
-
-import 'role.dart';
+import 'package:get/get.dart';
+import '../app/widgets/login_widgets.dart';
+import 'action_enum.dart';
+import 'access_level.dart';
+import '../../services/auth_service.dart';
 
 enum AccessedVia {
   auto,
   widget, //example: top right button
-  navigator, //bottom nav. can be linked to drawer items
-  drawer, //creates nav tree
-  bottomSheet, //context menu for web
-  fab,
+  navigator, //bottom nav. can be linked to drawer items //handled in ScreenWidget
+  drawer, //creates nav tree //handled in RootView
+  bottomSheet, //context menu for web handled via the Button that calls the sheet
+  fab, //handled in ScreenWidget
   singleTap, //when an item of a list is clicked
   longTap //or double click
 }
 
-enum Screen {
+enum Screen implements ActionEnum {
   HOME('/home',
       icon: Icons.home,
       label: "Home",
@@ -34,6 +36,15 @@ enum Screen {
       parent: HOME),
   PRODUCT_DETAILS('/:productId',
       accessLevel: AccessLevel.public, parent: PRODUCTS),
+  LOGIN('/login',
+      icon: Icons.login,
+      accessor: AccessedVia.widget,
+      accessLevel: AccessLevel.notAuthed),
+  LOGOUT('/login',
+      icon: Icons.logout,
+      label: "Logout",
+      accessor: AccessedVia.bottomSheet,
+      accessLevel: AccessLevel.authenticated),
   PROFILE('/profile',
       icon: Icons.account_box_rounded,
       label: "Profile",
@@ -44,10 +55,6 @@ enum Screen {
       label: "Settings",
       accessor: AccessedVia.drawer,
       accessLevel: AccessLevel.authenticated),
-  LOGIN('/login',
-      widget: LoginLogoutToggle(),
-      accessor: AccessedVia.widget,
-      accessLevel: AccessLevel.notAuthed),
   CART('/cart',
       icon: Icons.trolley,
       label: "Cart",
@@ -58,7 +65,7 @@ enum Screen {
   CHECKOUT('/checkout',
       icon: Icons.check_outlined,
       label: "Checkout",
-      accessor: AccessedVia.fab,
+      accessor: AccessedVia.fab, //fab appears in parent
       parent: CART,
       accessLevel: AccessLevel.authenticated),
   REGISTER('/register',
@@ -98,23 +105,47 @@ enum Screen {
       this.label,
       this.parent,
       this.accessor = AccessedVia.singleTap,
-      this.accessLevel = AccessLevel.authenticated,
-      this.widget});
-  final String path;
+      this.accessLevel = AccessLevel.authenticated});
+
+  @override
   final IconData? icon;
+  @override
   final String? label;
+
+  final String path;
   final AccessedVia accessor;
   final Screen? parent;
-  final Widget? widget;
   final AccessLevel
       accessLevel; //if false it is role based. true means allowed for all
 
   Iterable<Screen> get children =>
       Screen.values.where((Screen screen) => screen.parent == this);
 
-  static Iterable<Screen> drawer({Screen? parent}) =>
-      Screen.values.where((Screen screen) =>
-          screen.parent == parent && screen.accessor == AccessedVia.drawer);
+  Iterable<Screen> get fabs => Screen.values.where((Screen screen) =>
+      screen.parent == this && screen.accessor == AccessedVia.fab);
+
+  Iterable<Screen> get navTabs => Screen.values.where((Screen screen) =>
+      screen.parent == this && screen.accessor == AccessedVia.navigator);
 
   String get route => (parent != null ? parent?.route : '')! + path;
+
+  static Iterable<Screen> sheet(Screen? parent) =>
+      Screen.values.where((Screen screen) =>
+          screen.parent == parent &&
+          screen.accessor == AccessedVia.bottomSheet);
+
+  static Iterable<Screen> drawer() => //drawer is not parent linked
+      Screen.values
+          .where((Screen screen) => screen.accessor == AccessedVia.drawer);
+
+  @override
+  Future<dynamic> doAction() async {
+    if (this == LOGOUT) {
+      AuthService.to.logout();
+    }
+    Get.rootDelegate.toNamed(route);
+  }
+
+  Widget? widget(GetNavConfig current) =>
+      (this == LOGIN) ? LoginBottomSheetToggle(current) : null;
 }

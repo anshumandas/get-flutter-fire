@@ -29,18 +29,21 @@ class RootView extends GetView<RootController> {
                     onPressed: () =>
                         Get.rootDelegate.popRoute(), //Navigator.pop(context),
                   )
-                : AuthService.to.isLoggedInValue
-                    ? IconButton(
-                        icon: const Icon(Icons.person),
-                        onPressed: () => controller.openDrawer(),
-                      )
-                    : null,
+                : IconButton(
+                    icon: ImageIcon(
+                      const AssetImage("icons/logo.png"),
+                      color: Colors.grey.shade800,
+                    ),
+                    onPressed: () => AuthService.to.isLoggedInValue
+                        ? controller.openDrawer()
+                        : {Screen.HOME.doAction()},
+                  ),
             actions: [
               Container(
                   margin: const EdgeInsets.only(right: 15),
-                  child: Screen.LOGIN.widget)
+                  child: Screen.LOGIN.widget(current))
             ],
-            automaticallyImplyLeading: false, //removes drawer icon
+            // automaticallyImplyLeading: false, //removes drawer icon
           ),
           body: GetRouterOutlet(
             initialRoute: AppPages.INITIAL,

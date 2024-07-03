@@ -97,7 +97,7 @@ class ProfileView extends GetView<ProfileController> {
                       icon: const Icon(Icons.password_rounded),
                     )
                   : const SizedBox.shrink(),
-              ImagePickerButton((String? path) async {
+              ImagePickerButton(callback: (String? path) async {
                 if (path != null) {
                   //Upload to Store
                   String? dest = await controller.uploadFile(path);

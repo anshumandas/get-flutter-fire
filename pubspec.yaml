@@ -36,5 +36,6 @@ flutter:
   assets:
     - assets/images/flutterfire_300x.png
     - assets/images/dash.png
+    - assets/icons/logo.png
   uses-material-design: true
 
