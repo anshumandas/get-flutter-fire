@@ -81,12 +81,12 @@ Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we 
    2. Created Navigation for each of Admin, Buyer, Seller screens
    3. Allowed switch from lower role Navigation to Navigation view till the given role of the user
 
-Step 10: TODO: Firebase Remote Config for A/B testing
+Step 10: TODO: Firebase Remote Config for A/B testing. See [https://firebase.google.com/docs/remote-config]
 
 1. Complete the Screen enum based Navigation framework
-2. Config for Navigation element change
-   * A: Drawer for Account, Settings, Sign Out
-   * B: Hamburger that opens BottomSheet (Context Menu in larger screen) for the same options
+2. Config useBottomSheetForProfileOptions for Navigation element to be one of the following
+   * False: Drawer for Account, Settings, Sign Out
+   * True: Hamburger that opens BottomSheet (Context Menu in larger screen) for the same options
 3. Config for adding Search Bar at the Top vs a Bottom Navigation button
 
 Step 11: TODO: CRUD

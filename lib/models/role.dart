@@ -30,6 +30,6 @@ enum Role {
   bool hasAccessOf(String role) => index >= fromString(role).index;
 
   List<Screen> get tabs => permissions
-      .where((screen) => screen.accessor == AccessedVia.navigator)
+      .where((screen) => screen.accessor_ == AccessedVia.navigator)
       .toList(); //the ones in tab
 }

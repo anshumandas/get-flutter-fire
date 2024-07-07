@@ -38,11 +38,7 @@ class RootView extends GetView<RootController> {
                         ? controller.openDrawer()
                         : {Screen.HOME.doAction()},
                   ),
-            actions: [
-              Container(
-                  margin: const EdgeInsets.only(right: 15),
-                  child: Screen.LOGIN.widget(current))
-            ],
+            actions: topRightMenuButtons(current),
             // automaticallyImplyLeading: false, //removes drawer icon
           ),
           body: GetRouterOutlet(
@@ -55,5 +51,14 @@ class RootView extends GetView<RootController> {
         );
       },
     );
+  }
+
+//This could be used to add icon buttons in expanded web view instead of the context menu
+  List<Widget> topRightMenuButtons(GetNavConfig current) {
+    return [
+      Container(
+          margin: const EdgeInsets.only(right: 15),
+          child: Screen.LOGIN.widget(current))
+    ]; //TODO add seach button
   }
 }

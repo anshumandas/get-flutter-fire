@@ -172,6 +172,7 @@ class AuthService extends GetxService {
       }
 
       return switch (e.code) {
+        'invalid-credential' => 'User ID or Password incorrect',
         'user-not-found' => 'Please create an account first.',
         'credential-already-in-use' => 'This email is already in use.',
         _ => fbui.localizedErrorText(e.code, defaultLabels) ??

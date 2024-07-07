@@ -3,6 +3,12 @@ import 'package:get/get.dart';
 
 import '../../models/action_enum.dart';
 
+class MenuItemsController<T extends ActionEnum> extends GetxController {
+  MenuItemsController(Iterable<T> iter) : values = Rx<Iterable<T>>(iter);
+
+  final Rx<Iterable<T>> values;
+}
+
 class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
   final Iterable<T>? values_;
   final Icon? icon;
@@ -42,7 +48,7 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
     );
   }
 
-  List<PopupMenuEntry<T>> getItems(BuildContext context) {
+  List<PopupMenuEntry<T>> getItems(BuildContext context, Iterable<T> values) {
     return values.map<PopupMenuEntry<T>>(createPopupMenuItem).toList();
   }
 
@@ -57,27 +63,29 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
   }
 
 //This should be a modal bottom sheet if on Mobile (See https://mercyjemosop.medium.com/select-and-upload-images-to-firebase-storage-flutter-6fac855970a9)
-  Widget builder(BuildContext context) {
+  Widget builder(BuildContext context, {Iterable<T>? vals}) {
+    Iterable<T> values = vals ?? values_!;
     return values.length == 1 ||
             Get.mediaQuery.orientation == Orientation.portrait
         // : Get.context!.isPortrait
         ? (icon != null
             ? IconButton(
-                onPressed: buttonPressed,
+                onPressed: () => buttonPressed(values),
                 icon: icon!,
                 tooltip: label,
               )
             : TextButton(
-                onPressed: buttonPressed, child: Text(label ?? 'Need Label')))
+                onPressed: () => buttonPressed(values),
+                child: Text(label ?? 'Need Label')))
         : PopupMenuButton<T>(
-            itemBuilder: getItems,
+            itemBuilder: (context_) => getItems(context_, values),
             icon: icon,
             tooltip: label,
             onSelected: (T value) async =>
                 callbackFunc(await value.doAction()));
   }
 
-  void buttonPressed() async => values.length == 1
+  void buttonPressed(Iterable<T> values) async => values.length == 1
       ? callbackFunc(await values.first.doAction())
       : Get.bottomSheet(MenuSheetButton.bottomSheet(values, callbackFunc),
           backgroundColor: Colors.white);
