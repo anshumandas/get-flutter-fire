@@ -1,14 +1,31 @@
 # get-flutter-fire
 
-Boilerplate for Flutter with GetX and Firebase
+This codebase provides a boilerplate code utilizing the following three technologies:
 
-Use the git version history to learn step by step
+1. Flutter 3.0 - For UX and uses Dart languange. See [https://flutter.dev/]
+2. GetX - State management for Flutter. See [https://github.com/jonataslaw/getx/tree/4.6.1]
+3. Firebase - For Backend as a Service. See [https://firebase.google.com/]
+   1. Easy Authentication flow
+   2. Server side functions
+   3. Remote Configurations which can be used for A/B testing
 
-Step 1: Use Get CLI https://pub.dev/packages/get_cli
+This was created as part of my own learning process and you will find that git commits were made according to the Steps listed below. You can use the git version history to check each commit and learn step by step, as I did.
+
+I am also using this codebase as an experiment towards hiring people (freshers especially but not limited to them) for my development team. If you are in Mumbai and are interested to join my team, you can use this codebase in the following manner:
+
+* Fork the codebase
+* Build your own application using this as a base, or complete a TODO or fix a bug
+* Send me a Pull Request. Mention a way of connecting with you in the commit message along with details of commit. Also modify ReadMe to say what you have changed in detail.
+* I will go through the request and then connect with you if I find the entry to be interesting and take an interview round.
+
+
+## The Steps
+
+Step 1: Use Get CLI [https://pub.dev/packages/get_cli]
 
 `get create project`
 
-Step 2: Copy code from https://github.com/jonataslaw/getx/tree/4.6.1/example_nav2/lib
+Step 2: Copy code from [https://github.com/jonataslaw/getx/tree/4.6.1/example_nav2/lib]
 
 Step 3: Integrate FlutterFire Authentication
 
@@ -81,13 +98,13 @@ Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we 
    2. Created Navigation for each of Admin, Buyer, Seller screens
    3. Allowed switch from lower role Navigation to Navigation view till the given role of the user
 
-Step 10: TODO: Firebase Remote Config for A/B testing. See [https://firebase.google.com/docs/remote-config]
+Step 10: Firebase Remote Config for A/B testing. See [https://firebase.google.com/docs/remote-config]
 
 1. Complete the Screen enum based Navigation framework
 2. Config useBottomSheetForProfileOptions for Navigation element to be one of the following
    * False: Drawer for Account, Settings, Sign Out
    * True: Hamburger that opens BottomSheet (Context Menu in larger screen) for the same options
-3. Config for adding Search Bar at the Top vs a Bottom Navigation button
+3. TODO: Config for adding Search Bar at the Top vs a Bottom Navigation button
 
 Step 11: TODO: CRUD
 
