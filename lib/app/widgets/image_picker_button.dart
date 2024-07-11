@@ -80,12 +80,14 @@ class ImagePickerButton extends MenuSheetButton<ImageSources> {
 
   @override
   Widget build(BuildContext context) {
-    return !(GetPlatform.isAndroid || GetPlatform.isIOS)
-        ? TextButton.icon(
-            onPressed: () async => callbackFunc(await ImageSources.getFile()),
-            icon: icon,
-            label: const Text('Pick an Image'),
-          )
-        : builder(context);
+    return
+        // !(GetPlatform.isAndroid || GetPlatform.isIOS)
+        //     ?
+        TextButton.icon(
+      onPressed: () async => callbackFunc(await ImageSources.getFile()),
+      icon: icon,
+      label: const Text('Pick an Image'),
+    );
+    // : builder(context);
   }
 }

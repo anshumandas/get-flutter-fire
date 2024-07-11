@@ -52,6 +52,9 @@ class AuthService extends GetxService {
       ? (user!.displayName ?? user!.email)
       : 'Guest';
 
+  String? get userPhotoUrl => user?.photoURL;
+  String? get userEmail => user?.email;
+
   void login() {
     // this is not needed as we are using Firebase UI for the login part
   }
