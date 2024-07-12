@@ -7,7 +7,7 @@ class LoginController extends GetxController {
 
   final Rx<bool> showReverificationButton = Rx(false);
 
-  bool get isRobot => AuthService.to.robot.value == true;
+  bool get isRobot => AuthService.to.robot.value == false;
 
   set robot(bool v) => AuthService.to.robot.value = v;
 

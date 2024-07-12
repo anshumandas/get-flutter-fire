@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 
 import 'app/routes/app_pages.dart';
 import 'firebase_options.dart';
@@ -15,7 +16,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  if (GetPlatform.isWeb) {
+    bool ready = await GRecaptchaV3.ready(DefaultFirebaseOptions.sitekey); 
+    print("Is Recaptcha ready? $ready");
+  }
   runApp(
     GetMaterialApp.router(
       debugShowCheckedModeBanner:
