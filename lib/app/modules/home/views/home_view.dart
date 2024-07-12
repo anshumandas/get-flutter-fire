@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
 import '../../../widgets/screen_widget.dart';
@@ -9,6 +10,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    GRecaptchaV3.hideBadge();
     return GetRouterOutlet.builder(
       builder: (context, delegate, currentRoute) {
         var arg = Get.rootDelegate.arguments();

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
+import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 import 'package:get/get.dart';
 import '../../../../firebase_options.dart';
 
@@ -51,6 +52,7 @@ class LoginView extends GetView<LoginController> {
   Widget loginScreen(BuildContext context) {
     Widget ui;
     if (!controller.isLoggedIn) {
+      GRecaptchaV3.showBadge();
       ui = !(GetPlatform.isAndroid || GetPlatform.isIOS) && controller.isRobot
           ? recaptcha()
           : SignInScreen(
@@ -93,12 +95,24 @@ class LoginView extends GetView<LoginController> {
   }
 
   Widget recaptcha() {
-    //TODO: Add Recaptcha
     return Scaffold(
-        body: TextButton(
-      onPressed: () => controller.robot = false,
-      child: const Text("Are you a Robot?"),
-    ));
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () async {
+                String? token = await GRecaptchaV3.execute('login'); //--3
+                print(token);
+                controller.robot = false;
+                Get.rootDelegate.toNamed(Screen.LOGIN.route);
+              },
+              child: const Text("I am a human"),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// The following actions are useful here:
