@@ -24,14 +24,14 @@ enum ImageSources implements ActionEnum {
       case ImageSources.file:
         return await getFile();
       default:
+        return null;
     }
-    return null;
   }
 
   @override
-  final IconData? icon;
+  final IconData icon;
   @override
-  final String? label;
+  final String label;
 
   static Future<String?> getImage(ImageSource imageSource) async {
     final pickedFile = await ImagePicker().pickImage(source: imageSource);
@@ -53,7 +53,6 @@ enum ImageSources implements ActionEnum {
       GetStorage().write(fileName, fileBytes);
 
       return fileName;
-      //result.files.single.path;//is causing issues for Web, see https://github.com/miguelpruivo/flutter_file_picker/wiki/FAQ
     } else {
       Get.snackbar('Error', 'Image Not Selected');
       return null;
@@ -64,28 +63,36 @@ enum ImageSources implements ActionEnum {
 class ImagePickerButton extends MenuSheetButton<ImageSources> {
   final ValueSetter<String>? callback;
 
-  const ImagePickerButton(
-      {super.key,
-      super.icon = const Icon(Icons.image),
-      super.label = 'Pick an Image',
-      this.callback});
+  const ImagePickerButton({
+    super.key,
+    super.icon = const Icon(Icons.image),
+    super.label = 'Pick an Image',
+    this.callback,
+  });
 
   @override
   Iterable<ImageSources> get values => ImageSources.values;
 
   @override
   void callbackFunc(act) {
-    if (callback != null) callback!(act);
+    if (callback != null && act != null) {
+      callback!(act);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return !(GetPlatform.isAndroid || GetPlatform.isIOS)
         ? TextButton.icon(
-            onPressed: () async => callbackFunc(await ImageSources.getFile()),
-            icon: icon,
-            label: const Text('Pick an Image'),
-          )
+      onPressed: () async {
+        var result = await ImageSources.getFile();
+        if (result != null) {
+          callbackFunc(result);
+        }
+      },
+      icon: icon,
+      label: const Text('Pick an Image'),
+    )
         : builder(context);
   }
 }
