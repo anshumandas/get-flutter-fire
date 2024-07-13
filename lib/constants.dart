@@ -8,7 +8,7 @@ const double defaultPadding = 16.0;
 
 const useEmulator = false;
 
-const useRecaptcha = false;
+const useRecaptcha = true;
 
 const sendMailFromClient =
     true; // set this true if in server using custom claim status
