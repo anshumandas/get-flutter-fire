@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -44,29 +42,42 @@ class ProfileView extends GetView<ProfileController> {
             //   title: const Text('User Profile'),
             // ),
             avatar: SizedBox(
-              //null will give the profile image component but it does not refresh the pic when changed
               height: size,
               width: size,
               child: ClipPath(
                 clipper: ShapeBorderClipper(shape: shape),
                 clipBehavior: Clip.hardEdge,
-                child: controller.photoURL != null
-                    ? Image.network(
-                        controller.photoURL!,
+                child: Obx(() {
+                  if (controller.photoURL != null && controller.photoURL!.isNotEmpty) {
+                    final cacheBustedUrl = controller.photoURL!;
+                    return Image.network(
+                      cacheBustedUrl,
+                      width: size,
+                      height: size,
+                      cacheWidth: size.toInt(),
+                      cacheHeight: size.toInt(),
+                      fit: BoxFit.contain,
+                      frameBuilder: _imageFrameBuilder,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Center(
+                          child: Image.asset(
+                            'assets/images/dash.png',
+                            width: size,
+                            fit: BoxFit.contain,
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: Image.asset(
+                        'assets/images/dash.png',
                         width: size,
-                        height: size,
-                        cacheWidth: size.toInt(),
-                        cacheHeight: size.toInt(),
                         fit: BoxFit.contain,
-                        frameBuilder: _imageFrameBuilder,
-                      )
-                    : Center(
-                        child: Image.asset(
-                          'assets/images/dash.png',
-                          width: size,
-                          fit: BoxFit.contain,
-                        ),
                       ),
+                    );
+                  }
+                }),
               ),
             ),
             // showDeleteConfirmationDialog: true, //this does not work properly. Possibly a bug in FlutterFire
