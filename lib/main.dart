@@ -6,9 +6,11 @@ import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '.buildConfig.dart';
 import 'app/routes/app_pages.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
+import 'services/recaptcha_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,8 +19,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   if (GetPlatform.isWeb) {
-    bool ready = await GRecaptchaV3.ready("<your site key>"); //--2
-    print("Is Recaptcha ready? $ready");
+    await GRecaptchaV3.ready(BuildConfig.instance.recaptchaSiteKey);
   }
 
   runApp(
@@ -29,6 +30,7 @@ void main() async {
       initialBinding: BindingsBuilder(
         () {
           Get.put(AuthService());
+          Get.put(RecaptchaService());
         },
       ),
       getPages: AppPages.routes,

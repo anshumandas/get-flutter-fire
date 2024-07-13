@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../models/screens.dart';
 import '../constants.dart';
 import '../models/role.dart';
+import 'recaptcha_service.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
@@ -107,7 +108,8 @@ class AuthService extends GetxService {
         .then((value) => print('Successfully sent email verification'));
   }
 
-  void register() {
+  Future<void> register() async {
+    await RecaptchaService.to.isNotABot('register');
     registered.value = true;
     // logout(); // Uncomment if we need to enforce relogin
     final thenTo =

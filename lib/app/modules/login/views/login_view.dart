@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../../firebase_options.dart';
 
 import '../../../../models/screens.dart';
+import '../../../../services/recaptcha_service.dart';
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
 
@@ -102,9 +103,7 @@ class LoginView extends GetView<LoginController> {
           children: [
             TextButton(
               onPressed: () async {
-                String? token = await GRecaptchaV3.execute('login'); //--3
-                print(token);
-                controller.robot = false;
+                await RecaptchaService.to.isNotABot('recaptcha');
                 Get.rootDelegate.toNamed(Screen.LOGIN.route);
               },
               child: const Text("I am a human"),
