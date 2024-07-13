@@ -92,54 +92,28 @@ class ProfileView extends GetView<ProfileController> {
         //This is to show that we can add custom content here
         const Divider(),
         controller.currentUser?.email != null
-        //     ? TextButton.icon(
-        //   onPressed: callChangePwdDialog,
-        //   label: const Text('Change Password'),
-        //   icon: const Icon(Icons.password_rounded),
-        // )
-        //     : const SizedBox.shrink(),
          ? TextButton.icon(
           onPressed: () => _resetPasswordEmailVerification(context),
           label: const Text('Reset Password'),
           icon: const Icon(Icons.email_rounded),
         )
         : const SizedBox.shrink(),
-        // ImagePickerButton(
-        //   callback: (String? path) async {
-        //     if (path != null) {
-        //       String? dest = await controller.uploadFile(path);
-        //       if (dest != null) {
-        //         await controller.updatePhotoURL(dest);
-        //       } else {
-        //         Get.snackbar(
-        //           'Error',
-        //           'Failed to upload image.',
-        //           snackPosition: SnackPosition.BOTTOM,
-        //         );
-        //       }
-        //     } else {
-        //       Get.snackbar(
-        //         'Error',
-        //         'Failed to pick image.',
-        //         snackPosition: SnackPosition.BOTTOM,
-        //       );
-        //     }
-        //   },
-        // ),
+        ImagePickerButton(callback: (String? path) async {
+          if (path != null) {
+            //Upload to Store
+            String? dest = await controller.uploadFile(path);
+            //attach it to User imageUrl
+            if (dest != null) {
+              await controller.updatePhotoURL(dest);
+            }
+          }
+        })
       ],
     )
         : const Scaffold();
   }
 
-  // void callChangePwdDialog() {
-  //   var dlg = ChangePasswordDialog(controller.currentUser!);
-  //   Get.defaultDialog(
-  //       title: "Change Password",
-  //       content: dlg,
-  //       textConfirm: "Submit",
-  //       textCancel: "Cancel",
-  //       onConfirm: dlg.onSubmit);
-  // }
+
 
   Future<void> _resetPasswordEmailVerification(BuildContext context) async {
     final email = controller.currentUser?.email;

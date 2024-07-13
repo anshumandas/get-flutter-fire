@@ -24,14 +24,14 @@ enum ImageSources implements ActionEnum {
       case ImageSources.file:
         return await getFile();
       default:
-        return null;
     }
+    return null;
   }
 
   @override
-  final IconData icon;
+  final IconData? icon;
   @override
-  final String label;
+  final String? label;
 
   static Future<String?> getImage(ImageSource imageSource) async {
     final pickedFile = await ImagePicker().pickImage(source: imageSource);
@@ -44,14 +44,37 @@ enum ImageSources implements ActionEnum {
   }
 
   static Future<String?> getFile() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.image, allowMultiple: false);
+    if (GetPlatform.isWeb) {
+      // Web-specific file picking logic
+      return await getWebFile();
+    } else {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: false,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        final fileBytes = result.files.first.bytes;
+        final fileName = result.files.first.name;
+        GetStorage().write(fileName, fileBytes);
+        return fileName;
+      } else {
+        Get.snackbar('Error', 'Image Not Selected');
+        return null;
+      }
+    }
+  }
+
+  static Future<String?> getWebFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
 
     if (result != null && result.files.isNotEmpty) {
       final fileBytes = result.files.first.bytes;
       final fileName = result.files.first.name;
       GetStorage().write(fileName, fileBytes);
-
       return fileName;
     } else {
       Get.snackbar('Error', 'Image Not Selected');
@@ -75,24 +98,15 @@ class ImagePickerButton extends MenuSheetButton<ImageSources> {
 
   @override
   void callbackFunc(act) {
-    if (callback != null && act != null) {
-      callback!(act);
-    }
+    if (callback != null) callback!(act);
   }
 
   @override
   Widget build(BuildContext context) {
-    return !(GetPlatform.isAndroid || GetPlatform.isIOS)
-        ? TextButton.icon(
-      onPressed: () async {
-        var result = await ImageSources.getFile();
-        if (result != null) {
-          callbackFunc(result);
-        }
-      },
+    return TextButton.icon(
+      onPressed: () async => callbackFunc(await ImageSources.getFile()),
       icon: icon,
       label: const Text('Pick an Image'),
-    )
-        : builder(context);
+    );
   }
 }
