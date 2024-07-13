@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../services/auth_service.dart';
 import '../../models/screens.dart';
 import '../../services/remote_config.dart';
+import '../utils/img_constants.dart';
 import 'menu_sheet_button.dart';
 
 class LoginWidgets {
@@ -14,7 +15,7 @@ class LoginWidgets {
       padding: const EdgeInsets.all(20),
       child: AspectRatio(
         aspectRatio: 1,
-        child: Image.asset('assets/images/flutterfire_300x.png'),
+        child: Image.asset(ImgConstants.flutterfire),
       ),
     );
   }
@@ -38,7 +39,7 @@ class LoginWidgets {
       padding: const EdgeInsets.all(20),
       child: AspectRatio(
         aspectRatio: 1,
-        child: Image.asset('assets/images/flutterfire_300x.png'),
+        child: Image.asset(ImgConstants.flutterfire),
       ),
     );
   }
