@@ -29,12 +29,15 @@ class ScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     int currentIndex =
         role != null ? role!.getCurrentIndexFromRoute(currentRoute) : 0;
+    print('role : $role');
+    bool isDesktop = GetPlatform.isDesktop;
     Iterable<Screen> fabs = screen.fabs;
     return Scaffold(
       body: body,
       appBar: appBar,
-      bottomNavigationBar: (screen.navTabs.isNotEmpty)
-          ? BottomNavigationBar(
+      bottomNavigationBar: isDesktop || screen.navTabs.isEmpty
+          ? null
+          : BottomNavigationBar(
               currentIndex: currentIndex,
               onTap: (value) {
                 if (delegate != null) {
@@ -48,8 +51,7 @@ class ScreenWidget extends StatelessWidget {
                             label: tab.label,
                           ))
                       .toList(),
-            )
-          : null,
+            ),
       floatingActionButton: fabs.isNotEmpty ? getFAB(fabs) : null,
       // bottomSheet: //this is used for persistent bar like status bar
     );

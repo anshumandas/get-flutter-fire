@@ -2,43 +2,93 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../utils/size_config.dart';
 import '../../../../models/role.dart';
 import '../../../../services/auth_service.dart';
-
 import '../../../../models/screens.dart';
 import '../controllers/my_drawer_controller.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({
-    super.key,
-  });
+  const DrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    MyDrawerController controller = Get.put(MyDrawerController([]),
-        permanent: true); //must make true else gives error
+    MyDrawerController controller =
+        Get.put(MyDrawerController([]), permanent: true);
     Screen.drawer().then((v) => {controller.values.value = v});
     SizeConfig.init(context);
-    double drawerWidth = GetPlatform.isDesktop ? SizeConfig.w * 0.27 : SizeConfig.w * 0.7;
-    
-    return Obx(() => Drawer(
-          //changing the shape of the drawer
-          backgroundColor: const Color.fromARGB(255, 241, 241, 232),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20),
-                bottomRight: Radius.circular(20)),
-          ),
-          width: drawerWidth,
-          child: Column(
-            children: drawerItems(context, controller.values),
-          ),
-        ));
+    double drawerWidth =
+        GetPlatform.isDesktop ? SizeConfig.w * 0.27 : SizeConfig.w * 0.7;
+
+    return Obx(() {
+      Role userRole = AuthService.to.maxRole;
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          bool isHorizontal = GetPlatform.isDesktop;
+
+          // Determine the width for the left-side navigation panel
+          double leftPanelWidth =
+              isHorizontal ? SizeConfig.w * 0.16 : drawerWidth;
+
+          return Row(
+            children: [
+              // Extreme left vertical navigation strip 
+              if (isHorizontal)
+                Container(
+                  width: SizeConfig.w * 0.08, // Adjust width as needed
+                  color: Colors.blueGrey,
+                  child: Column(
+                    // Vertical navigation items can be added here
+                    children: [
+                      SizedBox(height: SizeConfig.h * 0.1),
+                      IconButton(
+                        icon: const Icon(Icons.dashboard),
+                        onPressed: () {
+                          // Handle navigation or actions
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      if (GetPlatform.isDesktop)
+                        ...userRole.tabs.map((tab) => Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: IconButton(
+                                icon: Icon(tab.icon),
+                                onPressed: () {
+                                  Get.rootDelegate.toNamed(tab.route);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            )),
+                    ],
+                  ),
+                ),
+              // Left-side navigation panel (drawer)
+              SizedBox(
+                width: leftPanelWidth,
+                child: Drawer(
+                  backgroundColor: const Color.fromARGB(255, 241, 241, 232),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Column(
+                    children: drawerItems(context, controller.values),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 
   List<Widget> drawerItems(BuildContext context, Rx<Iterable<Screen>> values) {
-    double sWidth = GetPlatform.isDesktop ? SizeConfig.w * 0.25: SizeConfig.w *0.6;
+    double sWidth =
+        GetPlatform.isDesktop ? SizeConfig.w * 0.25 : SizeConfig.w * 0.6;
     List<Widget> list = [
       Container(
         height: SizeConfig.h * 0.37,
@@ -46,7 +96,8 @@ class DrawerWidget extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerLeft,
           child: Container(
-            margin: EdgeInsets.only(left: SizeConfig.h * 0.02,top: SizeConfig.h*0.02),
+            margin: EdgeInsets.only(
+                left: SizeConfig.h * 0.02, top: SizeConfig.h * 0.02, right:SizeConfig.h*0.02),
             decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(50)),
                 color: Color.fromARGB(255, 210, 214, 214)),
@@ -112,73 +163,70 @@ class DrawerWidget extends StatelessWidget {
       }
     }
 
-    for (Screen screen in values.value) {
-      list.add(Padding(
-          padding: EdgeInsets.only(left: SizeConfig.h * 0.01),
-          child: ListTile(
-            tileColor: const Color.fromARGB(255, 241, 241, 232),
-            leading: Icon(
-              screen.icon,
-              color: Colors.black,
-              // size: SizeConfig.w * 0.08,
-            ),
-            title: Text(
-              screen.label ?? '',
-              style: const TextStyle(
-                  color: Colors.black,
-                 
-                  fontWeight: FontWeight.w400),
-            ),
-            onTap: () {
-              Get.rootDelegate.toNamed(screen.route);
-              //to close the drawer
-
-              Navigator.of(context).pop();
-            },
-          )));
-    }
+    list.add(
+      Obx(
+        () {
+          return Column(
+            children: values.value.map((screen) {
+              return Padding(
+                padding: EdgeInsets.only(left: SizeConfig.h * 0.01),
+                child: ListTile(
+                  tileColor: const Color.fromARGB(255, 241, 241, 232),
+                  leading: Icon(
+                    screen.icon,
+                    color: Colors.black,
+                  ),
+                  title: Text(
+                    screen.label ?? '',
+                    style: const TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w400),
+                  ),
+                  onTap: () {
+                    Get.rootDelegate.toNamed(screen.route);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              );
+            }).toList(),
+          );
+        },
+      ),
+    );
 
     if (AuthService.to.isLoggedInValue) {
-      list.add(const Spacer(
-        flex: 1,
-      ));
-      list.add(Padding(
+      list.add(const Spacer(flex: 1));
+      list.add(
+        Padding(
           padding: EdgeInsets.only(left: SizeConfig.h * 0.01),
           child: ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.logout_sharp,
               color: Colors.black,
-              // size: SizeConfig.w * 0.08,
             ),
             title: const Text(
               'Logout',
-              style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w400),
             ),
             onTap: () {
               AuthService.to.logout();
               Get.rootDelegate.toNamed(Screen.LOGIN.route);
               //to close the drawer
-
               Navigator.of(context).pop();
             },
-          )));
-      list.add(SizedBox(
-        height: SizeConfig.h * 0.02,
-      ));
+          ),
+        ),
+      );
+      list.add(SizedBox(height: SizeConfig.h * 0.02));
     }
     if (!AuthService.to.isLoggedInValue) {
-      list.add(const Spacer(
-        flex: 1,
-      ));
-      list.add(Padding(
+      list.add(const Spacer(flex: 1));
+      list.add(
+        Padding(
           padding: EdgeInsets.only(left: SizeConfig.h * 0.01),
           child: ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.login_sharp,
               color: Colors.black,
-              // size: SizeConfig.w * 0.08,
             ),
             title: const Text(
               'Login',
@@ -189,10 +237,11 @@ class DrawerWidget extends StatelessWidget {
             onTap: () {
               Get.rootDelegate.toNamed(Screen.LOGIN.route);
               //to close the drawer
-
               Navigator.of(context).pop();
             },
-          )));
+          ),
+        ),
+      );
     }
 
     return list;
