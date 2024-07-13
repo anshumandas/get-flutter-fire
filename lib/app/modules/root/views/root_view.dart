@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_flutter_fire/services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../models/screens.dart';
+import '../../../utils/icon_constants.dart';
 import '../../../widgets/screen_widget.dart';
 import '../controllers/root_controller.dart';
 import 'drawer.dart';
@@ -32,7 +33,7 @@ class RootView extends GetView<RootController> {
                   )
                 : IconButton(
                     icon: ImageIcon(
-                      const AssetImage("icons/logo.png"),
+                      const AssetImage(IconConstants.logo),
                       color: Colors.grey.shade800,
                     ),
                     onPressed: () => AuthService.to.isLoggedInValue
