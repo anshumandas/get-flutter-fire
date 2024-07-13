@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/services/auth_service.dart';
@@ -9,7 +7,8 @@ import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
 class RootView extends GetView<RootController> {
-  const RootView({super.key});
+  RootView({super.key});
+  final RxBool isSearchBarVisible = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -38,27 +37,102 @@ class RootView extends GetView<RootController> {
                         ? controller.openDrawer()
                         : {Screen.HOME.doAction()},
                   ),
-            actions: topRightMenuButtons(current),
-            // automaticallyImplyLeading: false, //removes drawer icon
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  // Toggle search bar visibility
+                  isSearchBarVisible.value = !isSearchBarVisible.value;
+                },
+              ),
+              topRightMenuButtons(current),
+            ],
           ),
-          body: GetRouterOutlet(
-            initialRoute: AppPages.INITIAL,
-            // anchorRoute: '/',
-            // filterPages: (afterAnchor) {
-            //   return afterAnchor.take(1);
-            // },
+          body: Stack(
+            children: [
+              GetRouterOutlet(
+                initialRoute: AppPages.INITIAL,
+              ),
+              Obx(() {
+                if (isSearchBarVisible.value) {
+                  return buildSearchBar();
+                } else {
+                  return const SizedBox.shrink();
+                }
+              }),
+            ],
           ),
         );
       },
     );
   }
 
-//This could be used to add icon buttons in expanded web view instead of the context menu
-  List<Widget> topRightMenuButtons(GetNavConfig current) {
-    return [
-      Container(
-          margin: const EdgeInsets.only(right: 15),
-          child: Screen.LOGIN.widget(current))
-    ]; //TODO add seach button
+  Widget topRightMenuButtons(GetNavConfig current) {
+    return Container(
+      margin: const EdgeInsets.only(right: 15),
+      child: Screen.LOGIN.widget(current),
+    );
   }
+
+Widget buildSearchBar() {
+  final TextEditingController searchController = TextEditingController();
+
+  return Positioned(
+    top: 0,
+    left: 10,
+    right: 10,
+    child: Obx(() {
+      return Visibility(
+        visible: isSearchBarVisible.value,
+        maintainState: true,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: Colors.grey,
+              width: 1.0,
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    border: InputBorder.none,
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: () {
+                        searchController.clear();
+                        print('Clear button pressed');
+                      },
+                    ),
+                  ),
+                  onChanged: (value) {
+                    print('Typed: $value');
+                  },
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_forward_outlined),
+                onPressed: () {
+                  String searchText = searchController.text.trim();
+                  if (searchText.isNotEmpty) {
+                    print('Performing search for: $searchText');
+                    isSearchBarVisible.value = false;
+                  } else {
+                    print('Search text is empty');
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    }),
+  );
+}
 }
