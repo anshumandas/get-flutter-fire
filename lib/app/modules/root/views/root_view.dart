@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_flutter_fire/services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../models/screens.dart';
+import '../../../widgets/screen_widget.dart';
 import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
@@ -38,7 +39,7 @@ class RootView extends GetView<RootController> {
                         ? controller.openDrawer()
                         : {Screen.HOME.doAction()},
                   ),
-            actions: topRightMenuButtons(current),
+            actions: ScreenWidgetExtension.topRightMenuButtons(current),
             // automaticallyImplyLeading: false, //removes drawer icon
           ),
           body: GetRouterOutlet(
@@ -51,14 +52,5 @@ class RootView extends GetView<RootController> {
         );
       },
     );
-  }
-
-//This could be used to add icon buttons in expanded web view instead of the context menu
-  List<Widget> topRightMenuButtons(GetNavConfig current) {
-    return [
-      Container(
-          margin: const EdgeInsets.only(right: 15),
-          child: Screen.LOGIN.widget(current))
-    ]; //TODO add seach button
   }
 }
