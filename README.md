@@ -1,5 +1,8 @@
 # get-flutter-fire
 
+## changes i made
+
+## descrption
 This codebase provides a boilerplate code utilizing the following three technologies:
 
 1. Flutter 3.0 - For UX and uses Dart languange. See [https://flutter.dev/]
