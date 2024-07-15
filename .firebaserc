@@ -1,0 +1,10 @@
+{
+  "projects": {
+    "default": "sharekhan-f9ac0"
+  },
+  "dataconnectEmulatorConfig": {
+    "postgres": {
+      "localConnectionString": "postgresql://localhost:5432?sslmode=disable"
+    }
+  }
+}

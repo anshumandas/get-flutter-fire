@@ -1,0 +1,17 @@
+{
+  "name": "get_flutter_fire_server",
+  "version": "1.0.0",
+  "description": "firebase server code for get_flutter_fire",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "build": "echo \"add build logic\" && exit 0"
+  },
+  "author": "Anshuman Das",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^10.12.3",
+    "firebase-admin": "^12.2.0",
+    "firebase-functions": "^5.0.1"
+  }
+}

@@ -162,3 +162,4 @@ lib/firebase_options.dart
 pubspec.lock
 pubspec.lock
 server/functions/firebase_options.json
+node_modules

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "260821266676",
+    "project_id": "sharekhan-f9ac0",
+    "storage_bucket": "sharekhan-f9ac0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260821266676:android:ea3feae5a8e275a70d2ea1",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "260821266676-gbr99s2cp4bao2hchihl0447tq9hn0pr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHbYoT8YBUO48x9QoXInlUdj4r4qLadfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "260821266676-gbr99s2cp4bao2hchihl0447tq9hn0pr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "260821266676-n1dskq31gq05s8egsuemfl2slek3vd9b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
