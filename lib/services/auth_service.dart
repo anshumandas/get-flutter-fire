@@ -1,14 +1,18 @@
 // ignore_for_file: avoid_print
 
+import 'dart:developer';
+
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-import '../models/screens.dart';
-import '../constants.dart';
-import '../models/role.dart';
+import '../../../../models/role.dart';
+import '../../../../models/screens.dart';
+import '../../../../constants.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
@@ -16,9 +20,12 @@ class AuthService extends GetxService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late Rxn<EmailAuthCredential> credential = Rxn<EmailAuthCredential>();
   final Rxn<User> _firebaseUser = Rxn<User>();
-  final Rx<Role> _userRole = Rx<Role>(Role.buyer);
+  final Rx<Role> _userRole =
+      Rx<Role>(Role.buyer); //! CHANGE: Changed to admin, originally Buyer
   final Rx<bool> robot = RxBool(useRecaptcha);
   final RxBool registered = false.obs;
+  // final ValueNotifier<bool> isLoading = ValueNotifier<bool>(
+  //     false); // Listen to when the firebase is signing in and show a loading sign
 
   User? get user => _firebaseUser.value;
   Role get maxRole => _userRole.value;
@@ -26,13 +33,20 @@ class AuthService extends GetxService {
   @override
   onInit() {
     super.onInit();
-    if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
+    if (useEmulator) {
+      _auth.useAuthEmulator(emulatorHost, 9099);
+      print("Using emulator. $emulatorHost");
+    }
     _firebaseUser.bindStream(_auth.authStateChanges());
     _auth.authStateChanges().listen((User? user) {
       if (user != null) {
         user.getIdTokenResult().then((token) {
+          print("Custom claim: ${token.claims?["role"]}");
           _userRole.value = Role.fromString(token.claims?["role"]);
         });
+        Get.rootDelegate.offNamed(Screen.HOME.route);
+      } else if (user == null) {
+        Get.rootDelegate.offNamed(Screen.LOGIN.route);
       }
     });
   }
@@ -52,8 +66,58 @@ class AuthService extends GetxService {
       ? (user!.displayName ?? user!.email)
       : 'Guest';
 
-  void login() {
-    // this is not needed as we are using Firebase UI for the login part
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+      clientId:
+          '260821266676-gbr99s2cp4bao2hchihl0447tq9hn0pr.apps.googleusercontent.com');
+  Future<String?> signInwithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      await _auth.signInWithCredential(credential);
+      print('Done');
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      rethrow;
+    }
+    return null;
+  }
+
+  Future<void> login(String email, String password) async {
+    // isLoading.value = true;
+
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      String errorMessage;
+
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = 'No user found for that email.';
+          break;
+        case 'wrong-password':
+          errorMessage = 'Wrong password provided for that user.';
+          break;
+        case 'invalid-email':
+          errorMessage = 'The email address is badly formatted.';
+          break;
+        default:
+          errorMessage =
+              'An unknown error occurred. Please try again later. ${e.toString()}';
+      }
+      Get.snackbar('Login Error', errorMessage);
+    } catch (error) {
+      Get.snackbar('Error', 'An unexpected error occurred. Please try again.');
+      print("Error during login: ${error.toString()}");
+    } finally {
+      // isLoading.value = false;
+    }
   }
 
   void sendVerificationMail({EmailAuthCredential? emailAuth}) async {
@@ -114,6 +178,36 @@ class AuthService extends GetxService {
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate
         .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
+  }
+
+  Future<void> signup(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      print("User created");
+      HttpsCallableResult result =
+          await FirebaseFunctions.instance.httpsCallable('addUserRole').call({
+        'email': email,
+      });
+
+      print("Result: $result");
+
+      // Optionally send verification email
+      if (true) {
+        await userCredential.user!.sendEmailVerification();
+      }
+
+      registered.value = true;
+      // Navigate to profile or other destination
+      final thenTo = Get
+          .rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
+      Get.rootDelegate.offAndToNamed(thenTo ?? Screen.PROFILE.route);
+    } catch (e) {
+      Get.snackbar('Registration Error', 'Failed to register: $e');
+    }
   }
 
   void logout() {
@@ -180,6 +274,15 @@ class AuthService extends GetxService {
             'Oh no! Something went wrong.',
       };
     };
+  }
+
+  resetPassword({required String email}) {
+    try {
+      _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      log("Error sending reset link: $e");
+      rethrow;
+    }
   }
 }
 
