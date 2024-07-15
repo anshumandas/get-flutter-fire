@@ -112,10 +112,9 @@ extension RoleExtension on Role {
   int getCurrentIndexFromRoute(GetNavConfig? currentRoute) {
     final String? currentLocation = currentRoute?.uri.toString();
     int currentIndex = 0;
-    if (currentLocation != null) {
+    if (currentLocation != null && currentLocation.startsWith('/home')) {
       // removinng '/home' from the start of the location
-      final filteredLocation =
-          currentLocation.replaceFirst(RegExp(r'^/home'), '');
+      final filteredLocation = currentLocation.replaceFirst('/home', '');
       currentIndex = tabs.indexWhere((tab) {
         return filteredLocation.startsWith(tab.path);
       });
