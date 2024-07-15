@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/login/views/custom_signUp.dart';
 
 import '../../models/access_level.dart';
 import '../../models/role.dart';
@@ -58,6 +59,10 @@ class AppPages {
       children: [
         Screen.LOGIN.getPage(
           page: () => const LoginView(),
+          binding: LoginBinding(),
+        ),
+        Screen.SIGNUP.getPage(
+          page: () => const CustomSignUp(),
           binding: LoginBinding(),
         ),
         Screen.REGISTER.getPage(

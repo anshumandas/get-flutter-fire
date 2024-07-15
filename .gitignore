@@ -31,6 +31,8 @@ migrate_working_dir/
 .pub/
 /build/
 
+node_modules
+
 # Symbolication related
 app.*.symbols
 
@@ -65,6 +67,7 @@ ios/Flutter/Debug.xcconfig
 ios/Flutter/Release.xcconfig
 ios/Runner/AppDelegate.swift
 ios/Runner/Runner-Bridging-Header.h
+ios/Runner/GoogleService-Info.plist
 ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
 ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
 ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
