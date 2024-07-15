@@ -63,9 +63,8 @@ class AuthService extends GetxService {
       ? (user!.displayName ?? user!.email)
       : 'Guest';
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-      clientId:
-          clientID);
+  final GoogleSignIn _googleSignIn =
+      GoogleSignIn(clientId: const String.fromEnvironment('CLIENT_ID'));
   Future<String?> signInwithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
