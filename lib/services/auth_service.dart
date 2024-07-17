@@ -87,7 +87,6 @@ class AuthService extends GetxService {
   // Functions to handle phone authentication.
   // Function to verify the phone number. On android this tries to read the code directly without the user having to manually enter the code.
   Future<void> verifyMobileNumber(String phoneNumber) async {
-    print("HEre");
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
@@ -120,7 +119,6 @@ class AuthService extends GetxService {
   // Verify the OTP.
   Future<void> verifyOTP(String smsCode, String verificationId) async {
     try {
-      print("here");
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: smsCode);
       await _auth.signInWithCredential(credential);
