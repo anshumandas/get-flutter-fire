@@ -181,18 +181,36 @@ class CustomSignIn extends StatelessWidget {
               SizedBox(height: height * 0.02),
 
               //google sign in
-              GestureDetector(
-                onTap: () => AuthService().signInwithGoogle(),
-                child: Container(
-                  padding: EdgeInsets.all(width * 0.03),
-                  margin: EdgeInsets.symmetric(horizontal: width * 0.08),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () => AuthService().signInwithGoogle(),
+                    child: Container(
+                      padding: EdgeInsets.all(width * 0.03),
+                      margin: EdgeInsets.symmetric(horizontal: width * 0.04),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Image.asset('assets/icons/google.png',
+                          height: height * 0.045),
+                    ),
                   ),
-                  child: Image.asset('assets/icons/google.png',
-                      height: height * 0.045),
-                ),
+                  GestureDetector(
+                    onTap: () =>
+                        Get.rootDelegate.toNamed(Screen.MOBILEAUTH.route),
+                    child: Container(
+                      padding: EdgeInsets.all(width * 0.03),
+                      margin: EdgeInsets.symmetric(horizontal: width * 0.04),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(Icons.phone, size: height * 0.045),
+                    ),
+                  ),
+                ],
               ),
 
               SizedBox(height: height * 0.02),

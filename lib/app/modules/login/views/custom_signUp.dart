@@ -86,8 +86,10 @@ class CustomSignUp extends GetView<AuthController> {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.all(width * 0.05),
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.05),
                   margin: EdgeInsets.symmetric(horizontal: width * 0.1),
+                  height: height * 0.07,
+                  width: width * 0.2,
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(10),
@@ -103,48 +105,66 @@ class CustomSignUp extends GetView<AuthController> {
 
               SizedBox(height: height * 0.05),
 
-              // //or continue with
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     SizedBox(
-              //         width: width * 0.2,
-              //         child: Divider(
-              //           thickness: 0.5,
-              //           color: Colors.grey.shade900,
-              //         )),
-              //     SizedBox(
-              //       width: width * 0.05,
-              //     ),
-              //     const Text("Or Continue with"),
-              //     SizedBox(
-              //       width: width * 0.05,
-              //     ),
-              //     SizedBox(
-              //         width: width * 0.2,
-              //         child: Divider(
-              //           thickness: 0.5,
-              //           color: Colors.grey.shade900,
-              //         )),
-              //   ],
-              // ),
+              //or continue with
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      width: width * 0.2,
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey.shade900,
+                      )),
+                  SizedBox(
+                    width: width * 0.05,
+                  ),
+                  const Text("Or Continue with"),
+                  SizedBox(
+                    width: width * 0.05,
+                  ),
+                  SizedBox(
+                      width: width * 0.2,
+                      child: Divider(
+                        thickness: 0.5,
+                        color: Colors.grey.shade900,
+                      )),
+                ],
+              ),
 
-              // SizedBox(height: height * 0.01),
+              SizedBox(height: height * 0.01),
 
-              // //google sign in
-              // GestureDetector(
-              //   onTap: () => AuthService().signInwithGoogle(),
-              //   child: Container(
-              //     padding: EdgeInsets.all(width * 0.03),
-              //     margin: EdgeInsets.symmetric(horizontal: width * 0.1),
-              //     decoration: BoxDecoration(
-              //       color: Colors.grey.shade200,
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //     child: Image.asset('assets/icons/google.png',
-              //         height: height * 0.045),
-              //   ),
-              // ),
+              //google sign in
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () => AuthService().signInwithGoogle(),
+                    child: Container(
+                      padding: EdgeInsets.all(width * 0.03),
+                      margin: EdgeInsets.symmetric(horizontal: width * 0.04),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Image.asset('assets/icons/google.png',
+                          height: height * 0.045),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        Get.rootDelegate.toNamed(Screen.MOBILEAUTH.route),
+                    child: Container(
+                      padding: EdgeInsets.all(width * 0.03),
+                      margin: EdgeInsets.symmetric(horizontal: width * 0.04),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(Icons.phone, size: height * 0.045),
+                    ),
+                  ),
+                ],
+              ),
 
               SizedBox(height: height * 0.01),
 

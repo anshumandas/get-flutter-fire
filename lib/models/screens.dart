@@ -45,6 +45,10 @@ enum Screen implements ActionEnum {
       icon: Icons.login,
       accessor_: AccessedVia.widget,
       accessLevel: AccessLevel.notAuthed),
+  MOBILEAUTH('/mobileAuth',
+      icon: Icons.login,
+      accessor_: AccessedVia.widget,
+      accessLevel: AccessLevel.notAuthed),
   PROFILE('/profile',
       icon: Icons.account_box_rounded,
       label: "Profile",
@@ -179,4 +183,3 @@ enum Screen implements ActionEnum {
   Widget? widget(GetNavConfig current) =>
       (this == LOGIN) ? LoginBottomSheetToggle(current) : null;
 }
-

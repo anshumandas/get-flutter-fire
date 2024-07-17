@@ -8,6 +8,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/phone_auth/controllers/phone_auth_controller.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/screens.dart';
@@ -32,13 +33,11 @@ class AuthService extends GetxService {
     super.onInit();
     if (useEmulator) {
       _auth.useAuthEmulator(emulatorHost, 9099);
-      print("Using emulator. $emulatorHost");
     }
     _firebaseUser.bindStream(_auth.authStateChanges());
     _auth.authStateChanges().listen((User? user) {
       if (user != null) {
         user.getIdTokenResult().then((token) {
-          print("Custom claim: ${token.claims?["role"]}");
           _userRole.value = Role.fromString(token.claims?["role"]);
         });
         Get.rootDelegate.offNamed(Screen.HOME.route);
@@ -63,6 +62,8 @@ class AuthService extends GetxService {
       ? (user!.displayName ?? user!.email)
       : 'Guest';
 
+// Function to handle google sign in.
+//* Can use silent sign in to make the flow smoother on the web.
   final GoogleSignIn _googleSignIn =
       GoogleSignIn(clientId: const String.fromEnvironment('CLIENT_ID'));
   Future<String?> signInwithGoogle() async {
@@ -76,7 +77,6 @@ class AuthService extends GetxService {
         idToken: googleSignInAuthentication.idToken,
       );
       await _auth.signInWithCredential(credential);
-      print('Done');
     } on FirebaseAuthException catch (e) {
       print(e.message);
       rethrow;
@@ -84,9 +84,54 @@ class AuthService extends GetxService {
     return null;
   }
 
+  // Functions to handle phone authentication.
+  // Function to verify the phone number. On android this tries to read the code directly without the user having to manually enter the code.
+  Future<void> verifyMobileNumber(String phoneNumber) async {
+    print("HEre");
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        String errorMessage = 'Verification failed';
+        switch (e.code) {
+          case 'invalid-verification-code':
+            errorMessage = 'Invalid SMS code.';
+            break;
+          case 'expired-verification-code':
+            errorMessage = 'SMS code has expired.';
+            break;
+          default:
+            errorMessage = 'An unknown error occurred. Please try again later.';
+        }
+        Get.snackbar(errorMessage, '');
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        print("Code sent");
+        Get.find<MobileAuthController>().codeSent.value = true;
+        Get.find<MobileAuthController>().verificationId.value = verificationId;
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+      timeout: const Duration(seconds: 60),
+    );
+  }
+
+  // Verify the OTP.
+  Future<void> verifyOTP(String smsCode, String verificationId) async {
+    try {
+      print("here");
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: smsCode);
+      await _auth.signInWithCredential(credential);
+      print("Done");
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<void> login(String email, String password) async {
     // isLoading.value = true;
-
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
