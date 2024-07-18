@@ -101,6 +101,11 @@ enum Screen implements ActionEnum {
       label: "Logout",
       accessor_: AccessedVia.bottomSheet,
       accessLevel: AccessLevel.authenticated),
+  ROLE_REQUEST('/role-request',
+      icon: Icons.request_page,
+      label: "Role Request",
+      accessor_: AccessedVia.drawer,
+      accessLevel: AccessLevel.authenticated),
   ;
 
   const Screen(this.path,

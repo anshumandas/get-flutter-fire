@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/role_requests/bindings/role_requests_binding.dart';
+import 'package:get_flutter_fire/app/modules/role_requests/views/role_requests_view.dart';
 
 import '../../models/access_level.dart';
 import '../../models/role.dart';
@@ -57,6 +59,10 @@ class AppPages {
       preventDuplicates: true,
       children: [
         Screen.LOGIN.getPage(
+          page: () => const LoginView(),
+          binding: LoginBinding(),
+        ),
+        Screen.LOGOUT.getPage(
           page: () => const LoginView(),
           binding: LoginBinding(),
         ),
@@ -145,6 +151,10 @@ class AppPages {
                   binding: TaskDetailsBinding(),
                 ),
               ],
+            ),
+            Screen.ROLE_REQUEST.getPage(
+              page: () => const RoleRequestsView(),
+              binding: RoleRequestsBinding(),
             ),
           ],
         )

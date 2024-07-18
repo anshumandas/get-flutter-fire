@@ -15,7 +15,7 @@ class LoginWidgets {
       padding: const EdgeInsets.all(20),
       child: AspectRatio(
         aspectRatio: 1,
-        child: Image.asset(ImgConstants.flutterfire),
+        child: Image.asset('assets/icons/Official_Logo_of_Sharekhan_by_BNP_Paribas.png'),
       ),
     );
   }
@@ -25,7 +25,7 @@ class LoginWidgets {
       children: [
         myWidget,
         const Padding(
-            padding: EdgeInsets.only(top: 16),
+            padding: EdgeInsets.only(top: 20),
             child: Text(
               'By signing in, you agree to our terms and conditions.',
               style: TextStyle(color: Colors.grey),

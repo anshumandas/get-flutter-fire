@@ -1,0 +1,16 @@
+{
+    "flutter": {
+        "platforms": {
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "sharekhan-dhruv",
+                    "configurations": {
+                        "android": "1:64647061409:android:a52c96120dd0ace789f5e0",
+                        "web": "1:64647061409:web:a5241dce8216b26989f5e0",
+                        "windows": "1:64647061409:web:4e3c3388406d0e2789f5e0"
+                    }
+                }
+            }
+        }
+    }
+}

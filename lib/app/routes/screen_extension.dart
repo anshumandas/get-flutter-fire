@@ -110,7 +110,7 @@ extension ScreenExtension on Screen {
 
 extension RoleExtension on Role {
   int getCurrentIndexFromRoute(GetNavConfig? currentRoute) {
-    final String? currentLocation = currentRoute?.location;
+    final String? currentLocation = currentRoute?.locationString;
     int currentIndex = 0;
     if (currentLocation != null) {
       currentIndex =
