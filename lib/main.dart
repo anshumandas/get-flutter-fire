@@ -9,6 +9,7 @@ import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 import 'app/routes/app_pages.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
+import 'services/persona_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,7 @@ void main() async {
     bool ready = await GRecaptchaV3.ready(DefaultFirebaseOptions.sitekey); 
     print("Is Recaptcha ready? $ready");
   }
+  Get.lazyPut(() => PersonaService());
   runApp(
     GetMaterialApp.router(
       debugShowCheckedModeBanner:
@@ -28,6 +30,7 @@ void main() async {
       initialBinding: BindingsBuilder(
         () {
           Get.put(AuthService());
+          Get.put(PersonaService());
         },
       ),
       getPages: AppPages.routes,
@@ -39,10 +42,9 @@ void main() async {
       //   preventDuplicateHandlingMode:
       //       PreventDuplicateHandlingMode.ReorderRoutes,
       // ),
-      theme: ThemeData(
-          highlightColor: Colors.black.withOpacity(0.5),
-          bottomSheetTheme:
-              const BottomSheetThemeData(surfaceTintColor: Colors.blue)),
+     theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: Get.find<PersonaService>().themeMode,
     ),
   );
 }

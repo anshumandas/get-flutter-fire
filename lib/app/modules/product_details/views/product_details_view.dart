@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../../services/persona_service.dart';
 import '../controllers/product_details_controller.dart';
 
 class ProductDetailsView extends GetWidget<ProductDetailsController> {
   const ProductDetailsView({super.key});
 
-  @override
   Widget build(BuildContext context) {
+    final personaService = Get.find<PersonaService>();
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'ProductDetailsView is working',
-              style: TextStyle(fontSize: 20),
-            ),
-            Text('ProductId: ${controller.productId}')
-          ],
-        ),
+      appBar: AppBar(title: Text('Select Persona')),
+      body: ListView.builder(
+        itemCount: personaService.personas.length,
+        itemBuilder: (context, index) {
+          final persona = personaService.personas[index];
+          return ListTile(
+            title: Text(persona.name),
+            onTap: () => personaService.selectPersona(persona),
+          );
+        },
       ),
     );
   }

@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
@@ -9,6 +7,7 @@ import 'package:get/get.dart';
 import '../models/screens.dart';
 import '../constants.dart';
 import '../models/role.dart';
+import 'persona_service.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
@@ -32,6 +31,8 @@ class AuthService extends GetxService {
       if (user != null) {
         user.getIdTokenResult().then((token) {
           _userRole.value = Role.fromString(token.claims?["role"]);
+          final personaService = Get.find<PersonaService>();
+          personaService.loadSelectedPersona();
         });
       }
     });
@@ -112,7 +113,6 @@ class AuthService extends GetxService {
 
   void register() {
     registered.value = true;
-    // logout(); // Uncomment if we need to enforce relogin
     final thenTo =
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate

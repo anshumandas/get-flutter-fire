@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../services/persona_service.dart';
 import '../../../../utils/size_config.dart';
 import '../../../../models/role.dart';
 import '../../../../services/auth_service.dart';
@@ -23,6 +24,7 @@ class DrawerWidget extends StatelessWidget {
 
     return Obx(() {
       Role userRole = AuthService.to.maxRole;
+      Persona selectedPersona = Get.find<PersonaService>().selectedPersona;
       return LayoutBuilder(
         builder: (context, constraints) {
           bool isHorizontal = GetPlatform.isDesktop;
@@ -33,7 +35,7 @@ class DrawerWidget extends StatelessWidget {
 
           return Row(
             children: [
-              // Extreme left vertical navigation strip 
+              // Extreme left vertical navigation strip
               if (isHorizontal)
                 Container(
                   width: SizeConfig.w * 0.08, // Adjust width as needed
@@ -67,7 +69,7 @@ class DrawerWidget extends StatelessWidget {
               SizedBox(
                 width: leftPanelWidth,
                 child: Drawer(
-                  backgroundColor: const Color.fromARGB(255, 241, 241, 232),
+                  backgroundColor: selectedPersona.drawerColor,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(20),
@@ -75,7 +77,8 @@ class DrawerWidget extends StatelessWidget {
                     ),
                   ),
                   child: Column(
-                    children: drawerItems(context, controller.values),
+                    children: drawerItems(
+                        context, controller.values, selectedPersona),
                   ),
                 ),
               ),
@@ -86,21 +89,25 @@ class DrawerWidget extends StatelessWidget {
     });
   }
 
-  List<Widget> drawerItems(BuildContext context, Rx<Iterable<Screen>> values) {
+  List<Widget> drawerItems(BuildContext context, Rx<Iterable<Screen>> values,
+      Persona selectedPersona) {
     double sWidth =
-        GetPlatform.isDesktop ? SizeConfig.w * 0.25 : SizeConfig.w * 0.6;
+        GetPlatform.isDesktop ? SizeConfig.w * 0.25 : SizeConfig.w * 0.7;
     List<Widget> list = [
       Container(
         height: SizeConfig.h * 0.37,
-        color: const Color.fromARGB(255, 241, 241, 232),
+        color: selectedPersona.drawerColor,
         child: Align(
           alignment: Alignment.centerLeft,
           child: Container(
+           
             margin: EdgeInsets.only(
-                left: SizeConfig.h * 0.02, top: SizeConfig.h * 0.02, right:SizeConfig.h*0.02),
-            decoration: const BoxDecoration(
+                left: SizeConfig.h * 0.02,
+                top: SizeConfig.h * 0.02,
+                right: SizeConfig.h * 0.02),
+            decoration:  BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(50)),
-                color: Color.fromARGB(255, 210, 214, 214)),
+                color: selectedPersona.drawerColor1),
             child: SizedBox(
                 height: sWidth,
                 width: sWidth,
@@ -123,7 +130,7 @@ class DrawerWidget extends StatelessWidget {
                           '${AuthService.to.userName}',
                           style: const TextStyle(
                               fontSize: 20,
-                              color: Color.fromARGB(255, 0, 0, 0)),
+                              ),
                         ),
                       ),
                     ),
@@ -133,6 +140,16 @@ class DrawerWidget extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 15,
                             color: Color.fromARGB(169, 37, 38, 39)),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: Text(
+                        'Selected Persona: ${selectedPersona.name}',
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
@@ -146,7 +163,7 @@ class DrawerWidget extends StatelessWidget {
       for (var i = 0; i <= AuthService.to.maxRole.index; i++) {
         Role role = Role.values[i];
         list.add(ListTile(
-          tileColor: const Color.fromARGB(255, 241, 241, 232),
+          tileColor: selectedPersona.drawerColor,
           title: Text(
             role.name,
             style: const TextStyle(
@@ -171,15 +188,15 @@ class DrawerWidget extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.only(left: SizeConfig.h * 0.01),
                 child: ListTile(
-                  tileColor: const Color.fromARGB(255, 241, 241, 232),
+                  tileColor:selectedPersona.drawerColor,
                   leading: Icon(
                     screen.icon,
-                    color: Colors.black,
+                    
                   ),
                   title: Text(
                     screen.label ?? '',
                     style: const TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w400),
+                         fontWeight: FontWeight.w400),
                   ),
                   onTap: () {
                     Get.rootDelegate.toNamed(screen.route);
