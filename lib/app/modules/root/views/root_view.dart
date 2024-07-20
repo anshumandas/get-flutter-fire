@@ -6,7 +6,6 @@ import 'package:get_flutter_fire/services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../models/screens.dart';
 import '../../../utils/icon_constants.dart';
-import '../../../widgets/screen_widget.dart';
 import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
@@ -18,7 +17,7 @@ class RootView extends GetView<RootController> {
     return GetRouterOutlet.builder(
       builder: (context, delegate, current) {
         final title = current!.currentPage!.title;
-        controller.updateMenuButtons(current);
+        controller.updateTopRightButtons(current);
         return Scaffold(
           key: controller.scaffoldKey,
           drawer: const DrawerWidget(),
@@ -45,7 +44,7 @@ class RootView extends GetView<RootController> {
               Obx(() {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: controller.menuButtons.toList(),
+                  children: controller.topRightButtons.toList(),
                 );
               }),
             ],

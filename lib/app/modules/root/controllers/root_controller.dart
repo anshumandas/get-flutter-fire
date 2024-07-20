@@ -4,7 +4,7 @@ import '../../../widgets/screen_widget.dart';
 
 class RootController extends GetxController {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  var menuButtons = <Widget>[].obs;
+  var topRightButtons = <Widget>[].obs;
 
   void openDrawer() {
     scaffoldKey.currentState!.openDrawer();
@@ -14,9 +14,9 @@ class RootController extends GetxController {
     scaffoldKey.currentState!.openEndDrawer();
   }
 
-  void updateMenuButtons(GetNavConfig getNavConfig) async {
+  void updateTopRightButtons(GetNavConfig getNavConfig) async {
     final buttons =
         await ScreenWidgetExtension.topRightMenuButtons(getNavConfig);
-    menuButtons.assignAll(buttons);
+    topRightButtons.assignAll(buttons);
   }
 }

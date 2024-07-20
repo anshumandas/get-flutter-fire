@@ -192,10 +192,15 @@ enum Screen implements ActionEnum {
     return list;
   }
 
-  static Iterable<Screen> topRightMenu() {
-    return Screen.values.where((Screen screen) =>
-        screen.accessor_ == AccessedVia.topRight &&
-        AuthService.to.accessLevel.index >= screen.accessLevel.index);
+  static Future<Iterable<Screen>> topRightMenu() async {
+    List<Screen> topRightScreens = [];
+    for (Screen screen in Screen.values) {
+      if ((await screen.accessor) == AccessedVia.topRight &&
+          AuthService.to.accessLevel.index >= screen.accessLevel.index) {
+        topRightScreens.add(screen);
+      }
+    }
+    return topRightScreens;
   }
 
   @override

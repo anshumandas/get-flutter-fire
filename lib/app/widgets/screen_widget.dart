@@ -99,6 +99,6 @@ extension ScreenWidgetExtension on Screen {
           child: screen.widget(current)));
     }
 
-    return widgets; //This will return empty. We need a Obx
+    return widgets;
   }
 }
