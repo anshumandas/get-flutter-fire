@@ -104,7 +104,9 @@ Step 10: Firebase Remote Config for A/B testing. See [https://firebase.google.co
 2. Config useBottomSheetForProfileOptions for Navigation element to be one of the following
    * False: Drawer for Account, Settings, Sign Out
    * True: Hamburger that opens BottomSheet (Context Menu in larger screen) for the same options
-3. TODO: Config for adding Search Bar at the Top vs a Bottom Navigation button
+3. Config showSearchBarOnTop for Navigation element to be one of the following
+   * False: TODO: Bottom Navigation Button
+   * True: Search button on top right menu
 
 Step 11: TODO: CRUD
 
