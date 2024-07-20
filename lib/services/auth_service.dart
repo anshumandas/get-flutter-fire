@@ -190,6 +190,8 @@ class AuthService extends GetxService {
       };
     };
   }
+
+  //void verifyPhoneNumber(String text, Null Function(dynamic credential) param1) {}
 }
 
 class MyCredential extends AuthCredential {
@@ -208,3 +210,4 @@ parseEmail(String message) {
   int j = message.indexOf('"', i);
   return message.substring(i, j - 1);
 }
+
