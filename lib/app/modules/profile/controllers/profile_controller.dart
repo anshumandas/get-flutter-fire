@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:path/path.dart';
 import '../../../../services/auth_service.dart';
 import '../../../../models/screens.dart';
+import 'dart:html' as html;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ProfileController extends GetxController {
   final FirebaseStorage storage = FirebaseStorage.instance;
@@ -32,18 +36,25 @@ class ProfileController extends GetxController {
     });
   }
 
-  Future<String?> uploadFile(String path) async {
+  Future<String?> uploadFile(dynamic fileData, String fileName) async {
     try {
-      final fileName = basename(path);
       final destination = 'profilePics/${currentUser!.uid}/$fileName';
       final ref = storage.ref(destination);
 
-      var byt = GetStorage().read(path);
-      if (byt != null) {
-        await ref.putData(byt);
+      if (fileData is String && !kIsWeb) {
+        // Mobile/Desktop upload logic with file path
+        var byt = GetStorage().read(fileData);
+        if (byt != null) {
+          await ref.putData(byt);
+        } else {
+          File photo = File(fileData);
+          await ref.putFile(photo);
+        }
+      } else if (fileData is Uint8List) {
+        // Web upload logic with byte data
+        await ref.putData(fileData);
       } else {
-        File photo = File(path);
-        await ref.putFile(photo);
+        throw ArgumentError('Invalid file data type');
       }
 
       return destination;
@@ -51,6 +62,16 @@ class ProfileController extends GetxController {
       Get.snackbar('Error', 'Image Not Uploaded: ${e.toString()}');
       return null;
     }
+  }
+
+  Future<Uint8List?> _getWebImageBytes(String path) async {
+    final completer = Completer<Uint8List?>();
+    final reader = html.FileReader();
+    reader.readAsArrayBuffer(html.File([path], path));
+    reader.onLoadEnd.listen((event) {
+      completer.complete(reader.result as Uint8List?);
+    });
+    return completer.future;
   }
 
   void logout() {

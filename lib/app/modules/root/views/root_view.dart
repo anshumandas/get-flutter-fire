@@ -23,21 +23,21 @@ class RootView extends GetView<RootController> {
             title: Text(title ?? ''),
             centerTitle: true,
             leading: GetPlatform.isIOS // Since Web and Android have back button
-                    &&
-                    current.locationString.contains(RegExp(r'(\/[^\/]*){3,}'))
+                &&
+                current.locationString.contains(RegExp(r'(\/[^\/]*){3,}'))
                 ? BackButton(
-                    onPressed: () =>
-                        Get.rootDelegate.popRoute(), //Navigator.pop(context),
-                  )
+              onPressed: () =>
+                  Get.rootDelegate.popRoute(), //Navigator.pop(context),
+            )
                 : IconButton(
-                    icon: ImageIcon(
-                      const AssetImage("assets/icons/logo.png"),
-                      color: Colors.grey.shade800,
-                    ),
-                    onPressed: () => AuthService.to.isLoggedInValue
-                        ? controller.openDrawer()
-                        : {Screen.HOME.doAction()},
-                  ),
+              icon: ImageIcon(
+                const AssetImage("assets/icons/logo.png"),
+                color: Colors.grey.shade800,
+              ),
+              onPressed: () => AuthService.to.isLoggedInValue
+                  ? controller.openDrawer()
+                  : {Screen.HOME.doAction()},
+            ),
             actions: topRightMenuButtons(current),
             // automaticallyImplyLeading: false, //removes drawer icon
           ),
@@ -58,7 +58,8 @@ class RootView extends GetView<RootController> {
     return [
       Container(
           margin: const EdgeInsets.only(right: 15),
-          child: Screen.LOGIN.widget(current))
+          child: Screen.LOGIN.widget(current),
+      )
     ]; //TODO add seach button
   }
 }

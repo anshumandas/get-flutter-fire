@@ -6,6 +6,7 @@ import '../../../../services/auth_service.dart';
 import '../../../../models/screens.dart';
 import '../../../widgets/change_password_dialog.dart';
 import '../controllers/profile_controller.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
@@ -134,7 +135,15 @@ class ProfileView extends GetView<ProfileController> {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
-      String? dest = await controller.uploadFile(image.path);
+      String? dest;
+      if (kIsWeb) {
+        // For web, pass the bytes and filename
+        final bytes = await image.readAsBytes();
+        dest = await controller.uploadFile(bytes, image.name);
+      } else {
+        // For mobile/desktop, pass the file path and filename
+        dest = await controller.uploadFile(image.path, image.name);
+      }
       if (dest != null) {
         await controller.updatePhotoURL(dest);
       }
