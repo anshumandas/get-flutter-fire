@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/app/modules/login/views/custom_signUp.dart';
 import 'package:get_flutter_fire/app/modules/phone_auth/bindings/phone_auth_binding.dart';
@@ -6,6 +7,7 @@ import 'package:get_flutter_fire/app/modules/phone_auth/views/phone_auth.dart';
 
 import '../../models/access_level.dart';
 import '../../models/role.dart';
+import '../../models/screens.dart';
 import '../middleware/auth_middleware.dart';
 import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
@@ -31,6 +33,8 @@ import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/root/bindings/root_binding.dart';
 import '../modules/root/views/root_view.dart';
+import '../modules/search/bindings/search_binding.dart';
+import '../modules/search/views/search_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/task_details/bindings/task_details_binding.dart';
@@ -39,7 +43,6 @@ import '../modules/tasks/bindings/tasks_binding.dart';
 import '../modules/tasks/views/tasks_view.dart';
 import '../modules/users/bindings/users_binding.dart';
 import '../modules/users/views/users_view.dart';
-import '../../models/screens.dart';
 
 part 'app_routes.dart';
 part 'screen_extension.dart';
@@ -160,6 +163,10 @@ class AppPages {
           ],
         )
       ],
+    ),
+    Screen.SEARCH.getPage(
+      page: () => const SearchView(),
+      binding: SearchBinding(),
     ),
   ];
 }

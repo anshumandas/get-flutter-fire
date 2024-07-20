@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/app/modules/phone_auth/controllers/phone_auth_controller.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:get_flutter_fire/models/access_level.dart';
 
 import '../models/screens.dart';
 import '../constants.dart';
@@ -46,6 +47,14 @@ class AuthService extends GetxService {
       }
     });
   }
+
+  AccessLevel get accessLevel => user != null
+      ? user!.isAnonymous
+          ? _userRole.value.index > Role.buyer.index
+              ? AccessLevel.roleBased
+              : AccessLevel.authenticated
+          : AccessLevel.guest
+      : AccessLevel.public;
 
   bool get isEmailVerified =>
       user != null && (user!.email == null || user!.emailVerified);
