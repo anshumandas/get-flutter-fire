@@ -93,13 +93,12 @@ extension ScreenWidgetExtension on Screen {
 //This could be used to add icon buttons in expanded web view instead of the context menu
   static List<Widget> topRightMenuButtons(GetNavConfig current) {
     List<Widget> widgets = [];
-    Screen.topRightMenu().then((v) {
-      for (var screen in v) {
-        widgets.add(Container(
-            margin: const EdgeInsets.only(right: 15),
-            child: screen.widget(current)));
-      }
-    });
+    for (var screen in Screen.topRightMenu()) {
+      widgets.add(Container(
+          margin: const EdgeInsets.only(right: 15),
+          child: screen.widget(current)));
+    }
+
     return widgets; //This will return empty. We need a Obx
   }
 }

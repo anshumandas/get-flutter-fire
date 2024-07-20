@@ -184,7 +184,7 @@ enum Screen implements ActionEnum {
     return list;
   }
 
-  static Future<Iterable<Screen>> topRightMenu() async {
+  static Iterable<Screen> topRightMenu() {
     return Screen.values.where((Screen screen) =>
         screen.accessor_ == AccessedVia.topRight &&
         AuthService.to.accessLevel.index >= screen.accessLevel.index);

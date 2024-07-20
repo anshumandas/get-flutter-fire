@@ -8,8 +8,6 @@ class RemoteConfigController<L extends Iterable> extends GetxController {
   final Rx<L> values;
 }
 
-/// final _name = "GetX".obs;
-/// Obx(() => Text( _name.value )),... ;
 class RemotelyConfigObx<X, C extends RemoteConfigController<Iterable<X>>>
     extends ObxWidget {
   final Widget Function() builder;
@@ -34,17 +32,6 @@ class RemotelyConfigObx<X, C extends RemoteConfigController<Iterable<X>>>
   Widget build() => builder();
 }
 
-/// Similar to Obx, but manages a local state.
-/// Pass the initial data in constructor.
-/// Useful for simple local states, like toggles, visibility, themes,
-/// button states, etc.
-///  Sample:
-///    ObxValue((data) => Switch(
-///      value: data.value,
-///      onChanged: (flag) => data.value = flag,
-///    ),
-///    false.obs,
-///   ),
 class RemotelyConfigObxVal<T extends RxObjectMixin, X> extends ObxWidget {
   final Widget Function(T) builder;
   final T data;
