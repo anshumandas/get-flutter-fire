@@ -59,19 +59,32 @@ class AuthService extends GetxService {
   void sendVerificationMail({EmailAuthCredential? emailAuth}) async {
     if (sendMailFromClient) {
       if (_auth.currentUser != null) {
-        await _auth.currentUser?.sendEmailVerification();
+        try {
+          await _auth.currentUser?.sendEmailVerification();
+          Get.snackbar(
+            'Verification Email Sent',
+            'Please check your email (including spam folder) for the verification link.',
+            duration: Duration(seconds: 5),
+          );
+        } catch (e) {
+          print('Error sending verification email: $e');
+          Get.snackbar(
+            'Error',
+            'Failed to send verification email. Please try again later.',
+            duration: Duration(seconds: 5),
+          );
+        }
       } else if (emailAuth != null) {
-        // Approach 1: sending email auth link requires deep linking which is
-        // a TODO as the current Flutter methods are deprecated
-        // sendSingInLink(emailAuth);
-
-        // Approach 2: This is a hack.
-        // We are using createUser to send the verification link from the server side by adding suffix .verify in the email
-        // if the user already exists and the password is also same and sign in occurs via custom token on server side
+        // Use the existing approach for sending verification email
         try {
           await _auth.createUserWithEmailAndPassword(
-              email: "${credential.value!.email}.verify",
-              password: credential.value!.password!);
+              email: "${emailAuth.email}.verify",
+              password: emailAuth.password!);
+          Get.snackbar(
+            'Verification Email Sent',
+            'Please verify your email by clicking the link in the email sent.',
+            duration: Duration(seconds: 5),
+          );
         } on FirebaseAuthException catch (e) {
           int i = e.message!.indexOf("message") + 10;
           int j = e.message!.indexOf('"', i);
@@ -80,6 +93,13 @@ class AuthService extends GetxService {
             'Please verify your email by clicking the link on the Email sent',
           );
         }
+      } else {
+        print('No user is currently signed in and no email auth provided');
+        Get.snackbar(
+          'Error',
+          'Unable to send verification email. Please try registering again.',
+          duration: Duration(seconds: 5),
+        );
       }
     }
   }

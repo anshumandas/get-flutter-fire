@@ -35,16 +35,36 @@ class DrawerWidget extends StatelessWidget {
   List<Widget> drawerItems(BuildContext context, Rx<Iterable<Screen>> values) {
     List<Widget> list = [
       Container(
-        height: 100,
+        height: 200,
+        width: double.infinity,
         color: Colors.red,
-        //adding content in the highlighted part of the drawer
-        child: Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-                margin: const EdgeInsets.only(left: 15),
-                child: const Text('User Name', //Profile Icon also
-                    style: TextStyle(fontWeight: FontWeight.bold)))),
-      )
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 40,),
+              CircleAvatar(
+                radius: 40,
+                backgroundImage: AuthService.to.user?.photoURL != null
+                    ? NetworkImage(AuthService.to.user!.photoURL!)
+                    : const AssetImage('assets/images/dash.png') as ImageProvider,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                AuthService.to.user?.displayName ?? 'User Name',
+                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                AuthService.to.user?.email ?? 'Email',
+                style: const TextStyle(color: Colors.white70),
+              ),
+            ],
+          ),
+        ),
+      ),
     ];
 
     if (AuthService.to.maxRole.index > 1) {

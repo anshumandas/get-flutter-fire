@@ -1,53 +1,56 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'package:path/path.dart';
 import '../../../../services/auth_service.dart';
+import '../../../../models/screens.dart';
 
 class ProfileController extends GetxController {
-  FirebaseStorage storage = FirebaseStorage.instance;
-  User? currentUser = AuthService.to.user;
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? get currentUser => _auth.currentUser;
   final Rxn<String> _photoURL = Rxn<String>();
-
-  File? _photo;
 
   String? get photoURL => _photoURL.value;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
-    _photoURL.value = currentUser!.photoURL;
-    _photoURL.bindStream(currentUser!.photoURL.obs.stream);
+    _photoURL.value = currentUser?.photoURL;
+    _listenToUserChanges();
+  }
+
+  void _listenToUserChanges() {
+    _auth.userChanges().listen((User? user) {
+      if (user != null) {
+        _photoURL.value = user.photoURL;
+      } else {
+        _photoURL.value = null;
+      }
+    });
   }
 
   Future<String?> uploadFile(String path) async {
     try {
+      final fileName = basename(path);
+      final destination = 'profilePics/${currentUser!.uid}/$fileName';
+      final ref = storage.ref(destination);
+
       var byt = GetStorage().read(path);
       if (byt != null) {
-        final fileName = path;
-        final destination = 'profilePics/${currentUser!.uid}';
-
-        final ref = storage.ref(destination).child(fileName);
         await ref.putData(byt);
-        return "$destination/$fileName";
       } else {
-        _photo = File(path);
-        if (_photo == null) return null;
-        final fileName = basename(_photo!.path);
-        final destination = 'profilePics/${currentUser!.uid}';
-
-        final ref = storage.ref(destination).child(fileName);
-        await ref.putFile(_photo!);
-        return "$destination/$fileName";
+        File photo = File(path);
+        await ref.putFile(photo);
       }
+
+      return destination;
     } catch (e) {
-      Get.snackbar('Error', 'Image Not Uploaded as ${e.toString()}');
+      Get.snackbar('Error', 'Image Not Uploaded: ${e.toString()}');
+      return null;
     }
-    return null;
   }
 
   void logout() {
@@ -55,8 +58,29 @@ class ProfileController extends GetxController {
   }
 
   Future<void> updatePhotoURL(String dest) async {
-    _photoURL.value = await storage.ref().child(dest).getDownloadURL();
-    await currentUser?.updatePhotoURL(_photoURL.value);
-    Get.snackbar('Success', 'Picture stored and linked');
+    try {
+      String downloadURL = await storage.ref(dest).getDownloadURL();
+      await _auth.currentUser?.updatePhotoURL(downloadURL);
+      _photoURL.value = downloadURL;
+      Get.snackbar('Success', 'Picture stored and linked');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update profile picture: ${e.toString()}');
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      await _auth.currentUser?.delete();
+      Get.defaultDialog(
+        title: 'Account Deleted',
+        middleText: 'Your account has been successfully deleted.',
+        onConfirm: () {
+          logout();
+          Get.offAllNamed(Screen.HOME.route);
+        },
+      );
+    } catch (e) {
+      throw Exception('Failed to delete account: ${e.toString()}');
+    }
   }
 }
