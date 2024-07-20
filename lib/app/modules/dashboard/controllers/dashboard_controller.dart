@@ -14,9 +14,4 @@ class DashboardController extends GetxController {
       },
     );
   }
-  var isSearchBarVisible = true.obs;
-  void toggleSearchBarVisibility() {
-    isSearchBarVisible.value = !isSearchBarVisible.value;
-  }
-  // Observable state for current time (example)
 }
