@@ -21,7 +21,7 @@ class CartController extends GetxController {
   }
 
   Future<void> fetchCartItems() async {
-    final userId = 'your-user-id'; // Replace with the actual user ID
+    const userId = 'your-user-id'; // Replace with the actual user ID
     final snapshot = await _firestore
         .collection('carts')
         .doc(userId)
@@ -36,7 +36,7 @@ class CartController extends GetxController {
   }
 
   Future<void> addCartItem(CartItem item) async {
-    final userId = 'your-user-id'; // Replace with the actual user ID
+    const userId = 'your-user-id'; // Replace with the actual user ID
     await _firestore
         .collection('carts')
         .doc(userId)
@@ -47,7 +47,7 @@ class CartController extends GetxController {
   }
 
   Future<void> removeCartItem(String itemId) async {
-    final userId = 'your-user-id'; // Replace with the actual user ID
+    const userId = 'your-user-id'; // Replace with the actual user ID
     await _firestore
         .collection('carts')
         .doc(userId)
@@ -59,7 +59,7 @@ class CartController extends GetxController {
   }
 
   Future<void> updateCartItem(CartItem item) async {
-    final userId = 'your-user-id'; // Replace with the actual user ID
+    const userId = 'your-user-id'; // Replace with the actual user ID
     await _firestore
         .collection('carts')
         .doc(userId)

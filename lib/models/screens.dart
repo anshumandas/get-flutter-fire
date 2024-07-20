@@ -113,6 +113,10 @@ enum Screen implements ActionEnum {
       label: "Role Request",
       accessor_: AccessedVia.drawer,
       accessLevel: AccessLevel.authenticated),
+  LOGIN('/login',
+      icon: Icons.login,
+      accessor_: AccessedVia.topRight,
+      accessLevel: AccessLevel.notAuthed),
   ;
 
   const Screen(this.path,
