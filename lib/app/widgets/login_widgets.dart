@@ -8,6 +8,7 @@ import '../../models/screens.dart';
 import '../../services/remote_config.dart';
 import '../utils/img_constants.dart';
 import 'menu_sheet_button.dart';
+import 'remotely_config_obx.dart';
 
 class LoginWidgets {
   static Widget headerBuilder(context, constraints, shrinkOffset) {
@@ -57,31 +58,36 @@ class LoginBottomSheetToggle extends MenuSheetButton<Screen> {
 
   @override
   Icon? get icon => (AuthService.to.isLoggedInValue)
-      ? values.length == 1
+      ? values.length <= 1
           ? const Icon(Icons.logout)
           : const Icon(Icons.menu)
       : const Icon(Icons.login);
 
   @override
   String? get label => (AuthService.to.isLoggedInValue)
-      ? values.length == 1
+      ? values.length <= 1
           ? 'Logout'
           : 'Click for Options'
       : 'Login';
 
   @override
+  void buttonPressed(Iterable<Screen> values) async => values.isEmpty
+      ? callbackFunc(await Screen.LOGOUT.doAction())
+      : super.buttonPressed(values);
+
+  @override
   Widget build(BuildContext context) {
-    MenuItemsController<Screen> controller = Get.put(
-        MenuItemsController<Screen>([]),
-        permanent: true); //must make true else gives error
-    Screen.sheet(null).then((val) {
-      controller.values.value = val;
-    });
-    RemoteConfig.instance.then((ins) =>
-        ins.addUseBottomSheetForProfileOptionsListener((val) async =>
-            {controller.values.value = await Screen.sheet(null)}));
+    MenuItemsController<Screen> controller =
+        MenuItemsController<Screen>(const Iterable<Screen>.empty());
     return Obx(() => (AuthService.to.isLoggedInValue)
-        ? builder(context, vals: controller.values.value)
+        ? RemotelyConfigObx(
+            () => builder(context, vals: controller.values.value),
+            controller,
+            Screen.sheet,
+            Screen.NONE,
+            "useBottomSheetForProfileOptions",
+            Typer.boolean,
+          )
         : !(current.currentPage!.name == Screen.LOGIN.path)
             ? IconButton(
                 onPressed: () async {
