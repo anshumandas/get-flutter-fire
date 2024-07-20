@@ -42,9 +42,8 @@ flutter:
       fonts:
         - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
   assets:
-    - assets/images/flutterfire_300x.png
-    - assets/images/dash.png
-    - assets/icons/logo.png
-    - assets/lottie/tick.json
+    - assets/
+    - assets/images/
+    - assets/icons/
   uses-material-design: true
 

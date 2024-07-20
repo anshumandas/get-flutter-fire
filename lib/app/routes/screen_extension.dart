@@ -110,11 +110,14 @@ extension ScreenExtension on Screen {
 
 extension RoleExtension on Role {
   int getCurrentIndexFromRoute(GetNavConfig? currentRoute) {
-    final String? currentLocation = currentRoute?.location;
+    final String? currentLocation = currentRoute?.uri.path;
     int currentIndex = 0;
     if (currentLocation != null) {
-      currentIndex =
-          tabs.indexWhere((tab) => currentLocation.startsWith(tab.path));
+      currentIndex = tabs.indexWhere((tab) {
+        String parentPath = tab.parent?.path ?? '';
+        String fullPath = '$parentPath${tab.path}';
+        return currentLocation.startsWith(fullPath);
+      });
     }
     return (currentIndex > 0) ? currentIndex : 0;
   }

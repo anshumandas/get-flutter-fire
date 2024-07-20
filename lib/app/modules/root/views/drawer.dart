@@ -8,7 +8,8 @@ import '../../../../utils/size_config.dart';
 import '../../../../models/role.dart';
 import '../../../../services/auth_service.dart';
 import '../../../../models/screens.dart';
-import '../controllers/my_drawer_controller.dart';
+import '../../../../services/remote_config.dart';
+import '../../../widgets/remotely_config_obx.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({super.key});
