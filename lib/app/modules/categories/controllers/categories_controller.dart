@@ -1,23 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/models/category.dart';
 
-class CategoriesController extends GetxController {
-  //TODO: Implement CategoriesController
+class CategoryController extends GetxController {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var categories = <Category>[].obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    fetchCategories();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void fetchCategories() {
+    _firestore.collection('categories').snapshots().listen((snapshot) {
+      categories.value = snapshot.docs
+          .map((doc) => Category.fromMap(doc.data()))
+          .toList();
+    });
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  void addCategory(Category category) async {
+    await _firestore.collection('categories').add(category.toMap());
   }
-
-  void increment() => count.value++;
 }
