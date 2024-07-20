@@ -99,6 +99,7 @@ enum Screen implements ActionEnum {
   SEARCH('/search',
       icon: Icons.search,
       label: "Search",
+      parent: HOME,
       accessor_: AccessedVia.topRight,
       remoteConfig: "showSearchBarOnTop",
       accessLevel: AccessLevel.public),
@@ -147,6 +148,13 @@ enum Screen implements ActionEnum {
     if (remoteConfig == "useBottomSheetForProfileOptions" &&
         (await RemoteConfig.instance).useBottomSheetForProfileOptions()) {
       return AccessedVia.bottomSheet;
+    }
+    if (remoteConfig == "showSearchBarOnTop") {
+      if ((await RemoteConfig.instance).showSearchBarOnTop()) {
+        return AccessedVia.topRight;
+      } else {
+        return AccessedVia.navigator;
+      }
     }
     return accessor_;
   }
