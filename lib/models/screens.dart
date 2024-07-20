@@ -153,6 +153,7 @@ enum Screen implements ActionEnum {
       if ((await RemoteConfig.instance).showSearchBarOnTop()) {
         return AccessedVia.topRight;
       } else {
+        // TODO: Dispay nav bar in bottom navbar
         return AccessedVia.navigator;
       }
     }
