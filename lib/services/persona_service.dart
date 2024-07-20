@@ -28,47 +28,45 @@ class PersonaService extends GetxService {
   final GetStorage _storage = GetStorage();
   final Rx<Persona> _selectedPersona = Persona(
     name: 'Default',
-    themeData: ThemeData.light(),
+    themeData: ThemeData.light().copyWith(scaffoldBackgroundColor: Colors.white),
     darkThemeData: ThemeData.dark(),
-    imageUrl: '', 
+    imageUrl: '',
     titleColor: Colors.black,
-      textColor: Colors.black,
-      drawerColor: Color.fromARGB(255, 255, 255, 255),
-      drawerColor1: Color.fromARGB(255, 211, 211, 211),
+    textColor: Colors.black,
+    drawerColor: const Color.fromARGB(255, 255, 255, 255),
+    drawerColor1: const Color.fromARGB(255, 211, 211, 211),
   ).obs;
   final Rx<ThemeMode> _themeMode = ThemeMode.light.obs;
 
   final personas = <Persona>[
     Persona(
       name: 'Default',
-      themeData: ThemeData.light(),
+      themeData: ThemeData.light().copyWith(scaffoldBackgroundColor: Colors.white),
       darkThemeData: ThemeData.dark(),
       imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmEedEwy284CMHPcPoYXz8i9K1BkGpLyHRUo2IleoVqnEa9cVD3pgtZdu0AHVQUnTDqKY&usqp=CAUR',
       titleColor: Colors.black,
       textColor: Colors.black,
-      drawerColor: Color.fromARGB(255, 255, 255, 255),
-      drawerColor1: Color.fromARGB(255, 211, 211, 211),
-
-      
+      drawerColor: const Color.fromARGB(255, 255, 255, 255),
+      drawerColor1: const Color.fromARGB(255, 211, 211, 211),
     ),
     Persona(
       name: 'Kids',
       themeData: ThemeData(
         primarySwatch: Colors.pink,
-        scaffoldBackgroundColor: Colors.pinkAccent,
+        scaffoldBackgroundColor: Color.fromARGB(255, 244, 157, 186),
       ),
       darkThemeData: ThemeData(
         primarySwatch: Colors.green,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 64, 255, 201),
+        scaffoldBackgroundColor: Color.fromARGB(255, 166, 127, 168),
         brightness: Brightness.dark,
       ),
       titleColor: Colors.black,
       textColor: Colors.black,
-      drawerColor: Color.fromARGB(255, 255, 255, 255),
-      drawerColor1: Color.fromARGB(255, 255, 255, 255),
+      drawerColor: const Color.fromARGB(255, 255, 255, 255),
+      drawerColor1: const Color.fromARGB(255, 255, 255, 255),
       imageUrl: 'https://static.vecteezy.com/system/resources/previews/035/867/277/original/ai-generated-cute-little-boy-with-smile-icon-illustration-avatar-of-cute-handsome-boy-cartoon-style-vector.jpg',
     ),
-     Persona(
+    Persona(
       name: 'Tech Savvy',
       themeData: ThemeData(
         primarySwatch: Colors.blueGrey,
@@ -81,8 +79,8 @@ class PersonaService extends GetxService {
       ),
       titleColor: Colors.black,
       textColor: Colors.black,
-      drawerColor: Color.fromARGB(255, 255, 255, 255),
-      drawerColor1: Color.fromARGB(255, 255, 255, 255),
+      drawerColor: const Color.fromARGB(255, 255, 255, 255),
+      drawerColor1: const Color.fromARGB(255, 255, 255, 255),
       imageUrl: 'https://img.freepik.com/premium-photo/neon-character-tech-savvy-chibi-boy-with-undercut-hairstyle-hacker-hoodie-clipart-sticker-set_655090-1193425.jpg?w=740',
     ),
     Persona(
@@ -98,8 +96,8 @@ class PersonaService extends GetxService {
       ),
       titleColor: Colors.black,
       textColor: Colors.black,
-      drawerColor: Color.fromARGB(255, 255, 255, 255),
-      drawerColor1: Color.fromARGB(255, 255, 255, 255),
+      drawerColor: const Color.fromARGB(255, 255, 255, 255),
+      drawerColor1: const Color.fromARGB(255, 255, 255, 255),
       imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxPkSUSZlKiUTK94du4ILsKpvFMrKi32VWLOsngdc3YSIeACsE58AchtZewsNkIfM6Ge0&usqp=CAU',
     ),
   ];

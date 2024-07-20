@@ -1,7 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../models/action_enum.dart';
@@ -44,38 +43,13 @@ enum ImageSources implements ActionEnum {
   }
 
   static Future<String?> getFile() async {
-    if (GetPlatform.isWeb) {
-      // Web-specific file picking logic
-      return await getWebFile();
-    } else {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: false,
-      );
-
-      if (result != null && result.files.isNotEmpty) {
-        final fileBytes = result.files.first.bytes;
-        final fileName = result.files.first.name;
-        GetStorage().write(fileName, fileBytes);
-        return fileName;
-      } else {
-        Get.snackbar('Error', 'Image Not Selected');
-        return null;
-      }
-    }
-  }
-
-  static Future<String?> getWebFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: false,
     );
 
     if (result != null && result.files.isNotEmpty) {
-      final fileBytes = result.files.first.bytes;
-      final fileName = result.files.first.name;
-      GetStorage().write(fileName, fileBytes);
-      return fileName;
+      return result.files.first.path;
     } else {
       Get.snackbar('Error', 'Image Not Selected');
       return null;
