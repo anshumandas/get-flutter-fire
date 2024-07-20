@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../app/widgets/login_widgets.dart';
 import '../services/remote_config.dart';
 import 'action_enum.dart';
 import 'access_level.dart';
@@ -8,9 +7,13 @@ import '../../services/auth_service.dart';
 
 enum AccessedVia {
   auto,
-  widget, //example: top right button
-  navigator, //bottom nav. can be linked to drawer items //handled in ScreenWidget
-  drawer, //creates nav tree //handled in RootView
+  widget,
+  topRight,
+  topCenter,
+  topLeft,
+  topBar, //bar below the main top menu bar
+  navigator, //bottom nav. can be linked to drawer items. left strip in expanded web //handled in ScreenWidget
+  drawer, //creates nav tree. persistant in expanded web and linked with nav icons //handled in RootView
   bottomSheet, //context menu for web handled via the Button that calls the sheet
   fab, //handled in ScreenWidget
   singleTap, //when an item of a list is clicked
@@ -18,6 +21,7 @@ enum AccessedVia {
 }
 
 enum Screen implements ActionEnum {
+  NONE.none(), //null
   HOME('/home',
       icon: Icons.home,
       label: "Home",
@@ -37,22 +41,18 @@ enum Screen implements ActionEnum {
       parent: HOME),
   PRODUCT_DETAILS('/:productId',
       accessLevel: AccessLevel.public, parent: PRODUCTS),
-  LOGIN('/login',
-      icon: Icons.login,
-      accessor_: AccessedVia.widget,
-      accessLevel: AccessLevel.notAuthed),
   PROFILE('/profile',
       icon: Icons.account_box_rounded,
       label: "Profile",
       accessor_: AccessedVia.drawer,
       accessLevel: AccessLevel.authenticated,
-      remoteConfig: true),
+      remoteConfig: "useBottomSheetForProfileOptions"),
   SETTINGS('/settings',
       icon: Icons.settings,
       label: "Settings",
       accessor_: AccessedVia.drawer,
       accessLevel: AccessLevel.authenticated,
-      remoteConfig: true),
+      remoteConfig: "useBottomSheetForProfileOptions"),
   CART('/cart',
       icon: Icons.trolley,
       label: "Cart",
@@ -96,10 +96,17 @@ enum Screen implements ActionEnum {
       accessLevel: AccessLevel.roleBased),
   MY_PRODUCT_DETAILS('/:productId',
       parent: MY_PRODUCTS, accessLevel: AccessLevel.roleBased),
+  SEARCH('/search',
+      icon: Icons.search,
+      label: "Search",
+      accessor_: AccessedVia.topRight,
+      remoteConfig: "showSearchBarOnTop",
+      accessLevel: AccessLevel.public),
   LOGOUT('/login',
       icon: Icons.logout,
       label: "Logout",
-      accessor_: AccessedVia.bottomSheet,
+      accessor_: AccessedVia.topRight,
+      remoteConfig: "useBottomSheetForProfileOptions",
       accessLevel: AccessLevel.authenticated),
   ROLE_REQUEST('/role-request',
       icon: Icons.request_page,
@@ -111,10 +118,19 @@ enum Screen implements ActionEnum {
   const Screen(this.path,
       {this.icon,
       this.label,
-      this.parent,
+      this.parent = Screen.NONE,
       this.accessor_ = AccessedVia.singleTap,
       this.accessLevel = AccessLevel.authenticated,
-      this.remoteConfig = false});
+      this.remoteConfig});
+
+  const Screen.none()
+      : path = '',
+        icon = null,
+        label = null,
+        parent = null,
+        accessor_ = AccessedVia.singleTap,
+        accessLevel = AccessLevel.authenticated,
+        remoteConfig = null;
 
   @override
   final IconData? icon;
@@ -126,10 +142,10 @@ enum Screen implements ActionEnum {
   final Screen? parent;
   final AccessLevel
       accessLevel; //if false it is role based. true means allowed for all
-  final bool remoteConfig;
+  final String? remoteConfig;
 
   Future<AccessedVia> get accessor async {
-    if (remoteConfig &&
+    if (remoteConfig == "useBottomSheetForProfileOptions" &&
         (await RemoteConfig.instance).useBottomSheetForProfileOptions()) {
       return AccessedVia.bottomSheet;
     }
@@ -169,6 +185,12 @@ enum Screen implements ActionEnum {
     return list;
   }
 
+  static Iterable<Screen> topRightMenu() {
+    return Screen.values.where((Screen screen) =>
+        screen.accessor_ == AccessedVia.topRight &&
+        AuthService.to.accessLevel.index >= screen.accessLevel.index);
+  }
+
   @override
   Future<dynamic> doAction() async {
     if (this == LOGOUT) {
@@ -176,7 +198,4 @@ enum Screen implements ActionEnum {
     }
     Get.rootDelegate.toNamed(route);
   }
-
-  Widget? widget(GetNavConfig current) =>
-      (this == LOGIN) ? LoginBottomSheetToggle(current) : null;
 }
