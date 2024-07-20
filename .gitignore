@@ -32,6 +32,7 @@ migrate_working_dir/
 /build/
 
 node_modules
+android/app/google-services.json
 
 # Symbolication related
 app.*.symbols

@@ -41,11 +41,6 @@ enum Screen implements ActionEnum {
       parent: HOME),
   PRODUCT_DETAILS('/:productId',
       accessLevel: AccessLevel.public, parent: PRODUCTS),
-
-  LOGIN('/login',
-      icon: Icons.login,
-      accessor_: AccessedVia.widget,
-      accessLevel: AccessLevel.notAuthed),
   SIGNUP('/signUp',
       icon: Icons.login,
       accessor_: AccessedVia.widget,
