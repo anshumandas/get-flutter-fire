@@ -1,10 +1,7 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-
 import 'package:path/path.dart';
 import '../../../../services/auth_service.dart';
 
@@ -13,50 +10,59 @@ class ProfileController extends GetxController {
   User? currentUser = AuthService.to.user;
   final Rxn<String> _photoURL = Rxn<String>();
 
-  File? _photo;
-
   String? get photoURL => _photoURL.value;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
-    _photoURL.value = currentUser!.photoURL;
+    _photoURL.value = currentUser?.photoURL;
     _photoURL.bindStream(currentUser!.photoURL.obs.stream);
   }
 
   Future<String?> uploadFile(String path) async {
     try {
-      var byt = GetStorage().read(path);
-      if (byt != null) {
-        final fileName = path;
-        final destination = 'profilePics/${currentUser!.uid}';
-
-        final ref = storage.ref(destination).child(fileName);
-        await ref.putData(byt);
-        return "$destination/$fileName";
-      } else {
-        _photo = File(path);
-        if (_photo == null) return null;
-        final fileName = basename(_photo!.path);
-        final destination = 'profilePics/${currentUser!.uid}';
-
-        final ref = storage.ref(destination).child(fileName);
-        await ref.putFile(_photo!);
-        return "$destination/$fileName";
+      if (path.isEmpty) {
+        Get.snackbar('Error', 'Invalid file path');
+        return null;
       }
-    } catch (e) {
-      Get.snackbar('Error', 'Image Not Uploaded as ${e.toString()}');
+
+      File fileToUpload = File(path);
+      bool fileExists = await fileToUpload.exists();
+      print('Path: $path, File Exists: $fileExists');
+
+      if (fileExists) {
+        final fileName = basename(fileToUpload.path);
+        final destination = 'profilePics/${currentUser!.uid}/$fileName';
+        final ref = storage.ref(destination);
+
+        await ref.putFile(fileToUpload);
+        final downloadURL = await ref.getDownloadURL();
+        await updatePhotoURL(downloadURL);
+        return downloadURL;
+      } else {
+        Get.snackbar('Error', 'File does not exist at $path');
+        return null;
+      }
+    } catch (e, stacktrace) {
+      print('Error uploading file: $e');
+      print('Stacktrace: $stacktrace');
+      Get.snackbar('Error', 'Image Not Uploaded: ${e.toString()}');
+      return null;
     }
-    return null;
+  }
+
+  Future<void> updatePhotoURL(String url) async {
+    try {
+      _photoURL.value = url;
+      await currentUser?.updatePhotoURL(url);
+      Get.snackbar('Success', 'Profile picture updated successfully');
+    } catch (e) {
+      print('Error updating photo URL: $e');
+      Get.snackbar('Error', 'Failed to update photo URL: ${e.toString()}');
+    }
   }
 
   void logout() {
     AuthService.to.logout();
-  }
-
-  Future<void> updatePhotoURL(String dest) async {
-    _photoURL.value = await storage.ref().child(dest).getDownloadURL();
-    await currentUser?.updatePhotoURL(_photoURL.value);
-    Get.snackbar('Success', 'Picture stored and linked');
   }
 }

@@ -104,7 +104,7 @@ Step 10: Firebase Remote Config for A/B testing. See [https://firebase.google.co
 2. Config useBottomSheetForProfileOptions for Navigation element to be one of the following
    * False: Drawer for Account, Settings, Sign Out
    * True: Hamburger that opens BottomSheet (Context Menu in larger screen) for the same options
-3. TODO: Config for adding Search Bar at the Top vs a Bottom Navigation button
+3. Config for adding Search Bar at the Top vs a Bottom Navigation button  (Done)
 
 Step 11: TODO: CRUD
 
@@ -123,7 +123,7 @@ Step 12: TODO: Theming and Custom Settings
 
 Step 13: TODO: Large vs Small screen responsiveness
 
-* Drawer: Triggered by Top Left Icon (App Logo). For iOS this icon changes to back button when required. Contains allowed Role List, Screens specified as Drawer. Becomes Left Side Navigation for Horizontal Screens. Can have additional extreme left vertical Navigation Strip. Bottom Navigation Bar also folds into this strip in Horizontal Screens.
+* Drawer: Triggered by Top Left Icon (App Logo). For iOS this icon changes to back button when required. Contains allowed Role List, Screens specified as Drawer. Becomes Left Side Navigation for Horizontal Screens. Can have additional extreme left vertical Navigation Strip. Bottom Navigation Bar also folds into this strip in Horizontal Screens.(Done)
 * Top Right Icon: used for Login and post Login triggers BottomSheet/Context Menu for Persona Change, Profile, Settings, Change Password, Logout
 * Search Bar (Toggle Button for phones) on Top Center with Title
 * Status Bottom Bar for desktops only instead of SnackBars

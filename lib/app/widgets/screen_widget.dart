@@ -5,14 +5,11 @@ import '../../models/role.dart';
 import '../../models/screens.dart';
 import 'login_widgets.dart';
 
-class ScreenWidget extends StatelessWidget {
+class ScreenWidget extends StatefulWidget {
   final Widget body;
   final Role? role;
-
   final GetDelegate? delegate;
-
   final GetNavConfig? currentRoute;
-
   final Screen screen;
   final AppBar? appBar;
 
@@ -27,32 +24,54 @@ class ScreenWidget extends StatelessWidget {
   });
 
   @override
+  _ScreenWidgetState createState() => _ScreenWidgetState();
+}
+
+class _ScreenWidgetState extends State<ScreenWidget> {
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize currentIndex based on the role and route
+    _currentIndex = widget.role != null
+        ? widget.role!.getCurrentIndexFromRoute(widget.currentRoute)
+        : 0;
+  }
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+
+    if (widget.delegate != null) {
+      widget.role!.routeTo(index, widget.delegate!);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    int currentIndex =
-        role != null ? role!.getCurrentIndexFromRoute(currentRoute) : 0;
-    Iterable<Screen> fabs = screen.fabs;
+    bool isDesktop = GetPlatform.isDesktop;
+    Iterable<Screen> fabs = widget.screen.fabs;
+
     return Scaffold(
-      body: body,
-      appBar: appBar,
-      bottomNavigationBar: (screen.navTabs.isNotEmpty)
-          ? BottomNavigationBar(
-              currentIndex: currentIndex,
-              onTap: (value) {
-                if (delegate != null) {
-                  role!.routeTo(value, delegate!);
-                }
-              },
-              items:
-                  role!.tabs //screen may have more navTabs but we need by role
-                      .map((Screen tab) => BottomNavigationBarItem(
-                            icon: Icon(tab.icon),
-                            label: tab.label,
-                          ))
-                      .toList(),
-            )
-          : null,
+      body: widget.body,
+      appBar: widget.appBar,
+      bottomNavigationBar: isDesktop || widget.screen.navTabs.isEmpty
+          ? null
+          : BottomNavigationBar(
+              currentIndex: _currentIndex,
+              selectedItemColor: Colors.black, 
+              unselectedItemColor: Colors.grey, 
+              onTap: _onTabTapped,
+              items: widget.role!.tabs
+                  .map((Screen tab) => BottomNavigationBarItem(
+                        icon: Icon(tab.icon),
+                        label: tab.label,
+                      ))
+                  .toList(),
+            ),
       floatingActionButton: fabs.isNotEmpty ? getFAB(fabs) : null,
-      // bottomSheet: //this is used for persistent bar like status bar
     );
   }
 
