@@ -1,6 +1,5 @@
 // ignore_for_file: inference_failure_on_function_invocation
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,11 +18,11 @@ class ProfileView extends GetView<ProfileController> {
   Color get placeholderColor => Colors.grey;
 
   Widget _imageFrameBuilder(
-      BuildContext context,
-      Widget? child,
-      int? frame,
-      bool? _,
-      ) {
+    BuildContext context,
+    Widget? child,
+    int? frame,
+    bool? _,
+  ) {
     if (frame == null) {
       return Container(color: placeholderColor);
     }
@@ -33,14 +32,14 @@ class ProfileView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => profileScreen(context));
+    return Obx(() => profileScreen());
   }
 
-  Widget profileScreen(BuildContext context) {
+  Widget profileScreen() {
     return AuthService.to.isLoggedInValue
         ? ProfileScreen(
-      // We are using the Flutter Fire Profile Screen now but will change in subsequent steps.
-      // The issues are highlighted in comments here
+            // We are using the Flutter Fire Profile Screen now but will change in subsequent steps.
+            // The issues are highlighted in comments here
 
             // appBar: AppBar(
             //   title: const Text('User Profile'),
@@ -52,6 +51,7 @@ class ProfileView extends GetView<ProfileController> {
               child: ClipPath(
                 clipper: ShapeBorderClipper(shape: shape),
                 clipBehavior: Clip.hardEdge,
+
                child: Obx(() {
                   if (controller.photoURL != null && controller.photoURL!.isNotEmpty) {
                     final cacheBustedUrl = controller.photoURL!;
@@ -128,32 +128,13 @@ class ProfileView extends GetView<ProfileController> {
         : const Scaffold();
   }
 
-
-
-  Future<void> _resetPasswordEmailVerification(BuildContext context) async {
-    final email = controller.currentUser?.email;
-    if (email != null) {
-      try {
-        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-        controller.logout();
-        Get.snackbar(
-          'Success',
-          'Password reset email sent. Please check your inbox.',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      } catch (e) {
-        Get.snackbar(
-          'Error',
-          'Failed to send password reset email: $e',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
-    } else {
-      Get.snackbar(
-        'Error',
-        'No email associated with this account.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }
+  void callChangePwdDialog() {
+    var dlg = ChangePasswordDialog(controller.currentUser!);
+    Get.defaultDialog(
+        title: "Change Password",
+        content: dlg,
+        textConfirm: "Submit",
+        textCancel: "Cancel",
+        onConfirm: dlg.onSubmit);
   }
 }
