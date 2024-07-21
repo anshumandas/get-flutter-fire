@@ -27,7 +27,9 @@ class BecomeSellerView extends GetView<BecomeSellerController> {
                   },
                   child: Text("Become Seller Now"))
             else if (controller.status.value == "pending")
-              Text("Your request is pending"),
+              Text("Your request is pending")
+            else if (controller.status.value == "rejected")
+              Text("Request rejected")
           ],
         )),
       ),
