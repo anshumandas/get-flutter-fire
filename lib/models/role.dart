@@ -14,7 +14,7 @@ import 'screens.dart';
 // Profile and Settings is in Drawer
 
 enum Role {
-  buyer([Screen.DASHBOARD, Screen.PRODUCTS, Screen.CART]),
+  buyer([Screen.DASHBOARD, Screen.PRODUCTS, Screen.CART, Screen.BECOME_SELLER]),
   seller([Screen.DASHBOARD, Screen.PRODUCTS, Screen.MY_PRODUCTS]),
   admin([Screen.USERS, Screen.CATEGORIES, Screen.TASKS]);
 //higher role can assume a lower role

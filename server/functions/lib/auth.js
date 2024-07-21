@@ -22,12 +22,13 @@ const firebase_functions_1 = require("firebase-functions");
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const init_1 = require("./init");
 const auth_1 = require("firebase/auth");
+
 const addUser = firebase_functions_1.auth.user().onCreate(async (user, context) => {
     var _a;
     // This is used to provide admin role to the first user that gets created
     (0, logger_1.debug)("added user: ", user);
     if (((_a = user.customClaims) === null || _a === void 0 ? void 0 : _a.status) == "creating") { // this is using client side to send the verification mail
-        firebase_admin_1.default.auth().setCustomUserClaims(user.uid, { status: "created" });
+        firebase_admin_1.default.auth().setCustomUserClaims(user.uid, { status: "created", role: "buyer" });
     }
     else if (!init_1.config.useCustomeVerificationEmail && user && user.email && !user.emailVerified) {
         // this is client side module and can create issues with server side quota limits
@@ -192,3 +193,35 @@ async function sendCustomVerificationEmail(_email, _link, _locale) {
     // We could also see https://canopas.com/how-to-send-emails-using-cloud-functions-firestore-firebase-send-email-ff4702a16fef
 }
 //# sourceMappingURL=auth.js.map
+
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+
+exports.updateUserRole = functions.https.onCall(async (data, context) => {
+  // Check if the user is authenticated
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+  }
+
+  // Check if the user is an admin
+  const userRecord = await admin.auth().getUser(context.auth.uid);
+  const customClaims = userRecord.customClaims || {};
+  if (customClaims.role !== 'admin') {
+    throw new functions.https.HttpsError('permission-denied', 'Only admins can update user roles');
+  }
+
+  const { userId, newRole } = data;
+
+  if (!userId || !newRole) {
+    throw new functions.https.HttpsError('invalid-argument', 'Missing userId or newRole');
+  }
+
+  try {
+    const userRecord = await admin.auth().getUserByEmail(userId);
+    await admin.auth().setCustomUserClaims(userRecord.uid, { role: newRole });
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    throw new functions.https.HttpsError('internal', 'Error updating user role');
+  }
+});

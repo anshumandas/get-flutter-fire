@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/become_seller/bindings/become_seller_binding.dart';
+import 'package:get_flutter_fire/app/modules/become_seller/controllers/become_seller_controller.dart';
+import 'package:get_flutter_fire/app/modules/become_seller/views/become_seller_view.dart';
 
 import '../../models/access_level.dart';
 import '../../models/role.dart';
@@ -96,6 +99,10 @@ class AppPages {
                 )
               ],
             ),
+            Screen.BECOME_SELLER.getPage(
+              role: Role.buyer,
+                page: () => const BecomeSellerView(),
+                binding: BecomeSellerBinding()),
             Screen.PRODUCTS.getPage(
               page: () => const ProductsView(),
               binding: ProductsBinding(),

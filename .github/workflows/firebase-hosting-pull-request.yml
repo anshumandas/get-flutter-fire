@@ -18,4 +18,4 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FLUTTERFAST_92C25 }}
-          projectId: flutterfast-92c25
+          projectId: sharekhan-test-90957

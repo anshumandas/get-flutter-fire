@@ -98,7 +98,7 @@ class AuthService extends GetxService {
       // URL you want to redirect back to. The domain (www.example.com) for this
       // URL must be whitelisted in the Firebase Console.
       url:
-          '$baseUrl:5001/flutterfast-92c25/us-central1/handleEmailLinkVerification',
+          '$baseUrl:5001/sharekhan-test-90957/us-central1/handleEmailLinkVerification',
       //     // This must be true if deep linking.
       //     // If deeplinking. See [https://firebase.google.com/docs/dynamic-links/flutter/receive]
       handleCodeInApp: true,

@@ -51,4 +51,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // See: https://firebase.google.com/docs/functions/get-started
 const _ = __importStar(require("./auth"));
 exports.default = _;
+exports.updateUserRole = _.updateUserRole;
 //# sourceMappingURL=index.js.map

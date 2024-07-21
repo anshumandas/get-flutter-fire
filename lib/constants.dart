@@ -6,7 +6,7 @@ const kPrimaryLightColor = Color(0xFFF1E6FF);
 
 const double defaultPadding = 16.0;
 
-const useEmulator = false;
+const useEmulator = true;
 
 const useRecaptcha = false;
 
