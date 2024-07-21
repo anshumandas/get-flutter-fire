@@ -1,15 +1,15 @@
-// ignore_for_file: inference_failure_on_function_invocation
+// ignore_for_file: inference_failure_on_function_invocation, non_constant_identifier_names
 
 import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../firebase_options.dart';
 
 import '../../../../models/screens.dart';
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
+import 'custom_login.dart';
+import 'custom_signUp.dart';
 
 class LoginView extends GetView<LoginController> {
   void showReverificationButton(
@@ -51,37 +51,13 @@ class LoginView extends GetView<LoginController> {
   Widget loginScreen(BuildContext context) {
     Widget ui;
     if (!controller.isLoggedIn) {
-      ui = !(GetPlatform.isAndroid || GetPlatform.isIOS) && controller.isRobot
-          ? recaptcha()
-          : SignInScreen(
-              providers: [
-                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
-                MyEmailAuthProvider(),
-              ],
-              showAuthActionSwitch: !controller.isRegistered,
-              showPasswordVisibilityToggle: true,
-              headerBuilder: LoginWidgets.headerBuilder,
-              subtitleBuilder: subtitleBuilder,
-              footerBuilder: (context, action) => footerBuilder(
-                  controller.showReverificationButton,
-                  LoginController.to.credential),
-              sideBuilder: LoginWidgets.sideBuilder,
-              actions: getActions(),
-            );
+      if (!(GetPlatform.isAndroid || GetPlatform.isIOS) && controller.isRobot) {
+        ui = recaptcha();
+      } else {
+        ui = const CustomSignIn();
+      }
     } else if (controller.isAnon) {
-      ui = RegisterScreen(
-        providers: [
-          MyEmailAuthProvider(),
-        ],
-        showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
-        showPasswordVisibilityToggle: true,
-        headerBuilder: LoginWidgets.headerBuilder,
-        subtitleBuilder: subtitleBuilder,
-        footerBuilder: (context, action) => footerBuilder(
-            controller.showReverificationButton, LoginController.to.credential),
-        sideBuilder: LoginWidgets.sideBuilder,
-        actions: getActions(),
-      );
+      ui = const CustomSignUp();
     } else {
       final thenTo = Get
           .rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
@@ -91,6 +67,41 @@ class LoginView extends GetView<LoginController> {
     }
     return ui;
   }
+
+  // RegisterScreen Register() {
+  //   return RegisterScreen(
+  //     providers: [
+  //       MyEmailAuthProvider(),
+  //     ],
+  //     showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
+  //     showPasswordVisibilityToggle: true,
+  //     headerBuilder: LoginWidgets.headerBuilder,
+  //     subtitleBuilder: subtitleBuilder,
+  //     footerBuilder: (context, action) => footerBuilder(
+  //         controller.showReverificationButton, LoginController.to.credential),
+  //     sideBuilder: LoginWidgets.sideBuilder,
+  //     actions: getActions(),
+  //   );
+  // }
+
+  // SignInScreen SignIn() {
+  //   return SignInScreen(
+  //     providers: [
+  //       GoogleProvider(
+  //           clientId:
+  //               clientID),
+  //       MyEmailAuthProvider(),
+  //     ],
+  //     showAuthActionSwitch: !controller.isRegistered,
+  //     showPasswordVisibilityToggle: true,
+  //     headerBuilder: LoginWidgets.headerBuilder,
+  //     subtitleBuilder: subtitleBuilder,
+  //     footerBuilder: (context, action) => footerBuilder(
+  //         controller.showReverificationButton, LoginController.to.credential),
+  //     sideBuilder: LoginWidgets.sideBuilder,
+  //     actions: getActions(),
+  //   );
+  // }
 
   Widget recaptcha() {
     //TODO: Add Recaptcha

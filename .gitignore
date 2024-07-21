@@ -31,6 +31,9 @@ migrate_working_dir/
 .pub/
 /build/
 
+node_modules
+android/app/google-services.json
+
 # Symbolication related
 app.*.symbols
 
@@ -61,10 +64,15 @@ android/app/src/main/res/values-night/styles.xml
 android/app/src/profile/AndroidManifest.xml
 android/gradle/wrapper/gradle-wrapper.properties
 ios/.gitignore
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/Generated.xcconfig
+ios/Runner/GeneratedPluginRegistrant.h
+ios/Runner/GeneratedPluginRegistrant.m
 ios/Flutter/Debug.xcconfig
 ios/Flutter/Release.xcconfig
 ios/Runner/AppDelegate.swift
 ios/Runner/Runner-Bridging-Header.h
+ios/Runner/GoogleService-Info.plist
 ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
 ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png
 ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png
@@ -110,6 +118,7 @@ macos/.gitignore
 macos/Flutter/Flutter-Debug.xcconfig
 macos/Flutter/Flutter-Release.xcconfig
 macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/ephemeral/
 macos/Runner/AppDelegate.swift
 macos/Runner/DebugProfile.entitlements
 macos/Runner/MainFlutterWindow.swift
