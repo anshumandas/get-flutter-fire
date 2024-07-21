@@ -27,7 +27,7 @@ const addUser = firebase_functions_1.auth.user().onCreate(async (user, context) 
     // This is used to provide admin role to the first user that gets created
     (0, logger_1.debug)("added user: ", user);
     if (((_a = user.customClaims) === null || _a === void 0 ? void 0 : _a.status) == "creating") { // this is using client side to send the verification mail
-        firebase_admin_1.default.auth().setCustomUserClaims(user.uid, { status: "created" });
+        firebase_admin_1.default.auth().setCustomUserClaims(user.uid, { status: "created", role: "buyer" });
     }
     else if (!init_1.config.useCustomeVerificationEmail && user && user.email && !user.emailVerified) {
         // this is client side module and can create issues with server side quota limits
