@@ -32,13 +32,17 @@ class TasksController extends GetxController {
   }
 
   void fetchRequests() {
-    firestore.collection('Requests').snapshots().listen((snapshot) {
+    firestore
+        .collection('Requests')
+        .where('status', isEqualTo: 'pending')
+        .snapshots()
+        .listen((snapshot) {
       requests.value = snapshot.docs;
     });
     status.value = "fetched";
   }
 
-  Future<void> approveRequest(String userId) async {
+  Future<void> approveRequest(String userId, int index) async {
     try {
       final httpsCallable = functions.httpsCallable('updateUserRole');
       final result = await httpsCallable.call({
@@ -51,6 +55,7 @@ class TasksController extends GetxController {
           'status': 'approved',
           'approvedAt': FieldValue.serverTimestamp(),
         });
+        requests.removeAt(index);
       } else {
         print('Error approving request: ${result.data['error']}');
       }
@@ -59,12 +64,13 @@ class TasksController extends GetxController {
     }
   }
 
-  Future<void> rejectRequest(String userId) async {
+  Future<void> rejectRequest(String userId, int index) async {
     try {
       await firestore.collection('Requests').doc(userId).update({
         'status': 'rejected',
         'rejectedAt': FieldValue.serverTimestamp(),
       });
+      requests.removeAt(index);
     } catch (e) {
       print('Error rejecting request: $e');
     }

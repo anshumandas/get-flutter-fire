@@ -13,8 +13,9 @@ class TasksView extends GetView<TasksController> {
       body: Obx(() {
         return Column(
           children: [
-            if (controller.requests.length > 0)
+            if (controller.requests.isNotEmpty)
               ListView.builder(
+                shrinkWrap: true,
                 itemCount: controller.requests.length,
                 itemBuilder: (context, index) {
                   final request = controller.requests[index];
@@ -34,11 +35,11 @@ class TasksView extends GetView<TasksController> {
                     ),
                     onDismissed: (direction) {
                       if (direction == DismissDirection.startToEnd) {
-                        controller.approveRequest(request['email']);
+                        controller.approveRequest(request['email'], index);
                       } else {
-                        controller.rejectRequest(request['email']);
+                        controller.rejectRequest(request['email'], index);
                       }
-                      controller.removeRequest(index);
+                      controller.requests.removeAt(index);
                     },
                     child: ListTile(
                       title: Text(request['email'] ?? 'Unknown'),
