@@ -82,7 +82,7 @@ class CustomSignUp extends GetView<AuthController> {
                   } else if (passwordController.text ==
                       confirmpasswordController.text) {
                     AuthService()
-                        .login(emailController.text, passwordController.text);
+                        .signUp(emailController.text, passwordController.text);
                   }
                 },
                 child: Container(
