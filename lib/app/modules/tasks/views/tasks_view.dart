@@ -10,39 +10,50 @@ class TasksView extends GetView<TasksController> {
   @override
   Widget build(BuildContext context) {
     return ScreenWidget(
-      body: Obx(() => ListView.builder(
-            itemCount: controller.requests.length,
-            itemBuilder: (context, index) {
-              final request = controller.requests[index];
-              return Dismissible(
-                key: Key(request.id),
-                background: Container(
-                  color: Colors.green,
-                  child: Icon(Icons.check, color: Colors.white),
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 20),
-                ),
-                secondaryBackground: Container(
-                  color: Colors.red,
-                  child: Icon(Icons.close, color: Colors.white),
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 20),
-                ),
-                onDismissed: (direction) {
-                  if (direction == DismissDirection.startToEnd) {
-                    controller.approveRequest(request['email']);
-                  } else {
-                    controller.rejectRequest(request['email']);
-                  }
-                  controller.removeRequest(index);
+      body: Obx(() {
+        return Column(
+          children: [
+            if (controller.requests.length > 0)
+              ListView.builder(
+                itemCount: controller.requests.length,
+                itemBuilder: (context, index) {
+                  final request = controller.requests[index];
+                  return Dismissible(
+                    key: Key(request.id),
+                    background: Container(
+                      color: Colors.green,
+                      child: Icon(Icons.check, color: Colors.white),
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.only(left: 20),
+                    ),
+                    secondaryBackground: Container(
+                      color: Colors.red,
+                      child: Icon(Icons.close, color: Colors.white),
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 20),
+                    ),
+                    onDismissed: (direction) {
+                      if (direction == DismissDirection.startToEnd) {
+                        controller.approveRequest(request['email']);
+                      } else {
+                        controller.rejectRequest(request['email']);
+                      }
+                      controller.removeRequest(index);
+                    },
+                    child: ListTile(
+                      title: Text(request['email'] ?? 'Unknown'),
+                      subtitle: Text('Requested upgrade to seller'),
+                    ),
+                  );
                 },
-                child: ListTile(
-                  title: Text(request['email'] ?? 'Unknown'),
-                  subtitle: Text('Requested upgrade to seller'),
-                ),
-              );
-            },
-          )),
+              )
+            else
+              Center(
+                child: Text("No Requests Found"),
+              )
+          ],
+        );
+      }),
       screen: screen!,
     );
   }
