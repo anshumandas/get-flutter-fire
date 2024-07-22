@@ -1,6 +1,13 @@
 # get-flutter-fire
 
-## changes i made
+## changes I made
+- Bug fix : database.rules.json
+- Bug fix : Build command in package.json for server/functions
+- Bug fix : Firebase initialization error
+- TODO : Used nodemailer to write a custom send email function, which can be tested seperately for its logic and correctness
+- TODO : Modified the storage rules and firestore rules
+
+For a detailed description of my changes you can see the document 
 
 ## descrption
 This codebase provides a boilerplate code utilizing the following three technologies:

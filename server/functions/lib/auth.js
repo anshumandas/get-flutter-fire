@@ -12,24 +12,50 @@
 /* eslint-disable camelcase */
 /* eslint-disable require-jsdoc */
 /* eslint-disable max-len */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyIdToken = exports.beforeUserCreated = exports.beforeSignIn = exports.addUser = void 0;
+const init_1 = require("./init");
+const admin_1 = require("./admin");
 const logger_1 = require("firebase-functions/logger");
 const firebase_functions_1 = require("firebase-functions");
-const firebase_admin_1 = __importDefault(require("firebase-admin"));
-const init_1 = require("./init");
 const auth_1 = require("firebase/auth");
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const dotenv = __importStar(require("dotenv"));
+dotenv.config();
 const addUser = firebase_functions_1.auth.user().onCreate(async (user, context) => {
     var _a;
     // This is used to provide admin role to the first user that gets created
     (0, logger_1.debug)("added user: ", user);
     if (((_a = user.customClaims) === null || _a === void 0 ? void 0 : _a.status) == "creating") { // this is using client side to send the verification mail
-        firebase_admin_1.default.auth().setCustomUserClaims(user.uid, { status: "created" });
+        admin_1.adminAuth.setCustomUserClaims(user.uid, { status: "created" });
     }
-    else if (!init_1.config.useCustomeVerificationEmail && user && user.email && !user.emailVerified) {
+    else if (!init_1.config.useCustomVerificationEmail && user && user.email && !user.emailVerified) {
         // this is client side module and can create issues with server side quota limits
         await sendVerificationEmail(user, context);
     }
@@ -40,7 +66,7 @@ async function checkUserExistsSendVerification(user, context) {
     if (!email.endsWith(".verify"))
         return null;
     try {
-        const userRecord = await firebase_admin_1.default.auth().getUserByEmail(email.substring(0, email.length - 7));
+        const userRecord = await admin_1.adminAuth.getUserByEmail(email.substring(0, email.length - 7));
         (0, logger_1.debug)("existing user: ", user);
         // we could save the last email sent time in another DB to stop multiple sends
         await sendVerificationEmail(userRecord, context);
@@ -73,7 +99,7 @@ const beforeUserCreated = firebase_functions_1.auth.user().beforeCreate(async (u
         }
         else if (!init_1.config.adminEmail) {
             // ake the first user admin if admin email is not specified in config
-            const listUsersResult = await firebase_admin_1.default.auth().listUsers(2);
+            const listUsersResult = await admin_1.adminAuth.listUsers(2);
             if (listUsersResult.users.length == 0) {
                 return {
                     displayName: "Admin",
@@ -82,7 +108,7 @@ const beforeUserCreated = firebase_functions_1.auth.user().beforeCreate(async (u
                 };
             }
         }
-        if (!user.emailVerified && init_1.config.useCustomeVerificationEmail) {
+        if (!user.emailVerified && init_1.config.useCustomVerificationEmail) {
             await sendVerificationEmail(user, context);
         }
         else if (!user.emailVerified) {
@@ -117,7 +143,7 @@ const beforeSignIn = firebase_functions_1.auth.user().beforeSignIn((user, _conte
 exports.beforeSignIn = beforeSignIn;
 // TODO: use the below to verify auth token before any CRUD requests in a middleware
 const verifyIdToken = function (idToken) {
-    firebase_admin_1.default.auth().verifyIdToken(idToken).then((decodedToken) => {
+    admin_1.adminAuth.verifyIdToken(idToken).then((decodedToken) => {
         if (decodedToken.email_verified) {
             // Email verified. Grant access.
         }
@@ -133,11 +159,11 @@ exports.verifyIdToken = verifyIdToken;
  * @param {*} context
  */
 async function sendVerificationEmail(user, context) {
-    if (!init_1.config.useCustomeVerificationEmail) {
+    if (!init_1.config.useCustomVerificationEmail) {
         // If using Emulator don't forget to add this
         const emulator = process.env.FUNCTIONS_EMULATOR === "true";
-        const customToken = await firebase_admin_1.default.auth().createCustomToken(user.uid, user.customClaims);
-        // debug(customToken);
+        const customToken = await admin_1.adminAuth.createCustomToken(user.uid, user.customClaims);
+        (0, logger_1.debug)(customToken);
         if (init_1.config.useClientSDK) {
             // This is a hack to use client side email sending function at server side, suggested in stackOverflow
             try {
@@ -163,8 +189,8 @@ async function sendVerificationEmail(user, context) {
             // TODO test the below in live Firebase
             try {
                 const axios = require("axios");
-                const url = emulator ? "http://localhost:9099/emulator" : "https://identitytoolkit.googleapis.com";
-                await axios.post(`${url}/v1/accounts:sendOobCode?key=[${init_1.config.appId}]`, { requestType: "VERIFY_EMAIL", idToken: customToken }); // Not working. TODO fix the issue
+                const url = emulator ? "http://127.0.0.1:9099/identitytoolkit.googleapis.com" : "https://identitytoolkit.googleapis.com";
+                await axios.post(`${url}/v1/accounts:sendOobCode?key=[${init_1.config.apiKey}]`, { requestType: "VERIFY_EMAIL", idToken: customToken }); // Not working. TODO fix the issue
             }
             catch (error) {
                 (0, logger_1.debug)(error);
@@ -173,7 +199,7 @@ async function sendVerificationEmail(user, context) {
     }
     else {
         // Send custom email verification on sign-up.
-        const link = await firebase_admin_1.default.auth().generateEmailVerificationLink(user.email); // you can provide actionCodeSettings also
+        const link = await admin_1.adminAuth.generateEmailVerificationLink(user.email); // you can provide actionCodeSettings also
         await sendCustomVerificationEmail(user.email, link, context === null || context === void 0 ? void 0 : context.locale);
         // we can throw error such that user does not get created till verification.
         // However, we need the user details like pwd and thus the user has to be created
@@ -190,5 +216,29 @@ async function sendVerificationEmail(user, context) {
 async function sendCustomVerificationEmail(_email, _link, _locale) {
     // TODO use nodemailer etc. This will not use Firebase templates
     // We could also see https://canopas.com/how-to-send-emails-using-cloud-functions-firestore-firebase-send-email-ff4702a16fef
+    const transporter = nodemailer_1.default.createTransport({
+        host: "smtp.gmail.com", // e.g., smtp.gmail.com for Gmail
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: "shreya.parkar.197@gmail.com", // your email
+            pass: "3645@Adsh", // your email password or app-specific password
+        }
+    });
+    const mailOptions = {
+        from: "'Shreya Parkar' shreya.parkar.197@gmail.com", // sender address
+        to: _email,
+        subject: "Email Verification", // Subject line
+        text: `Please verify your email by clicking the following link: ${_link}`, // plain text body
+        html: `<b>Please verify your email by clicking the following link: <a href="${_link}">Verify Email</a></b>`, // html body
+    };
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log("Verification email sent to:", _email);
+    }
+    catch (error) {
+        console.error("Error sending verification email:", error);
+        throw new Error("Error sending verification email");
+    }
 }
 //# sourceMappingURL=auth.js.map

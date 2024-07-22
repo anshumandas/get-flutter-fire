@@ -28,6 +28,8 @@
 // See: https://firebase.google.com/docs/functions/get-started
 
 import * as _ from "./auth";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 export default _;
 

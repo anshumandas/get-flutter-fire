@@ -12,24 +12,29 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable max-len */
 
+import { config, auth } from "./init";
+import { adminAuth } from "./admin";
 import { debug } from "firebase-functions/logger";
 import { auth as functionAuth } from "firebase-functions";
 import { UserRecord } from "firebase-admin/auth";
 import { AuthUserRecord, AuthEventContext } from "firebase-functions/lib/common/providers/identity";
 import { connectAuthEmulator, sendEmailVerification, signInWithCustomToken } from "firebase/auth";
-import { adminAuth } from "./admin";
-import { config, auth } from "./init";
+import nodemailer from "nodemailer";
+import { google } from "googleapis";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const addUser = functionAuth.user().onCreate(async (user, context) => {
   // This is used to provide admin role to the first user that gets created
   debug("added user: ", user);
   if (user.customClaims?.status == "creating") { // this is using client side to send the verification mail
     adminAuth.setCustomUserClaims(user.uid, { status: "created" });
-  } else if (!config.useCustomeVerificationEmail && user && user.email && !user.emailVerified) {
+  } else if (!config.useCustomVerificationEmail && user && user.email && !user.emailVerified) {
     // this is client side module and can create issues with server side quota limits
     await sendVerificationEmail(user, context);
   }
 });
+
 async function checkUserExistsSendVerification(user: AuthUserRecord, context: AuthEventContext): Promise<UserRecord | null> {
   var email: String = user.email!;
   if (!email.endsWith(".verify")) return null;
@@ -74,7 +79,7 @@ const beforeUserCreated = functionAuth.user().beforeCreate(async (user, context)
         };
       }
     }
-    if (!user.emailVerified && config.useCustomeVerificationEmail) {
+    if (!user.emailVerified && config.useCustomVerificationEmail) {
       await sendVerificationEmail(user, context);
     } else if (!user.emailVerified) {
       // This could be useful if SignUp flow has other pages to take post email registeration details
@@ -122,11 +127,11 @@ const verifyIdToken = function (idToken: string) {
  */
 
 async function sendVerificationEmail(user: any, context: any) {
-  if (!config.useCustomeVerificationEmail) {
+  if (!config.useCustomVerificationEmail) {
     // If using Emulator don't forget to add this
     const emulator = process.env.FUNCTIONS_EMULATOR === "true";
     const customToken = await adminAuth.createCustomToken(user.uid, user.customClaims);
-    // debug(customToken);
+    debug(customToken);
     if (config.useClientSDK) {
       // This is a hack to use client side email sending function at server side, suggested in stackOverflow
       try {
@@ -151,8 +156,8 @@ async function sendVerificationEmail(user: any, context: any) {
       // TODO test the below in live Firebase
       try {
         const axios = require("axios");
-        const url = emulator ? "http://localhost:9099/emulator" : "https://identitytoolkit.googleapis.com";
-        await axios.post(`${url}/v1/accounts:sendOobCode?key=[${config.appId}]`,
+        const url = emulator ? "http://127.0.0.1:9099/emulator" : "https://identitytoolkit.googleapis.com";
+        await axios.post(`${url}/v1/accounts:sendOobCode?key=[${config.apiId}]`,
           { requestType: "VERIFY_EMAIL", idToken: customToken }
         ); // Not working. TODO fix the issue
       } catch (error) {
@@ -179,6 +184,52 @@ async function sendVerificationEmail(user: any, context: any) {
 async function sendCustomVerificationEmail(_email?: string, _link?: string, _locale?: string) {
   // TODO use nodemailer etc. This will not use Firebase templates
   // We could also see https://canopas.com/how-to-send-emails-using-cloud-functions-firestore-firebase-send-email-ff4702a16fef
+  const OAuth2 = google.auth.OAuth2;
+
+  //
+  const oauth2Client = new OAuth2(
+    process.env.GOOGLE_CLOUD_CLIENT_ID, // Replace with your own Client ID
+    process.env.GOOGLE_CLOUD_CLIENT_SECRET, // Replace with your own Client Secret
+    process.env.GOOGLE_CLOUD_REDIRECT_URI // Redirect URL
+  );
+
+  oauth2Client.setCredentials({
+    refresh_token: process.env.GMAIL_REFRESH_TOKEN, // Replace with your own Refresh Token
+  });
+  const accessToken = await oauth2Client.getAccessToken();
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    port: 587,
+    secure: false,
+    auth: {
+      type: "OAuth2",
+      // Replace with your email address
+      // the email address which you have added in the google cloud project test users for project
+      user: process.env.USER_GMAILID,
+      clientId: process.env.GOOGLE_CLOUD_CLIENT_ID, // Replace with your own Client ID
+      clientSecret: process.env.GOOGLE_CLOUD_CLIENT_SECRET, // Replace with your own Client Secret
+      //
+      refreshToken: process.env.GMAIL_REFRESH_TOKEN, // Replace with your own Refresh Token
+      accessToken: accessToken.token as string,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.USER_GMAILID,
+    to: _email,
+    subject: "Email Verification",
+    text: `Please verify your email by clicking the following link: ${_link}`,
+    html: `<b>Please verify your email by clicking the following link: <a href="${_link}">Verify Email</a></b>`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Verification email sent to:", _email);
+  } catch (error) {
+    console.error("Error sending verification email:", error);
+    throw new Error("Error sending verification email");
+  }
 }
 
 export {
