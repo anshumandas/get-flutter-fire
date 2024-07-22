@@ -49,7 +49,6 @@ class LoginWidgets {
 class LoginBottomSheetToggle extends MenuSheetButton<Screen> {
   const LoginBottomSheetToggle(this.current, {super.key});
   final GetNavConfig current;
-
   @override
   Iterable<Screen> get values {
     MenuItemsController<Screen> controller = Get.find();
@@ -97,6 +96,90 @@ class LoginBottomSheetToggle extends MenuSheetButton<Screen> {
                 icon: Icon(Screen.LOGIN.icon),
                 tooltip: Screen.LOGIN.label,
               )
+          //  ?TopRightButton()
             : const SizedBox.shrink()); //should be only for loggedin case
   }
+}
+
+class TopRightButton extends StatelessWidget {
+  const TopRightButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomSheetController = Get.find<BottomSheetController>();
+
+    return Obx(() => IconButton(
+          icon: Icon(AuthService.to.isLoggedInValue ? Icons.menu : Icons.login),
+          onPressed: () {
+            if (AuthService.to.isLoggedInValue) {
+              bottomSheetController.showBottomSheet(
+                items: [
+                  BottomSheetItem(
+                    icon: Icons.person,
+                    label: 'Persona Change',
+                    onTap: () {
+                      // Handle persona change logic
+                    },
+                  ),
+                  BottomSheetItem(
+                    icon: Icons.account_circle,
+                    label: 'Profile',
+                    onTap: () {
+                      // Handle profile logic
+                    },
+                  ),
+                  BottomSheetItem(
+                    icon: Icons.settings,
+                    label: 'Settings',
+                    onTap: () {
+                      // Handle settings logic
+                    },
+                  ),
+                  BottomSheetItem(
+                    icon: Icons.key,
+                    label: 'Change Password',
+                    onTap: () {
+                      // Handle change password logic
+                    },
+                  ),
+                  BottomSheetItem(
+                    icon: Icons.logout,
+                    label: 'Logout',
+                    onTap: () {
+                      AuthService.to.logout();
+                    },
+                  ),
+                ],
+              );
+            } else {
+              Get.to(() => Screen.LOGIN);
+            }
+          },
+        ));
+  }
+}
+
+class BottomSheetController extends GetxController {
+  final _isBottomSheetVisible = false.obs;
+
+  bool get isBottomSheetVisible => _isBottomSheetVisible.value;
+
+  List<BottomSheetItem> items = [];
+
+  void showBottomSheet({required List<BottomSheetItem> items}) {
+    this.items = items;
+    _isBottomSheetVisible.value = true;
+  }
+
+  void hideBottomSheet() {
+    _isBottomSheetVisible.value = false;
+  }
+}
+
+class BottomSheetItem {
+  final IconData icon;
+  final String label;
+  final onTap;
+  BottomSheetItem(
+      {required this.icon, required this.label, required this.onTap});
 }

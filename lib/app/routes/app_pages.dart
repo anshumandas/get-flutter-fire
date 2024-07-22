@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../../models/access_level.dart';
 import '../../models/role.dart';
 import '../../models/screens.dart';
@@ -97,11 +95,11 @@ class AppPages {
               ],
             ),
             Screen.PRODUCTS.getPage(
-              page: () => const ProductsView(),
+              page: () => const ProductPage(),
               binding: ProductsBinding(),
               children: [
                 Screen.PRODUCT_DETAILS.getPages(
-                  page: () => const ProductDetailsView(),
+                  page: () =>  ProductDetailScreen(),
                   binding: ProductDetailsBinding(),
                 ),
               ],
@@ -122,7 +120,7 @@ class AppPages {
                   binding: CheckoutBinding(),
                 ),
                 Screen.CART_DETAILS.getPages(
-                  page: () => const ProductDetailsView(),
+                  page: () => const ProductDetailScreen(),
                   binding: ProductDetailsBinding(),
                 ),
               ],
@@ -133,7 +131,7 @@ class AppPages {
               role: Role.seller,
               children: [
                 Screen.MY_PRODUCT_DETAILS.getPages(
-                  page: () => const ProductDetailsView(),
+                  page: () => const ProductDetailScreen(),
                   binding: ProductDetailsBinding(),
                 ),
               ],

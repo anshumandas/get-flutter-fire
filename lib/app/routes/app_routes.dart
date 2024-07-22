@@ -37,10 +37,10 @@ abstract class Routes {
 abstract class _Paths {
   static const String HOME = '/home';
   // static const DASHBOARD = '/dashboard';
-  // static const PRODUCTS = '/products';
+ //static const PRODUCTS = '/products';
   // static const PROFILE = '/profile';
   // static const SETTINGS = '/settings';
-  // static const PRODUCT_DETAILS = '/:productId';
+ // static const PRODUCT_DETAILS = '/:productId';
   // static const CART_DETAILS = '/:productId';
   // static const LOGIN = '/login';
   // static const CART = '/cart';

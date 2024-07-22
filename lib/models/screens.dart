@@ -99,6 +99,7 @@ enum Screen implements ActionEnum {
   SEARCH('/search',
       icon: Icons.search,
       label: "Search",
+      parent: HOME,
       accessor_: AccessedVia.topRight,
       remoteConfig: "showSearchBarOnTop",
       accessLevel: AccessLevel.public),
@@ -148,6 +149,13 @@ enum Screen implements ActionEnum {
         (await RemoteConfig.instance).useBottomSheetForProfileOptions()) {
       return AccessedVia.bottomSheet;
     }
+    if (remoteConfig == "showSearchBarOnTop") {
+      if ((await RemoteConfig.instance).showSearchBarOnTop()) {
+        return AccessedVia.topRight;
+      } else {
+        return AccessedVia.navigator;
+      }
+    }
     return accessor_;
   }
 
@@ -184,10 +192,15 @@ enum Screen implements ActionEnum {
     return list;
   }
 
-  static Iterable<Screen> topRightMenu() {
-    return Screen.values.where((Screen screen) =>
-        screen.accessor_ == AccessedVia.topRight &&
-        AuthService.to.accessLevel.index >= screen.accessLevel.index);
+  static Future<Iterable<Screen>> topRightMenu() async {
+    List<Screen> topRightScreens = [];
+    for (Screen screen in Screen.values) {
+      if ((await screen.accessor) == AccessedVia.topRight &&
+          AuthService.to.accessLevel.index >= screen.accessLevel.index) {
+        topRightScreens.add(screen);
+      }
+    }
+    return topRightScreens;
   }
 
   @override

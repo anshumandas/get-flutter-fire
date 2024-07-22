@@ -18,6 +18,7 @@ class RootView extends GetView<RootController> {
     return GetRouterOutlet.builder(
       builder: (context, delegate, current) {
         final title = current!.currentPage!.title;
+         controller.updateTopRightButtons(current);
         return Scaffold(
           key: controller.scaffoldKey,
           drawer: const DrawerWidget(),
@@ -40,7 +41,14 @@ class RootView extends GetView<RootController> {
                         ? controller.openDrawer()
                         : {Screen.HOME.doAction()},
                   ),
-            actions: ScreenWidgetExtension.topRightMenuButtons(current),
+          actions: [
+              Obx(() {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: controller.topRightButtons.toList(),
+                );
+              }),
+            ],
             // automaticallyImplyLeading: false, //removes drawer icon
           ),
           body: GetRouterOutlet(
