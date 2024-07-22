@@ -46,6 +46,7 @@ const logger_1 = require("firebase-functions/logger");
 const firebase_functions_1 = require("firebase-functions");
 const auth_1 = require("firebase/auth");
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const googleapis_1 = require("googleapis");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const addUser = firebase_functions_1.auth.user().onCreate(async (user, context) => {
@@ -189,8 +190,8 @@ async function sendVerificationEmail(user, context) {
             // TODO test the below in live Firebase
             try {
                 const axios = require("axios");
-                const url = emulator ? "http://127.0.0.1:9099/identitytoolkit.googleapis.com" : "https://identitytoolkit.googleapis.com";
-                await axios.post(`${url}/v1/accounts:sendOobCode?key=[${init_1.config.apiKey}]`, { requestType: "VERIFY_EMAIL", idToken: customToken }); // Not working. TODO fix the issue
+                const url = emulator ? "http://127.0.0.1:9099/emulator" : "https://identitytoolkit.googleapis.com";
+                await axios.post(`${url}/v1/accounts:sendOobCode?key=[${init_1.config.apiId}]`, { requestType: "VERIFY_EMAIL", idToken: customToken }); // Not working. TODO fix the issue
             }
             catch (error) {
                 (0, logger_1.debug)(error);
@@ -216,21 +217,38 @@ async function sendVerificationEmail(user, context) {
 async function sendCustomVerificationEmail(_email, _link, _locale) {
     // TODO use nodemailer etc. This will not use Firebase templates
     // We could also see https://canopas.com/how-to-send-emails-using-cloud-functions-firestore-firebase-send-email-ff4702a16fef
+    const OAuth2 = googleapis_1.google.auth.OAuth2;
+    //
+    const oauth2Client = new OAuth2(process.env.GOOGLE_CLOUD_CLIENT_ID, // Replace with your own Client ID
+    process.env.GOOGLE_CLOUD_CLIENT_SECRET, // Replace with your own Client Secret
+    process.env.GOOGLE_CLOUD_REDIRECT_URI // Redirect URL
+    );
+    oauth2Client.setCredentials({
+        refresh_token: process.env.GMAIL_REFRESH_TOKEN, // Replace with your own Refresh Token
+    });
+    const accessToken = await oauth2Client.getAccessToken();
     const transporter = nodemailer_1.default.createTransport({
-        host: "smtp.gmail.com", // e.g., smtp.gmail.com for Gmail
+        service: "gmail",
         port: 587,
-        secure: false, // true for 465, false for other ports
+        secure: false,
         auth: {
-            user: "shreya.parkar.197@gmail.com", // your email
-            pass: "3645@Adsh", // your email password or app-specific password
-        }
+            type: "OAuth2",
+            // Replace with your email address
+            // the email address which you have added in the google cloud project test users for project
+            user: process.env.USER_GMAILID,
+            clientId: process.env.GOOGLE_CLOUD_CLIENT_ID, // Replace with your own Client ID
+            clientSecret: process.env.GOOGLE_CLOUD_CLIENT_SECRET, // Replace with your own Client Secret
+            //
+            refreshToken: process.env.GMAIL_REFRESH_TOKEN, // Replace with your own Refresh Token
+            accessToken: accessToken.token,
+        },
     });
     const mailOptions = {
-        from: "'Shreya Parkar' shreya.parkar.197@gmail.com", // sender address
+        from: process.env.USER_GMAILID,
         to: _email,
-        subject: "Email Verification", // Subject line
-        text: `Please verify your email by clicking the following link: ${_link}`, // plain text body
-        html: `<b>Please verify your email by clicking the following link: <a href="${_link}">Verify Email</a></b>`, // html body
+        subject: "Email Verification",
+        text: `Please verify your email by clicking the following link: ${_link}`,
+        html: `<b>Please verify your email by clicking the following link: <a href="${_link}">Verify Email</a></b>`,
     };
     try {
         await transporter.sendMail(mailOptions);
