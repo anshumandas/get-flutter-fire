@@ -162,3 +162,6 @@ lib/firebase_options.dart
 pubspec.lock
 pubspec.lock
 server/functions/firebase_options.json
+android/app/google-services.json
+firebase.json
+android/app/src/main/kotlin/com/example/sharekhan/MainActivity.kt
