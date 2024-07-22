@@ -50,5 +50,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Create and deploy functions
 // See: https://firebase.google.com/docs/functions/get-started
 const _ = __importStar(require("./auth"));
+const dotenv = __importStar(require("dotenv"));
+dotenv.config();
 exports.default = _;
 //# sourceMappingURL=index.js.map

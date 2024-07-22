@@ -1,5 +1,15 @@
 # get-flutter-fire
 
+## changes I made
+- Bug fix : database.rules.json
+- Bug fix : Build command in package.json for server/functions
+- Bug fix : Firebase initialization error
+- TODO : Used nodemailer to write a custom send email function, which can be tested seperately for its logic and correctness
+- TODO : Modified the storage rules and firestore rules
+
+For a detailed description of my changes you can see the document [here](https://drive.google.com/file/d/1wavMcwcrJ1j7bMXgb8j6Uo7cUBBvbG6n/view?usp=sharing)
+
+## descrption
 This codebase provides a boilerplate code utilizing the following three technologies:
 
 1. Flutter 3.0 - For UX and uses Dart languange. See [https://flutter.dev/]

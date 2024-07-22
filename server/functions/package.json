@@ -6,6 +6,7 @@
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
+    "build": "tsc",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
@@ -15,15 +16,22 @@
   "main": "lib/index.js",
   "dependencies": {
     "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "firebase": "^10.12.2",
     "firebase-admin": "^12.1.0",
-    "firebase-functions": "^5.0.0"
+    "firebase-functions": "^5.0.0",
+    "googleapis": "^140.0.1",
+    "nodemailer": "^6.9.14"
   },
   "devDependencies": {
+    "@types/node": "^20.14.11",
+    "@types/nodemailer": "^6.4.15",
     "eslint": "^8.15.0",
     "eslint-config-google": "^0.14.0",
     "firebase-functions-test": "^3.1.0",
-    "typescript": "^5.4.5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
   },
   "private": true
 }
