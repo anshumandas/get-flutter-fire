@@ -7,6 +7,7 @@ import '../../../../models/role.dart';
 import '../../../../services/auth_service.dart';
 
 import '../../../../models/screens.dart';
+import '../../settings/controllers/settings_controller.dart';
 import '../controllers/my_drawer_controller.dart';
 
 class DrawerWidget extends StatelessWidget {
@@ -33,6 +34,9 @@ class DrawerWidget extends StatelessWidget {
   }
 
   List<Widget> drawerItems(BuildContext context, Rx<Iterable<Screen>> values) {
+
+    SettingsController settingsController = Get.find<SettingsController>();
+
     List<Widget> list = [
       Container(
         height: 200,
@@ -60,6 +64,14 @@ class DrawerWidget extends StatelessWidget {
               Text(
                 AuthService.to.user?.email ?? 'Email',
                 style: const TextStyle(color: Colors.white70),
+              ),
+              const SizedBox(height: 5),
+              Obx(() => settingsController.currentPersona.value != null
+                  ? Text(
+                'Persona: ${settingsController.currentPersona.value!.name}',
+                style: const TextStyle(color: Colors.white70),
+              )
+                  : SizedBox.shrink()
               ),
             ],
           ),
@@ -89,6 +101,7 @@ class DrawerWidget extends StatelessWidget {
 
     for (Screen screen in values.value) {
       list.add(ListTile(
+        leading: Icon(screen.icon),
         title: Text(screen.label ?? ''),
         onTap: () {
           Get.rootDelegate.toNamed(screen.route);
@@ -100,7 +113,9 @@ class DrawerWidget extends StatelessWidget {
     }
 
     if (AuthService.to.isLoggedInValue) {
+      list.add(Spacer());
       list.add(ListTile(
+        leading: Icon(Icons.logout, color: Colors.red),
         title: const Text(
           'Logout',
           style: TextStyle(
@@ -110,14 +125,13 @@ class DrawerWidget extends StatelessWidget {
         onTap: () {
           AuthService.to.logout();
           Get.rootDelegate.toNamed(Screen.LOGIN.route);
-          //to close the drawer
-
           Navigator.of(context).pop();
         },
       ));
     }
     if (!AuthService.to.isLoggedInValue) {
       list.add(ListTile(
+        leading: Icon(Icons.login, color: Colors.blue),
         title: const Text(
           'Login',
           style: TextStyle(
@@ -126,8 +140,6 @@ class DrawerWidget extends StatelessWidget {
         ),
         onTap: () {
           Get.rootDelegate.toNamed(Screen.LOGIN.route);
-          //to close the drawer
-
           Navigator.of(context).pop();
         },
       ));

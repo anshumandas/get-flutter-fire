@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/settings/controllers/settings_controller.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'app/modules/products/controllers/products_controller.dart';
@@ -26,6 +27,7 @@ void main() async {
         () {
           Get.put(AuthService());
           Get.put(ProductsController(), permanent: true);
+          Get.put(SettingsController(), permanent: true);
         },
       ),
       getPages: AppPages.routes,

@@ -3,10 +3,13 @@ import 'package:get/get.dart';
 import '../../../../models/role.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../../widgets/ProductCard.dart';
+import '../../settings/controllers/settings_controller.dart';
 import '../controllers/products_controller.dart';
 
 class ProductsView extends GetView<ProductsController> {
-  const ProductsView({super.key});
+  ProductsView({super.key});
+
+  final SettingsController themeController = Get.find<SettingsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +17,7 @@ class ProductsView extends GetView<ProductsController> {
     final List<String> categories = ['All', 'AirPods', 'Laptop', 'Headphones', 'Phones', 'Tablets'];
 
     return Scaffold(
+      backgroundColor: themeController.activePersona.backgroundColor,
       floatingActionButton: (arg != null && Get.rootDelegate.arguments()["role"] == Role.seller)
           ? FloatingActionButton.extended(
         onPressed: controller.addDemoProduct,

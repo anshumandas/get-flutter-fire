@@ -3,42 +3,43 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/app/modules/products/controllers/products_controller.dart';
+import 'package:get_flutter_fire/app/modules/settings/controllers/settings_controller.dart';
 import 'package:get_flutter_fire/app/widgets/ProductCard.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import '../../root/controllers/root_controller.dart';
 
 class DashboardView extends GetView<ProductsController> {
   DashboardView({Key? key}) : super(key: key);
 
-  final TextEditingController _searchController = TextEditingController();
-
-  void _onSearchPressed() {
-    final String searchQuery = _searchController.text;
-    print("You searched for: "+searchQuery);
-  }
+  final RootController rootController = Get.find<RootController>();
+  final SettingsController themeController = Get.find<SettingsController>();
 
   @override
   Widget build(BuildContext context) {
     final List<String> categories = ['All', 'AirPods', 'Laptop', 'Headphones', 'Phones', 'Tablets'];
 
     return Scaffold(
+      backgroundColor: themeController.activePersona.backgroundColor,
       body: Obx(
             () => SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Search(
-                textEditingController: _searchController,
-                micEnabled: true,
-                onSearchPressed: _onSearchPressed,
-                hintTexts: ['Search "Mobiles"', 'Search "EarPhones"', 'Search "Watches"'],
-                boxShadow: BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 2),
+              if (rootController.isSearchVisible.value)
+                Search(
+                  textEditingController: controller.searchController,
+                  micEnabled: true,
+                  onSearchPressed: controller.onSearchPressed,
+                  hintTexts: ['Search "Mobiles"', 'Search "EarPhones"', 'Search "Watches"'],
+                  boxShadow: BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                  verticalDivider_color: Colors.grey,
                 ),
-                verticalDivider_color: Colors.grey,
-              ),
+              if (rootController.isSearchVisible.value)
               const SizedBox(height: 30),
               Stack(
                 children: [

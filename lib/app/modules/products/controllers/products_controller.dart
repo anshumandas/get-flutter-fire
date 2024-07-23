@@ -18,11 +18,25 @@ class ProductsController extends GetxController {
     {"id": 3, "image_path": 'assets/images/banner3.png'},
   ];
 
+  late TextEditingController searchController;
+
   @override
   void onInit() {
     super.onInit();
+    searchController = TextEditingController();
     loadDemoProducts();
     loadCartItems();
+  }
+
+  @override
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
+  }
+
+  void onSearchPressed() {
+    final String searchQuery = searchController.text;
+    print("You searched for: $searchQuery");
   }
 
   void loadDemoProducts() {

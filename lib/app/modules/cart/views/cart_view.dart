@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../widgets/cartProduct.dart';
+import '../../settings/controllers/settings_controller.dart';
 import '../controllers/cart_controller.dart';
 
 class CartView extends GetView<CartController> {
-  const CartView({super.key});
+  CartView({super.key});
+
+  final SettingsController themeController = Get.find<SettingsController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Checkout'),
-      ),
+      backgroundColor: themeController.activePersona.backgroundColor,
       body: Obx(() {
         if (controller.cartItems.isEmpty) {
           return Center(child: Text('Cart is empty',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),));
