@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "97275907144",
+    "project_id": "get-flutter-fire-e490e",
+    "storage_bucket": "get-flutter-fire-e490e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97275907144:android:29982acdaa5ec1249d1c7d",
+        "android_client_info": {
+          "package_name": "com.example.get_flutter_fire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPsCLpCVaS7EF5GBjATazIoFUDPUDetq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
