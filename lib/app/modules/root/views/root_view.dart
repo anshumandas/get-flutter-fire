@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:get_flutter_fire/services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../models/screens.dart';
-import '../../../utils/icon_constants.dart';
-import '../../../widgets/screen_widget.dart';
 import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
@@ -29,18 +27,24 @@ class RootView extends GetView<RootController> {
                     current.locationString.contains(RegExp(r'(\/[^\/]*){3,}'))
                 ? BackButton(
                     onPressed: () =>
-                        Get.rootDelegate.popRoute(), //Navigator.pop(context),
+                        Get.rootDelegate.popRoute(),
                   )
                 : IconButton(
                     icon: ImageIcon(
-                      const AssetImage(IconConstants.logo),
+                      const AssetImage("assets/icons/logo.png"),
                       color: Colors.grey.shade800,
                     ),
                     onPressed: () => AuthService.to.isLoggedInValue
                         ? controller.openDrawer()
                         : {Screen.HOME.doAction()},
                   ),
-            actions: ScreenWidgetExtension.topRightMenuButtons(current),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => controller.toggleSearch(),
+              ),
+              ...topRightMenuButtons(current),
+            ],
             // automaticallyImplyLeading: false, //removes drawer icon
           ),
           body: GetRouterOutlet(
@@ -53,5 +57,14 @@ class RootView extends GetView<RootController> {
         );
       },
     );
+  }
+
+//This could be used to add icon buttons in expanded web view instead of the context menu
+  List<Widget> topRightMenuButtons(GetNavConfig current) {
+    return [
+      Container(
+          margin: const EdgeInsets.only(right: 15),
+          child: Screen.LOGIN.widget(current))
+    ]; //TODO add seach button
   }
 }

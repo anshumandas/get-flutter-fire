@@ -20,6 +20,7 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/my_products/bindings/my_products_binding.dart';
 import '../modules/my_products/views/my_products_view.dart';
+import '../modules/persona/persona_view.dart';
 import '../modules/product_details/bindings/product_details_binding.dart';
 import '../modules/product_details/views/product_details_view.dart';
 import '../modules/products/bindings/products_binding.dart';
@@ -63,6 +64,9 @@ class AppPages {
           page: () => const LoginView(),
           binding: LoginBinding(),
         ),
+        Screen.PERSONA_SELECTION.getPage(
+          page: () => const PersonaSelectionView(),
+        ),
         Screen.REGISTER.getPage(
           page: () => const RegisterView(),
           binding: RegisterBinding(),
@@ -82,7 +86,7 @@ class AppPages {
           ],
           children: [
             Screen.DASHBOARD.getPage(
-              page: () => const DashboardView(),
+              page: () => DashboardView(),
               binding: DashboardBinding(),
             ),
             Screen.USERS.getPage(
@@ -97,7 +101,7 @@ class AppPages {
               ],
             ),
             Screen.PRODUCTS.getPage(
-              page: () => const ProductsView(),
+              page: () => ProductsView(),
               binding: ProductsBinding(),
               children: [
                 Screen.PRODUCT_DETAILS.getPages(
@@ -112,7 +116,7 @@ class AppPages {
               binding: CategoriesBinding(),
             ),
             Screen.CART.getPage(
-              page: () => const CartView(),
+              page: () => CartView(),
               binding: CartBinding(),
               role: Role.buyer,
               children: [

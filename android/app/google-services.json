@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "444350384804",
+    "project_id": "getfire-2c177",
+    "storage_bucket": "getfire-2c177.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444350384804:android:47399da486dd5bf121b431",
+        "android_client_info": {
+          "package_name": "com.example.get_flutter_fire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9A_kRFXnNLajpn-Cy4caUj9k9y6gepV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
