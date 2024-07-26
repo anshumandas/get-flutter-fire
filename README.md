@@ -42,7 +42,7 @@ Step 5: Add Guest User/Anonymous login with a Cart and Checkout use case [https:
 
 * delete unlinked anonymous user post logout
 
-Step 6: Add ImagePicker and Firebase Storage for profile image (Done)
+Step 6: Add ImagePicker and Firebase Storage for profile image
 
 * Create PopupMenu button for web [https://api.flutter.dev/flutter/material/PopupMenuButton-class.html]
 * BottomSheet for phones and single file button for desktops

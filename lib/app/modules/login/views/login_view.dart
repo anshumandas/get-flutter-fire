@@ -16,7 +16,6 @@ class LoginView extends GetView<LoginController> {
       bool show, fba.EmailAuthCredential? credential) {
     // Below is very important.
     // See [https://stackoverflow.com/questions/69351845/this-obx-widget-cannot-be-marked-as-needing-to-build-because-the-framework-is-al]
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.showReverificationButton.value = show;
     });
