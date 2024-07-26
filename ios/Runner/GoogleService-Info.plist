@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>937033976489-8jp2ag1pabd0uk5njhf7lesatma938o5.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.937033976489-8jp2ag1pabd0uk5njhf7lesatma938o5</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCwvnLOdV7gR1eCus2JYHC3PT-dXz1XOic</string>
+	<key>GCM_SENDER_ID</key>
+	<string>937033976489</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.app</string>
+	<key>PROJECT_ID</key>
+	<string>flutter-fire-new-fd42a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flutter-fire-new-fd42a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:937033976489:ios:842aae5c2946e409a9f7b8</string>
+	<!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
+    <!-- Google Sign-in Section -->
+    <key>CFBundleURLTypes</key>
+    <array>
+            <dict>
+                    <key>CFBundleTypeRole</key>
+                    <string>Editor</string>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                            <!-- TODO Replace this value: -->
+                            <!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+                            <string>com.googleusercontent.apps.861823949799-vc35cprkp249096uujjn0vvnmcvjppkn</string>
+                    </array>
+            </dict>
+    </array>
+    <!-- End of the Google Sign-in Section -->
+</dict>
+</plist>

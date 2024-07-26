@@ -56,7 +56,7 @@ class LoginView extends GetView<LoginController> {
           ? recaptcha()
           : SignInScreen(
               providers: [
-                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
+                GoogleProvider(clientId: "937033976489-474q4ak930rivpbkfm0s3hgrj11vm2su.apps.googleusercontent.com"),
                 MyEmailAuthProvider(),
               ],
               showAuthActionSwitch: !controller.isRegistered,
@@ -150,61 +150,6 @@ class EmailLinkButton extends StatelessWidget {
   });
 
   @override
-  // Widget loginScreen(BuildContext context) {
-  //   Widget ui;
-  //   bool showPhoneVerification = controller.showReverificationButton.value;
-  //
-  //   if (!controller.isLoggedIn) {
-  //     ui = !(GetPlatform.isAndroid || GetPlatform.isIOS) && controller.isRobot
-  //         ? recaptcha()
-  //         : SignInScreen(
-  //       providers: [
-  //         GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
-  //         MyEmailAuthProvider(),
-  //       ],
-  //       showAuthActionSwitch: !controller.isRegistered,
-  //       showPasswordVisibilityToggle: true,
-  //       headerBuilder: LoginWidgets.headerBuilder,
-  //       subtitleBuilder: subtitleBuilder,
-  //       footerBuilder: (context, action) => footerBuilder(
-  //           controller.showReverificationButton,
-  //           LoginController.to.credential),
-  //       sideBuilder: LoginWidgets.sideBuilder,
-  //       actions: getActions(),
-  //     );
-  //   } else if (controller.isAnon) {
-  //     ui = RegisterScreen(
-  //       providers: [
-  //         MyEmailAuthProvider(),
-  //       ],
-  //       showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
-  //       showPasswordVisibilityToggle: true,
-  //       headerBuilder: LoginWidgets.headerBuilder,
-  //       subtitleBuilder: subtitleBuilder,
-  //       footerBuilder: (context, action) => footerBuilder(
-  //           controller.showReverificationButton, LoginController.to.credential),
-  //       sideBuilder: LoginWidgets.sideBuilder,
-  //       actions: getActions(),
-  //     );
-  //   } else {
-  //     final thenTo = Get
-  //         .rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
-  //     Get.rootDelegate.offNamed(thenTo ??
-  //         (controller.isRegistered ? Screen.HOME : Screen.REGISTER).route);
-  //     ui = const Scaffold();
-  //   }
-  //
-  //   // Add phone verification UI below the existing UI components
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //     children: [
-  //       ui, // Existing UI
-  //       if (showPhoneVerification)
-  //         phoneVerificationUI(context),
-  //     ],
-  //   );
-  // }
-
   Widget build(BuildContext context) {
     return Obx(() => Visibility(
         visible: show.value,
