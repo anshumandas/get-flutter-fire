@@ -55,7 +55,7 @@ class LoginView extends GetView<LoginController> {
           ? recaptcha()
           : SignInScreen(
               providers: [
-                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
+                GoogleProvider(clientId: "937033976489-474q4ak930rivpbkfm0s3hgrj11vm2su.apps.googleusercontent.com"),
                 MyEmailAuthProvider(),
               ],
               showAuthActionSwitch: !controller.isRegistered,
