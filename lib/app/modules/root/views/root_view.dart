@@ -7,6 +7,7 @@ import '../../../../models/teams.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../models/screens.dart';
 import '../../../utils/icon_constants.dart';
+import '../../../widgets/screen_widget.dart';
 import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
@@ -45,7 +46,7 @@ class RootView extends GetView<RootController> {
                         ? controller.openDrawer()
                         : {Screen.HOME.doAction()},
                   ),
-            actions: topRightMenuButtons(current),
+            actions: ScreenWidgetExtension.topRightMenuButtons(current),
             // automaticallyImplyLeading: false, //removes drawer icon
           ),
           body: Stack(children: [
@@ -170,6 +171,7 @@ class RootView extends GetView<RootController> {
           child: Screen.LOGIN.widget(current))
     ]; //TODO add seach button
   }
+
 }
 
 List<Team> searcht(String query) {
