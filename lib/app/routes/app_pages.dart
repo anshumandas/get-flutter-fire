@@ -54,7 +54,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: '/',
-      page: () => const RootView(),
+      page: () =>  RootView(),
       binding: RootBinding(),
       participatesInRootNavigator: true,
       preventDuplicates: true,
