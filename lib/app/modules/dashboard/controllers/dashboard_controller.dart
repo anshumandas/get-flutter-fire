@@ -1,4 +1,5 @@
 import 'dart:async';
+<<<<<<< HEAD
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
@@ -33,16 +34,28 @@ class DashboardController extends GetxController {
     loadCartItems();
   }
 
+=======
+
+import 'package:get/get.dart';
+
+class DashboardController extends GetxController {
+  final now = DateTime.now().obs;
+>>>>>>> origin/main
   @override
   void onReady() {
     super.onReady();
     Timer.periodic(
       const Duration(seconds: 1),
+<<<<<<< HEAD
           (timer) {
+=======
+      (timer) {
+>>>>>>> origin/main
         now.value = DateTime.now();
       },
     );
   }
+<<<<<<< HEAD
 
   void onPageChanged(int index, CarouselPageChangedReason reason) {
     currentIndex.value = index;
@@ -177,3 +190,6 @@ class CartItem {
     );
   }
 }
+=======
+}
+>>>>>>> origin/main

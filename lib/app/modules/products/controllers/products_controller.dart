@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
@@ -31,10 +32,33 @@ class ProductsController extends GetxController {
     searchController = TextEditingController();
     loadDemoProducts();
     loadCartItems();
+=======
+import 'package:get/get.dart';
+
+import '../../../../models/product.dart';
+
+class ProductsController extends GetxController {
+  final products = <Product>[].obs;
+
+  void loadDemoProductsFromSomeWhere() {
+    products.add(
+      Product(
+        name: 'Product added on: ${DateTime.now().toString()}',
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      ),
+    );
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    loadDemoProductsFromSomeWhere();
+>>>>>>> origin/main
   }
 
   @override
   void onClose() {
+<<<<<<< HEAD
     searchController.dispose();
     super.onClose();
   }
@@ -176,3 +200,9 @@ class CartItem {
     );
   }
 }
+=======
+    Get.printInfo(info: 'Products: onClose');
+    super.onClose();
+  }
+}
+>>>>>>> origin/main

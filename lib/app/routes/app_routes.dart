@@ -8,7 +8,10 @@ abstract class Routes {
   // static String PROFILE = Screen.PROFILE.fullPath;
   // static String SETTINGS = Screen.SETTINGS.fullPath;
   static String LOGIN = Screen.LOGIN.route;
+<<<<<<< HEAD
   static String PERSONA_SELECTION = Screen.PERSONA_SELECTION.route;
+=======
+>>>>>>> origin/main
   static String REGISTER = Screen.REGISTER.route;
   // static String DASHBOARD = Screen.DASHBOARD.fullPath;
   // static String PRODUCTS = Screen.PRODUCTS.fullPath;
@@ -37,7 +40,10 @@ abstract class Routes {
 // Keeping this as Get_Cli will require it. Any addition can later be added to Screen
 abstract class _Paths {
   static const String HOME = '/home';
+<<<<<<< HEAD
   static const String PERSONA_SELECTION = '/persona-selection';
+=======
+>>>>>>> origin/main
   // static const DASHBOARD = '/dashboard';
   // static const PRODUCTS = '/products';
   // static const PROFILE = '/profile';

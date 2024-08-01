@@ -24,6 +24,7 @@ class AuthService extends GetxService {
   User? get user => _firebaseUser.value;
   Role get maxRole => _userRole.value;
 
+<<<<<<< HEAD
   Future<void> verifyPhoneNumber({
     required String phoneNumber,
     required PhoneVerificationCompleted verificationCompleted,
@@ -44,6 +45,8 @@ class AuthService extends GetxService {
     return await _auth.signInWithCredential(credential);
   }
 
+=======
+>>>>>>> origin/main
   @override
   onInit() {
     super.onInit();
@@ -88,6 +91,7 @@ class AuthService extends GetxService {
   void sendVerificationMail({EmailAuthCredential? emailAuth}) async {
     if (sendMailFromClient) {
       if (_auth.currentUser != null) {
+<<<<<<< HEAD
         try {
           await _auth.currentUser?.sendEmailVerification();
           Get.snackbar(
@@ -114,6 +118,21 @@ class AuthService extends GetxService {
             'Please verify your email by clicking the link in the email sent.',
             duration: Duration(seconds: 5),
           );
+=======
+        await _auth.currentUser?.sendEmailVerification();
+      } else if (emailAuth != null) {
+        // Approach 1: sending email auth link requires deep linking which is
+        // a TODO as the current Flutter methods are deprecated
+        // sendSingInLink(emailAuth);
+
+        // Approach 2: This is a hack.
+        // We are using createUser to send the verification link from the server side by adding suffix .verify in the email
+        // if the user already exists and the password is also same and sign in occurs via custom token on server side
+        try {
+          await _auth.createUserWithEmailAndPassword(
+              email: "${credential.value!.email}.verify",
+              password: credential.value!.password!);
+>>>>>>> origin/main
         } on FirebaseAuthException catch (e) {
           int i = e.message!.indexOf("message") + 10;
           int j = e.message!.indexOf('"', i);
@@ -122,6 +141,7 @@ class AuthService extends GetxService {
             'Please verify your email by clicking the link on the Email sent',
           );
         }
+<<<<<<< HEAD
       } else {
         print('No user is currently signed in and no email auth provided');
         Get.snackbar(
@@ -129,6 +149,8 @@ class AuthService extends GetxService {
           'Unable to send verification email. Please try registering again.',
           duration: Duration(seconds: 5),
         );
+=======
+>>>>>>> origin/main
       }
     }
   }
@@ -172,6 +194,7 @@ class AuthService extends GetxService {
   }
 
   Future<bool?> guest() async {
+<<<<<<< HEAD
   return await Get.defaultDialog(
     title: 'Sign in as Guest',
     barrierDismissible: true,
@@ -214,6 +237,16 @@ class AuthService extends GetxService {
   );
 }
 
+=======
+    return await Get.defaultDialog(
+        middleText: 'Sign in as Guest',
+        barrierDismissible: true,
+        onConfirm: loginAsGuest,
+        onCancel: () => Get.back(result: false),
+        textConfirm: 'Yes, will SignUp later',
+        textCancel: 'No, will SignIn now');
+  }
+>>>>>>> origin/main
 
   void loginAsGuest() async {
     try {
@@ -222,8 +255,11 @@ class AuthService extends GetxService {
       Get.snackbar(
         'Alert!',
         'Signed in with temporary account.',
+<<<<<<< HEAD
         backgroundColor: Color.fromARGB(255, 232, 252, 243), 
     colorText: Color.fromARGB(255, 15, 43, 16), 
+=======
+>>>>>>> origin/main
       );
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -284,5 +320,8 @@ parseEmail(String message) {
   int j = message.indexOf('"', i);
   return message.substring(i, j - 1);
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> origin/main

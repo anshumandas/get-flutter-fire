@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:get_flutter_fire/app/modules/settings/controllers/settings_controller.dart';
@@ -78,3 +79,26 @@ class SettingsController extends GetxController {
     }
   }
 }
+=======
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+
+import '../controllers/settings_controller.dart';
+
+class SettingsView extends GetView<SettingsController> {
+  const SettingsView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text(
+          'SettingsView is working',
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+    );
+  }
+}
+>>>>>>> origin/main

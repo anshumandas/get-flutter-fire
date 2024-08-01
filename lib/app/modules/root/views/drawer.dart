@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+<<<<<<< HEAD
 import 'package:get_flutter_fire/app/routes/app_pages.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -10,6 +11,15 @@ import '../../../../services/auth_service.dart';
 import '../../../../models/screens.dart';
 import '../../settings/controllers/settings_controller.dart';
 import '../controllers/my_drawer_controller.dart';
+=======
+
+import '../../../../models/role.dart';
+import '../../../../services/auth_service.dart';
+
+import '../../../../models/screens.dart';
+import '../../../../services/remote_config.dart';
+import '../../../widgets/remotely_config_obx.dart';
+>>>>>>> origin/main
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({
@@ -18,6 +28,7 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     MyDrawerController controller = Get.put(MyDrawerController([]),
         permanent: true); //must make true else gives error
     Screen.drawer().then((v) => {controller.values.value = v});
@@ -92,6 +103,40 @@ class DrawerWidget extends StatelessWidget {
           ),
         ),
       )),
+=======
+    return RemotelyConfigObxVal.noparam(
+      (data) => Drawer(
+        //changing the shape of the drawer
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(0), bottomRight: Radius.circular(20)),
+        ),
+        width: 200,
+        child: Column(
+          children: drawerItems(context, data),
+        ),
+      ),
+      List<Screen>.empty().obs,
+      "useBottomSheetForProfileOptions",
+      Typer.boolean,
+      func: Screen.drawer,
+    );
+  }
+
+  List<Widget> drawerItems(BuildContext context, Iterable<Screen> values) {
+    List<Widget> list = [
+      Container(
+        height: 100,
+        color: Colors.red,
+        //adding content in the highlighted part of the drawer
+        child: Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+                margin: const EdgeInsets.only(left: 15),
+                child: const Text('User Name', //Profile Icon also
+                    style: TextStyle(fontWeight: FontWeight.bold)))),
+      )
+>>>>>>> origin/main
     ];
 
     if (AuthService.to.maxRole.index > 1) {
@@ -107,23 +152,38 @@ class DrawerWidget extends StatelessWidget {
           onTap: () {
             Get.rootDelegate
                 .toNamed(Screen.HOME.route, arguments: {'role': role});
+<<<<<<< HEAD
+=======
+            //to close the drawer
+>>>>>>> origin/main
             Navigator.of(context).pop();
           },
         ));
       }
     }
 
+<<<<<<< HEAD
     for (Screen screen in values.value) {
       list.add(ListTile(
         leading: Icon(screen.icon),
         title: Text(screen.label ?? ''),
         onTap: () {
           Get.rootDelegate.toNamed(screen.route);
+=======
+    for (Screen screen in values) {
+      list.add(ListTile(
+        title: Text(screen.label ?? ''),
+        onTap: () {
+          Get.rootDelegate.toNamed(screen.route);
+          //to close the drawer
+
+>>>>>>> origin/main
           Navigator.of(context).pop();
         },
       ));
     }
 
+<<<<<<< HEAD
     // // Add Persona Selection option for Buyer role
     // if (AuthService.to.maxRole == Role.buyer) {
     //   list.add(ListTile(
@@ -140,6 +200,10 @@ class DrawerWidget extends StatelessWidget {
       list.add(Spacer());
       list.add(ListTile(
         leading: Icon(Icons.logout, color: Colors.red),
+=======
+    if (AuthService.to.isLoggedInValue) {
+      list.add(ListTile(
+>>>>>>> origin/main
         title: const Text(
           'Logout',
           style: TextStyle(
@@ -149,13 +213,21 @@ class DrawerWidget extends StatelessWidget {
         onTap: () {
           AuthService.to.logout();
           Get.rootDelegate.toNamed(Screen.LOGIN.route);
+<<<<<<< HEAD
+=======
+          //to close the drawer
+
+>>>>>>> origin/main
           Navigator.of(context).pop();
         },
       ));
     }
     if (!AuthService.to.isLoggedInValue) {
       list.add(ListTile(
+<<<<<<< HEAD
         leading: Icon(Icons.login, color: Colors.blue),
+=======
+>>>>>>> origin/main
         title: const Text(
           'Login',
           style: TextStyle(
@@ -164,6 +236,11 @@ class DrawerWidget extends StatelessWidget {
         ),
         onTap: () {
           Get.rootDelegate.toNamed(Screen.LOGIN.route);
+<<<<<<< HEAD
+=======
+          //to close the drawer
+
+>>>>>>> origin/main
           Navigator.of(context).pop();
         },
       ));
@@ -171,4 +248,8 @@ class DrawerWidget extends StatelessWidget {
 
     return list;
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main
