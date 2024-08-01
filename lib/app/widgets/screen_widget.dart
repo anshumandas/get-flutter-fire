@@ -3,11 +3,21 @@ import 'package:get/get.dart';
 import '../routes/app_pages.dart';
 import '../../models/role.dart';
 import '../../models/screens.dart';
+<<<<<<< HEAD
+=======
 import 'login_widgets.dart';
+>>>>>>> origin/main
 
 class ScreenWidget extends StatelessWidget {
   final Widget body;
   final Role? role;
+<<<<<<< HEAD
+  final GetDelegate? delegate;
+  final GetNavConfig? currentRoute;
+  final Screen screen;
+  final AppBar? appBar;
+  final bool isWeb;
+=======
 
   final GetDelegate? delegate;
 
@@ -15,6 +25,7 @@ class ScreenWidget extends StatelessWidget {
 
   final Screen screen;
   final AppBar? appBar;
+>>>>>>> origin/main
 
   const ScreenWidget({
     super.key,
@@ -24,10 +35,28 @@ class ScreenWidget extends StatelessWidget {
     this.delegate,
     this.currentRoute,
     this.appBar,
+<<<<<<< HEAD
+    this.isWeb = false,
+=======
+>>>>>>> origin/main
   });
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
+    int currentIndex = role?.getCurrentIndexFromRoute(currentRoute) ?? 0;
+    Iterable<Screen> fabs = screen.fabs;
+
+    return Scaffold(
+      appBar: appBar,
+      body: isWeb
+          ? Row(
+        children: [
+          if (screen.navTabs.isNotEmpty)
+            NavigationRail(
+              selectedIndex: currentIndex,
+              onDestinationSelected: (value) {
+=======
     int currentIndex =
         role != null ? role!.getCurrentIndexFromRoute(currentRoute) : 0;
     Iterable<Screen> fabs = screen.fabs;
@@ -38,10 +67,66 @@ class ScreenWidget extends StatelessWidget {
           ? BottomNavigationBar(
               currentIndex: currentIndex,
               onTap: (value) {
+>>>>>>> origin/main
                 if (delegate != null) {
                   role!.routeTo(value, delegate!);
                 }
               },
+<<<<<<< HEAD
+              labelType: NavigationRailLabelType.all,
+              destinations: role!.tabs
+                  .map((Screen tab) => NavigationRailDestination(
+                icon: Icon(tab.icon),
+                label: Text(tab.label!),
+              ))
+                  .toList(),
+            ),
+          Expanded(child: body),
+        ],
+      )
+          : body,
+      bottomNavigationBar: (!isWeb && screen.navTabs.isNotEmpty)
+          ? Container( decoration: BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, -3),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+            child: BottomNavigationBar(
+              backgroundColor: Color.fromARGB(255, 15, 43, 16),
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Color.fromARGB(255, 137, 244, 230),
+                    currentIndex: currentIndex,
+                    onTap: (value) {
+            if (delegate != null) {
+              role!.routeTo(value, delegate!);
+            }
+                    },
+                    items: role!.tabs
+              .map((Screen tab) => BottomNavigationBarItem(
+            icon: Icon(tab.icon),
+            label: tab.label,
+                    ))
+              .toList(),
+                  ),
+          ))
+          : null,
+      floatingActionButton: fabs.isNotEmpty ? getFAB(fabs) : null,
+=======
               items:
                   role!.tabs //screen may have more navTabs but we need by role
                       .map((Screen tab) => BottomNavigationBarItem(
@@ -53,6 +138,7 @@ class ScreenWidget extends StatelessWidget {
           : null,
       floatingActionButton: fabs.isNotEmpty ? getFAB(fabs) : null,
       // bottomSheet: //this is used for persistent bar like status bar
+>>>>>>> origin/main
     );
   }
 
@@ -66,6 +152,16 @@ class ScreenWidget extends StatelessWidget {
         icon: screen.icon == null
             ? null
             : Icon(
+<<<<<<< HEAD
+          screen.icon,
+          color: Colors.white,
+        ),
+      );
+    }
+    return null;
+  }
+}
+=======
                 screen.icon,
                 color: Colors.white,
               ),
@@ -102,3 +198,4 @@ extension ScreenWidgetExtension on Screen {
     return widgets; //This will return empty. We need a Obx
   }
 }
+>>>>>>> origin/main
