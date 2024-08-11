@@ -27,18 +27,24 @@ class RootView extends GetView<RootController> {
                     current.locationString.contains(RegExp(r'(\/[^\/]*){3,}'))
                 ? BackButton(
                     onPressed: () =>
-                        Get.rootDelegate.popRoute(), //Navigator.pop(context),
+                        Get.rootDelegate.popRoute(),
                   )
                 : IconButton(
                     icon: ImageIcon(
-                      const AssetImage("icons/logo.png"),
+                      const AssetImage("assets/icons/logo.png"),
                       color: Colors.grey.shade800,
                     ),
                     onPressed: () => AuthService.to.isLoggedInValue
                         ? controller.openDrawer()
                         : {Screen.HOME.doAction()},
                   ),
-            actions: topRightMenuButtons(current),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => controller.toggleSearch(),
+              ),
+              ...topRightMenuButtons(current),
+            ],
             // automaticallyImplyLeading: false, //removes drawer icon
           ),
           body: GetRouterOutlet(
