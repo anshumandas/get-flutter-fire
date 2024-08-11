@@ -5,8 +5,10 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../firebase_options.dart';
+import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
+import 'package:lottie/lottie.dart';
 
+import '../../../../firebase_options.dart';
 import '../../../../models/screens.dart';
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
@@ -51,8 +53,9 @@ class LoginView extends GetView<LoginController> {
   Widget loginScreen(BuildContext context) {
     Widget ui;
     if (!controller.isLoggedIn) {
+      GRecaptchaV3.showBadge();
       ui = !(GetPlatform.isAndroid || GetPlatform.isIOS) && controller.isRobot
-          ? recaptcha()
+          ? recaptcha(context)
           : SignInScreen(
               providers: [
                 GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
@@ -92,13 +95,40 @@ class LoginView extends GetView<LoginController> {
     return ui;
   }
 
-  Widget recaptcha() {
+  Widget recaptcha(context) {
     //TODO: Add Recaptcha
     return Scaffold(
-        body: TextButton(
-      onPressed: () => controller.robot = false,
-      child: const Text("Are you a Robot?"),
-    ));
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              'lottie/tick.json',
+              width: 150, 
+              height: 150, 
+            ), 
+            TextButton(
+              onPressed: () async {
+                String? token = await GRecaptchaV3.execute('login'); 
+                print(token);
+                controller.robot = true;
+                Get.rootDelegate.toNamed(Screen.LOGIN.route);
+              },
+              style: ButtonStyle(
+                side: WidgetStateProperty.all(const BorderSide(color: Colors.blue, width: 2)),
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                ),
+              ),
+              child: const Text("Are you a Robot?"),
+              
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// The following actions are useful here:

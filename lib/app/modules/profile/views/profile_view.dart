@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../../services/auth_service.dart';
 import '../../../../models/screens.dart';
+import '../../../utils/img_constants.dart';
 import '../../../widgets/change_password_dialog.dart';
 import '../../../widgets/image_picker_button.dart';
 import '../controllers/profile_controller.dart';
@@ -50,65 +51,80 @@ class ProfileView extends GetView<ProfileController> {
               child: ClipPath(
                 clipper: ShapeBorderClipper(shape: shape),
                 clipBehavior: Clip.hardEdge,
-                child: controller.photoURL != null
-                    ? Image.network(
-                        controller.photoURL!,
+
+               child: Obx(() {
+                  if (controller.photoURL != null && controller.photoURL!.isNotEmpty) {
+                    final cacheBustedUrl = controller.photoURL!;
+                    return Image.network(
+                      cacheBustedUrl,
+                      width: size,
+                      height: size,
+                      cacheWidth: size.toInt(),
+                      cacheHeight: size.toInt(),
+                      fit: BoxFit.contain,
+                      frameBuilder: _imageFrameBuilder,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Center(
+                          child: Image.asset(
+                            'assets/images/dash.png',
+                            width: size,
+                            fit: BoxFit.contain,
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(
+                      child: Image.asset(
+                        'assets/images/dash.png',
                         width: size,
-                        height: size,
-                        cacheWidth: size.toInt(),
-                        cacheHeight: size.toInt(),
                         fit: BoxFit.contain,
-                        frameBuilder: _imageFrameBuilder,
-                      )
-                    : Center(
-                        child: Image.asset(
-                          'assets/images/dash.png',
-                          width: size,
-                          fit: BoxFit.contain,
-                        ),
                       ),
-              ),
-            ),
-            // showDeleteConfirmationDialog: true, //this does not work properly. Possibly a bug in FlutterFire
-            actions: [
-              SignedOutAction((context) {
-                Get.back();
-                controller.logout();
-                Get.rootDelegate.toNamed(Screen.PROFILE.route);
-                // Navigator.of(context).pop();
-              }),
-              AccountDeletedAction((context, user) {
-                //If we don't include this the button is still shown but no action gets done. Ideally the button should also not be shown. Its a bug in FlutterFire
-                Get.defaultDialog(
-                  //this is only called after the delete is done and not useful for confirmation of the delete action
-                  title: 'Deleted Account of ${user.displayName}',
-                  barrierDismissible: true,
-                  navigatorKey: Get.nestedKey(Screen.HOME.route),
-                );
-              })
-            ],
-            children: [
-              //This is to show that we can add custom content here
-              const Divider(),
-              controller.currentUser?.email != null
-                  ? TextButton.icon(
-                      onPressed: callChangePwdDialog,
-                      label: const Text('Change Password'),
-                      icon: const Icon(Icons.password_rounded),
-                    )
-                  : const SizedBox.shrink(),
-              ImagePickerButton(callback: (String? path) async {
-                if (path != null) {
-                  //Upload to Store
-                  String? dest = await controller.uploadFile(path);
-                  //attach it to User imageUrl
-                  if (dest != null) {
-                    await controller.updatePhotoURL(dest);
+                    );
                   }
-                }
-              })
-            ],
-          )
+                }),
+              ),
+            ), 
+       // showDeleteConfirmationDialog: true, //this does not work properly. Possibly a bug in FlutterFire
+      actions: [
+        SignedOutAction((context) {
+          Get.back();
+          controller.logout();
+          Get.rootDelegate.toNamed(Screen.PROFILE.route);
+          // Navigator.of(context).pop();
+        }),
+        AccountDeletedAction((context, user) {
+          //If we don't include this the button is still shown but no action gets done. Ideally the button should also not be shown. Its a bug in FlutterFire
+          Get.defaultDialog(
+            //this is only called after the delete is done and not useful for confirmation of the delete action
+            title: 'Deleted Account of ${user.displayName}',
+            barrierDismissible: true,
+            navigatorKey: Get.nestedKey(Screen.HOME.route),
+          );
+        })
+      ],
+      children: [
+        //This is to show that we can add custom content here
+        const Divider(),
+        controller.currentUser?.email != null
+         ? TextButton.icon(
+          onPressed: () => _resetPasswordEmailVerification(context),
+          label: const Text('Reset Password'),
+          icon: const Icon(Icons.email_rounded),
+        )
+        : const SizedBox.shrink(),
+        ImagePickerButton(callback: (String? path) async {
+          if (path != null) {
+            //Upload to Store
+            String? dest = await controller.uploadFile(path);
+            //attach it to User imageUrl
+            if (dest != null) {
+              await controller.updatePhotoURL(dest);
+            }
+          }
+        })
+      ],
+    )
         : const Scaffold();
   }
 

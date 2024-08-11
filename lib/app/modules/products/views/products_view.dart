@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,42 +10,83 @@ class ProductsView extends GetView<ProductsController> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchProductsFromApi();
+    });
+
     var arg = Get.rootDelegate.arguments();
     return Scaffold(
-      floatingActionButton:
-          (arg != null && Get.rootDelegate.arguments()["role"] == Role.seller)
-              ? FloatingActionButton.extended(
-                  onPressed: controller.loadDemoProductsFromSomeWhere,
-                  label: const Text('Add'),
-                )
-              : null,
+      floatingActionButton: (arg != null && Get.rootDelegate.arguments()["role"] == Role.seller)
+          ? FloatingActionButton.extended(
+              onPressed: controller.fetchProductsFromApi,
+              label: const Text('Refresh'),
+              icon: const Icon(Icons.refresh),
+            )
+          : null,
       body: Column(
         children: [
-          const Hero(
-            tag: 'heroLogo',
-            child: FlutterLogo(),
-          ),
           Expanded(
             child: Obx(
               () => RefreshIndicator(
                 onRefresh: () async {
-                  controller.products.clear();
-                  controller.loadDemoProductsFromSomeWhere();
+                  await controller.fetchProductsFromApi();
                 },
-                child: ListView.builder(
-                  itemCount: controller.products.length,
-                  itemBuilder: (context, index) {
-                    final item = controller.products[index];
-                    return ListTile(
-                      onTap: () {
-                        Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(
-                            item.id)); //we could use Get Parameters
-                      },
-                      title: Text(item.name),
-                      subtitle: Text(item.id),
-                    );
-                  },
-                ),
+                child: controller.products.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        itemCount: controller.products.length,
+                        itemBuilder: (context, index) {
+                          final item = controller.products[index];
+                          return Container(
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              border: Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 1),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(16),
+                              onTap: () {
+                                Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(item.id));
+                              },
+                              title: Text(
+                                item.name,
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  '${item.brandName}\n${item.category.isNotEmpty ? item.category : 'No Category'}',
+                                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                                ),
+                              ),
+                              leading: item.productImage.isNotEmpty
+                                  ? CircleAvatar(
+                                      backgroundImage: NetworkImage(item.productImage),
+                                      radius: 30,
+                                    )
+                                  : const CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      radius: 30,
+                                      child: Icon(Icons.image_not_supported, size: 30, color: Colors.white),
+                                    ),
+                              trailing: Text(
+                                '\$${item.price.toStringAsFixed(2)}',
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.green),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
               ),
             ),
           ),

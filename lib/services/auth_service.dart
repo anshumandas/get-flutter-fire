@@ -1,14 +1,14 @@
-// ignore_for_file: avoid_print
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/models/access_level.dart';
 
 import '../models/screens.dart';
 import '../constants.dart';
 import '../models/role.dart';
+import 'persona_service.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
@@ -32,10 +32,20 @@ class AuthService extends GetxService {
       if (user != null) {
         user.getIdTokenResult().then((token) {
           _userRole.value = Role.fromString(token.claims?["role"]);
+          final personaService = Get.find<PersonaService>();
+          personaService.loadSelectedPersona();
         });
       }
     });
   }
+
+  AccessLevel get accessLevel => user != null
+      ? user!.isAnonymous
+          ? _userRole.value.index > Role.buyer.index
+              ? AccessLevel.roleBased
+              : AccessLevel.authenticated
+          : AccessLevel.guest
+      : AccessLevel.public;
 
   bool get isEmailVerified =>
       user != null && (user!.email == null || user!.emailVerified);
@@ -51,6 +61,9 @@ class AuthService extends GetxService {
   String? get userName => (user != null && !user!.isAnonymous)
       ? (user!.displayName ?? user!.email)
       : 'Guest';
+
+  String? get userPhotoUrl => user?.photoURL;
+  String? get userEmail => user?.email;
 
   void login() {
     // this is not needed as we are using Firebase UI for the login part
@@ -109,7 +122,6 @@ class AuthService extends GetxService {
 
   void register() {
     registered.value = true;
-    // logout(); // Uncomment if we need to enforce relogin
     final thenTo =
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate
