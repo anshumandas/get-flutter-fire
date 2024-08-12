@@ -86,6 +86,6 @@ class ImagePickerButton extends MenuSheetButton<ImageSources> {
             icon: icon,
             label: const Text('Pick an Image'),
           )
-        : builder(context);
+        : builder(context, vals: values);
   }
 }
