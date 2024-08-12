@@ -13,7 +13,6 @@ class RemoteConfig {
   }
 
   final FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
-  final List listeners = [];
 
   Future<void> init() async {
     await _remoteConfig.setConfigSettings(RemoteConfigSettings(
@@ -67,12 +66,5 @@ class RemoteConfig {
 
   bool showSearchBarOnTop() {
     return _remoteConfig.getBool("showSearchBarOnTop");
-  }
-
-  void addUseBottomSheetForProfileOptionsListener(listener) {
-    addListener("useBottomSheetForProfileOptions", Typer.boolean, listener);
-    if (!listeners.contains(listener)) {
-      listeners.add(listener);
-    }
   }
 }
