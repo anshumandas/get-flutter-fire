@@ -5,6 +5,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/models/access_level.dart';
 
 import '../models/screens.dart';
 import '../constants.dart';
@@ -23,6 +24,29 @@ class AuthService extends GetxService {
   User? get user => _firebaseUser.value;
   Role get maxRole => _userRole.value;
 
+<<<<<<< HEAD
+  Future<void> verifyPhoneNumber({
+    required String phoneNumber,
+    required PhoneVerificationCompleted verificationCompleted,
+    required PhoneVerificationFailed verificationFailed,
+    required PhoneCodeSent codeSent,
+    required PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout,
+  }) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: verificationCompleted,
+      verificationFailed: verificationFailed,
+      codeSent: codeSent,
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+    );
+  }
+
+  Future<UserCredential> signInWithCredential(AuthCredential credential) async {
+    return await _auth.signInWithCredential(credential);
+  }
+
+=======
+>>>>>>> origin/main
   @override
   onInit() {
     super.onInit();
@@ -36,6 +60,14 @@ class AuthService extends GetxService {
       }
     });
   }
+
+  AccessLevel get accessLevel => user != null
+      ? user!.isAnonymous
+          ? _userRole.value.index > Role.buyer.index
+              ? AccessLevel.roleBased
+              : AccessLevel.authenticated
+          : AccessLevel.guest
+      : AccessLevel.public;
 
   bool get isEmailVerified =>
       user != null && (user!.email == null || user!.emailVerified);
@@ -59,6 +91,34 @@ class AuthService extends GetxService {
   void sendVerificationMail({EmailAuthCredential? emailAuth}) async {
     if (sendMailFromClient) {
       if (_auth.currentUser != null) {
+<<<<<<< HEAD
+        try {
+          await _auth.currentUser?.sendEmailVerification();
+          Get.snackbar(
+            'Verification Email Sent',
+            'Please check your email (including spam folder) for the verification link.',
+            duration: Duration(seconds: 5),
+          );
+        } catch (e) {
+          print('Error sending verification email: $e');
+          Get.snackbar(
+            'Error',
+            'Failed to send verification email. Please try again later.',
+            duration: Duration(seconds: 5),
+          );
+        }
+      } else if (emailAuth != null) {
+        // Use the existing approach for sending verification email
+        try {
+          await _auth.createUserWithEmailAndPassword(
+              email: "${emailAuth.email}.verify",
+              password: emailAuth.password!);
+          Get.snackbar(
+            'Verification Email Sent',
+            'Please verify your email by clicking the link in the email sent.',
+            duration: Duration(seconds: 5),
+          );
+=======
         await _auth.currentUser?.sendEmailVerification();
       } else if (emailAuth != null) {
         // Approach 1: sending email auth link requires deep linking which is
@@ -72,6 +132,7 @@ class AuthService extends GetxService {
           await _auth.createUserWithEmailAndPassword(
               email: "${credential.value!.email}.verify",
               password: credential.value!.password!);
+>>>>>>> origin/main
         } on FirebaseAuthException catch (e) {
           int i = e.message!.indexOf("message") + 10;
           int j = e.message!.indexOf('"', i);
@@ -80,6 +141,16 @@ class AuthService extends GetxService {
             'Please verify your email by clicking the link on the Email sent',
           );
         }
+<<<<<<< HEAD
+      } else {
+        print('No user is currently signed in and no email auth provided');
+        Get.snackbar(
+          'Error',
+          'Unable to send verification email. Please try registering again.',
+          duration: Duration(seconds: 5),
+        );
+=======
+>>>>>>> origin/main
       }
     }
   }
@@ -123,6 +194,50 @@ class AuthService extends GetxService {
   }
 
   Future<bool?> guest() async {
+<<<<<<< HEAD
+  return await Get.defaultDialog(
+    title: 'Sign in as Guest',
+    barrierDismissible: true,
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Limited access. Would you like to proceed?',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16),
+        ),
+        SizedBox(height: 20),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: loginAsGuest,
+              child: Text('Sign Up Later'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, backgroundColor: Color.fromARGB(255, 15, 43, 16), // Text color
+              ),
+            ),
+            SizedBox(width: 15),
+        ElevatedButton(
+          onPressed: () => Get.back(result: false),
+          child: Text('Sign In Now'),
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Color.fromARGB(255, 15, 43, 16), backgroundColor: Color.fromARGB(255, 232, 252, 243), // Text color
+          ),
+        ),
+          ],
+        ),
+      ],
+    ),
+    titlePadding: EdgeInsets.all(16),
+    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+    confirmTextColor: Colors.white,
+    cancelTextColor: Colors.white,
+    backgroundColor: Colors.white, // Dialog background color
+    radius: 10, // Rounded corners
+  );
+}
+
+=======
     return await Get.defaultDialog(
         middleText: 'Sign in as Guest',
         barrierDismissible: true,
@@ -131,6 +246,7 @@ class AuthService extends GetxService {
         textConfirm: 'Yes, will SignUp later',
         textCancel: 'No, will SignIn now');
   }
+>>>>>>> origin/main
 
   void loginAsGuest() async {
     try {
@@ -139,6 +255,11 @@ class AuthService extends GetxService {
       Get.snackbar(
         'Alert!',
         'Signed in with temporary account.',
+<<<<<<< HEAD
+        backgroundColor: Color.fromARGB(255, 232, 252, 243), 
+    colorText: Color.fromARGB(255, 15, 43, 16), 
+=======
+>>>>>>> origin/main
       );
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -199,3 +320,8 @@ parseEmail(String message) {
   int j = message.indexOf('"', i);
   return message.substring(i, j - 1);
 }
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> origin/main

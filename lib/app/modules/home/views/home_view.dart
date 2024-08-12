@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+import 'package:flutter/foundation.dart' show kIsWeb;
+=======
+>>>>>>> origin/main
 import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
 import '../../../widgets/screen_widget.dart';
@@ -16,19 +20,33 @@ class HomeView extends GetView<HomeController> {
           controller.chosenRole.value = arg["role"];
         }
         var route = controller.chosenRole.value.tabs[0].route;
+<<<<<<< HEAD
+=======
         //This router outlet handles the appbar and the bottom navigation bar
+>>>>>>> origin/main
         return ScreenWidget(
           screen: screen!,
           body: GetRouterOutlet(
             initialRoute: route,
+<<<<<<< HEAD
+=======
             // anchorRoute: Routes.HOME,
+>>>>>>> origin/main
             key: Get.nestedKey(route),
           ),
           role: controller.chosenRole.value,
           delegate: delegate,
           currentRoute: currentRoute,
+<<<<<<< HEAD
+          isWeb: kIsWeb,
+=======
+>>>>>>> origin/main
         );
       },
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main

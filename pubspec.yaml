@@ -17,13 +17,27 @@ dependencies:
   firebase_ui_oauth_google: ^1.3.2
   google_fonts: ^6.2.1
   firebase_storage: ^11.7.5
+<<<<<<< HEAD
+  image_picker: ^1.1.2
+=======
   image_picker: ^1.1.1
+>>>>>>> origin/main
   file_picker: ^8.0.3
   path: ^1.9.0
   get_storage: ^2.1.1
   firebase_ui_localizations: ^1.12.0
   firebase_remote_config: ^4.4.7
   firebase_analytics: ^10.10.7
+<<<<<<< HEAD
+  animated_hint_searchbar: ^1.0.2
+  carousel_slider: ^4.2.1
+  g_recaptcha_v3: ^0.0.6
+  firebase_dynamic_links: ^5.5.7
+  universal_html: ^2.2.4
+  pin_code_fields: ^8.0.1
+  country_code_picker: ^3.0.0
+=======
+>>>>>>> origin/main
 
 dev_dependencies: 
   flutter_lints: 3.0.2
@@ -36,8 +50,15 @@ flutter:
       fonts:
         - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
   assets:
+<<<<<<< HEAD
     - assets/images/flutterfire_300x.png
     - assets/images/dash.png
     - assets/icons/logo.png
+    - assets/images/
+=======
+    - assets/
+    - assets/images/
+    - assets/icons/
+>>>>>>> origin/main
   uses-material-design: true
 

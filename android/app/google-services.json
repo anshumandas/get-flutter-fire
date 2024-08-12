@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "113147469202",
+    "project_id": "sharekhan-21354",
+    "storage_bucket": "sharekhan-21354.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113147469202:android:478b2874b76ada9f3e754b",
+        "android_client_info": {
+          "package_name": "com.ap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIVCDMz4vrFdNZ7Ra2lR7CtV1z0tL-mb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
