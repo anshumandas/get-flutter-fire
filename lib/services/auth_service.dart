@@ -1,10 +1,16 @@
 // ignore_for_file: avoid_print
 
+import 'dart:developer';
+
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/phone_auth/controllers/phone_auth_controller.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:get_flutter_fire/models/access_level.dart';
 
 import '../models/screens.dart';
 import '../constants.dart';
@@ -26,16 +32,29 @@ class AuthService extends GetxService {
   @override
   onInit() {
     super.onInit();
-    if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
+    if (useEmulator) {
+      _auth.useAuthEmulator(emulatorHost, 9099);
+    }
     _firebaseUser.bindStream(_auth.authStateChanges());
     _auth.authStateChanges().listen((User? user) {
       if (user != null) {
         user.getIdTokenResult().then((token) {
           _userRole.value = Role.fromString(token.claims?["role"]);
         });
+        Get.rootDelegate.offNamed(Screen.HOME.route);
+      } else if (user == null) {
+        Get.rootDelegate.offNamed(Screen.LOGIN.route);
       }
     });
   }
+
+  AccessLevel get accessLevel => user != null
+      ? user!.isAnonymous
+          ? _userRole.value.index > Role.buyer.index
+              ? AccessLevel.roleBased
+              : AccessLevel.authenticated
+          : AccessLevel.guest
+      : AccessLevel.public;
 
   bool get isEmailVerified =>
       user != null && (user!.email == null || user!.emailVerified);
@@ -52,8 +71,119 @@ class AuthService extends GetxService {
       ? (user!.displayName ?? user!.email)
       : 'Guest';
 
-  void login() {
-    // this is not needed as we are using Firebase UI for the login part
+// Function to handle google sign in.
+//* Can use silent sign in to make the flow smoother on the web.
+  final GoogleSignIn _googleSignIn =
+      GoogleSignIn(clientId: const String.fromEnvironment('CLIENT_ID'));
+  Future<String?> signInwithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      await _auth.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      rethrow;
+    }
+    return null;
+  }
+
+  // Functions to handle phone authentication.
+  // Function to verify the phone number. On android this tries to read the code directly without the user having to manually enter the code.
+  Future<void> verifyMobileNumber(String phoneNumber) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        String errorMessage = 'Verification failed';
+        switch (e.code) {
+          case 'invalid-verification-code':
+            errorMessage = 'Invalid SMS code.';
+            break;
+          case 'expired-verification-code':
+            errorMessage = 'SMS code has expired.';
+            break;
+          default:
+            errorMessage = 'An unknown error occurred. Please try again later.';
+        }
+        Get.snackbar(errorMessage, '');
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        print("Code sent");
+        Get.find<MobileAuthController>().codeSent.value = true;
+        Get.find<MobileAuthController>().verificationId.value = verificationId;
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+      timeout: const Duration(seconds: 60),
+    );
+  }
+
+  // Verify the OTP.
+  Future<void> verifyOTP(String smsCode, String verificationId) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: smsCode);
+      await _auth.signInWithCredential(credential);
+      print("Done");
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> signUp(String email, String password) async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> login(String email, String password) async {
+    // isLoading.value = true;
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      String errorMessage;
+
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = 'No user found for that email.';
+          break;
+        case 'wrong-password':
+          errorMessage = 'Wrong password provided for that user.';
+          break;
+        case 'invalid-email':
+          errorMessage = 'The email address is badly formatted.';
+          break;
+        default:
+          errorMessage =
+              'An unknown error occurred. Please try again later. ${e.toString()}';
+      }
+      Get.snackbar('Login Error', errorMessage);
+    } catch (error) {
+      Get.snackbar('Error', 'An unexpected error occurred. Please try again.');
+      print("Error during login: ${error.toString()}");
+    } finally {
+      // isLoading.value = false;
+    }
   }
 
   void sendVerificationMail({EmailAuthCredential? emailAuth}) async {
@@ -114,6 +244,36 @@ class AuthService extends GetxService {
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate
         .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
+  }
+
+  Future<void> signup(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      print("User created");
+      HttpsCallableResult result =
+          await FirebaseFunctions.instance.httpsCallable('addUserRole').call({
+        'email': email,
+      });
+
+      print("Result: $result");
+
+      // Optionally send verification email
+      if (true) {
+        await userCredential.user!.sendEmailVerification();
+      }
+
+      registered.value = true;
+      // Navigate to profile or other destination
+      final thenTo = Get
+          .rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
+      Get.rootDelegate.offAndToNamed(thenTo ?? Screen.PROFILE.route);
+    } catch (e) {
+      Get.snackbar('Registration Error', 'Failed to register: $e');
+    }
   }
 
   void logout() {
@@ -180,6 +340,15 @@ class AuthService extends GetxService {
             'Oh no! Something went wrong.',
       };
     };
+  }
+
+  resetPassword({required String email}) {
+    try {
+      _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      log("Error sending reset link: $e");
+      rethrow;
+    }
   }
 }
 
