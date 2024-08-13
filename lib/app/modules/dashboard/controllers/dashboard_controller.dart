@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 class DashboardController extends GetxController {
   final now = DateTime.now().obs;
+  final isSearchBarVisible = true.obs;
   @override
   void onReady() {
     super.onReady();
@@ -13,5 +14,9 @@ class DashboardController extends GetxController {
         now.value = DateTime.now();
       },
     );
+  }
+
+  void toggleSearchBarVisibility() {
+    isSearchBarVisible.value = !isSearchBarVisible.value;
   }
 }

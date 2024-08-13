@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../../services/auth_service.dart';
 import '../../../../models/screens.dart';
+import '../../../utils/img_constants.dart';
 import '../../../widgets/change_password_dialog.dart';
 import '../../../widgets/image_picker_button.dart';
 import '../controllers/profile_controller.dart';
@@ -62,7 +63,7 @@ class ProfileView extends GetView<ProfileController> {
                       )
                     : Center(
                         child: Image.asset(
-                          'assets/images/dash.png',
+                          ImgConstants.dash,
                           width: size,
                           fit: BoxFit.contain,
                         ),
