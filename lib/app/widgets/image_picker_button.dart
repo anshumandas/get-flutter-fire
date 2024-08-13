@@ -44,16 +44,38 @@ enum ImageSources implements ActionEnum {
   }
 
   static Future<String?> getFile() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.image, allowMultiple: false);
+    if (GetPlatform.isWeb) {
+      // Web-specific file picking logic
+      return await getWebFile();
+    } else {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: false,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        final fileBytes = result.files.first.bytes;
+        final fileName = result.files.first.name;
+        GetStorage().write(fileName, fileBytes);
+        return fileName;
+      } else {
+        Get.snackbar('Error', 'Image Not Selected');
+        return null;
+      }
+    }
+  }
+
+  static Future<String?> getWebFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
 
     if (result != null && result.files.isNotEmpty) {
       final fileBytes = result.files.first.bytes;
       final fileName = result.files.first.name;
       GetStorage().write(fileName, fileBytes);
-
       return fileName;
-      //result.files.single.path;//is causing issues for Web, see https://github.com/miguelpruivo/flutter_file_picker/wiki/FAQ
     } else {
       Get.snackbar('Error', 'Image Not Selected');
       return null;
@@ -64,11 +86,12 @@ enum ImageSources implements ActionEnum {
 class ImagePickerButton extends MenuSheetButton<ImageSources> {
   final ValueSetter<String>? callback;
 
-  const ImagePickerButton(
-      {super.key,
-      super.icon = const Icon(Icons.image),
-      super.label = 'Pick an Image',
-      this.callback});
+  const ImagePickerButton({
+    super.key,
+    super.icon = const Icon(Icons.image),
+    super.label = 'Pick an Image',
+    this.callback,
+  });
 
   @override
   Iterable<ImageSources> get values => ImageSources.values;
@@ -80,12 +103,10 @@ class ImagePickerButton extends MenuSheetButton<ImageSources> {
 
   @override
   Widget build(BuildContext context) {
-    return !(GetPlatform.isAndroid || GetPlatform.isIOS)
-        ? TextButton.icon(
-            onPressed: () async => callbackFunc(await ImageSources.getFile()),
-            icon: icon,
-            label: const Text('Pick an Image'),
-          )
-        : builder(context);
+    return TextButton.icon(
+      onPressed: () async => callbackFunc(await ImageSources.getFile()),
+      icon: icon,
+      label: const Text('Pick an Image'),
+    );
   }
 }

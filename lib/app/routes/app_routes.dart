@@ -17,6 +17,7 @@ abstract class Routes {
   // static const TASKS = _Paths.HOME + _Paths.TASKS;
   // static const USERS = _Paths.HOME + _Paths.USERS;
   // static const MY_PRODUCTS = _Paths.HOME + _Paths.MY_PRODUCTS;
+  static String ROLE_REQUEST = Screen.ROLE_REQUEST.route;
 
   static String PRODUCT_DETAILS(String productId) =>
       '${Screen.PRODUCTS.route}/$productId';
@@ -30,6 +31,7 @@ abstract class Routes {
       '${Screen.LOGIN.route}?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
   static String REGISTER_THEN(String afterSuccessfulLogin) =>
       '${Screen.REGISTER.route}?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
+  // static const SEARCH = _Paths.SEARCH;
 }
 
 // Keeping this as Get_Cli will require it. Any addition can later be added to Screen
@@ -51,4 +53,5 @@ abstract class _Paths {
   // static const USERS = '/users';
   // static const USER_PROFILE = '/:uId';
   // static const MY_PRODUCTS = '/my-products';
+  // static const SEARCH = '/search';
 }
