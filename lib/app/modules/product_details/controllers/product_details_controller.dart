@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/models/cart_item.dart'; // Ensure this is the correct path
+import '../../cart/controllers/cart_controller.dart';
+import '../../../../models/product.dart';
 
 class ProductDetailsController extends GetxController {
   final String productId;
+  final CartController cartController = Get.find<CartController>();
 
-  // Local product data
   final Map<String, Map<String, dynamic>> products = {
     '1': {
       'name': 'T-Shirt',
@@ -73,7 +76,6 @@ class ProductDetailsController extends GetxController {
     },
   };
 
-  // Observable product details and loading status
   var productDetails = {}.obs;
   var isLoading = true.obs;
 
@@ -86,7 +88,6 @@ class ProductDetailsController extends GetxController {
   }
 
   void fetchProductDetails() {
-    // Simulate a delay for fetching data
     Future.delayed(Duration(seconds: 1), () {
       final product = products[productId];
       if (product != null) {
@@ -97,6 +98,25 @@ class ProductDetailsController extends GetxController {
       isLoading.value = false;
     });
   }
+
+  void addToCart() {
+    // ignore: invalid_use_of_protected_member
+    final product = productDetails.value;
+    final cartItem = CartItem(
+      product: Product.fromJson({
+        'id': productId,
+        'name': product['name'],
+        'price': product['price'],
+        'productImage': product['productImage'][0],
+        'brandName': 'N/A',
+        'category': 'N/A',
+        'description': product['description'],
+      }),
+      quantity: RxInt(1),
+    );
+    cartController.cartItems.add(cartItem);
+    Get.snackbar('Success', 'Product added to cart');
+    }
 
   @override
   void onClose() {

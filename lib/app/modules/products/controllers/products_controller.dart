@@ -1,15 +1,19 @@
 import 'package:get/get.dart';
-import '../../../../models/product.dart';
+import 'package:get_storage/get_storage.dart';
+import '../../../../models/product.dart';  // Update the import path if needed
 
 class ProductsController extends GetxController {
   final products = <Product>[].obs;
   final filteredProducts = <Product>[].obs;
   final selectedCategory = ''.obs;
+  final cartItems = <CartItem>[].obs;  // Add this line to manage cart items
+  final box = GetStorage();  // Initialize GetStorage for saving cart items
 
   @override
   void onInit() {
     super.onInit();
     loadDemoProducts();
+    loadCartItems();  // Load saved cart items
     applyFilter();
   }
 
@@ -84,5 +88,47 @@ class ProductsController extends GetxController {
   void setCategory(String category) {
     selectedCategory.value = category;
     applyFilter();
+  }
+
+  void addToCart(Product product) {
+    var existingItem = cartItems.firstWhereOrNull((item) => item.product.id == product.id);
+    if (existingItem != null) {
+      existingItem.quantity.value++;
+    } else {
+      cartItems.add(CartItem(product: product, quantity: 1));
+    }
+    saveCartItems();
+    Get.snackbar('Added to Cart', '${product.name} has been added to your cart.');
+  }
+
+  void loadCartItems() {
+    var savedItems = box.read<List>('cartItems') ?? [];
+    cartItems.value = savedItems.map((item) => CartItem.fromJson(item)).toList();
+  }
+
+  void saveCartItems() {
+    box.write('cartItems', cartItems.map((item) => item.toJson()).toList());
+  }
+}
+
+class CartItem {
+  final Product product;
+  RxInt quantity;
+
+  CartItem({required this.product, required int quantity})
+      : quantity = quantity.obs;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'product': product.toJson(),
+      'quantity': quantity.value,
+    };
+  }
+
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      product: Product.fromJson(json['product']),
+      quantity: json['quantity'],
+    );
   }
 }

@@ -4,7 +4,7 @@ import 'package:get_flutter_fire/services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../models/screens.dart';
 import '../../../utils/icon_constants.dart';
-import '../../../widgets/screen_widget.dart';
+//import '../../../widgets/screen_widget.dart';
 import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
