@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/action_enum.dart';
+import 'remotely_config.dart';
 
-class MenuItemsController<T extends ActionEnum> extends GetxController {
-  MenuItemsController(Iterable<T> iter) : values = Rx<Iterable<T>>(iter);
-
-  final Rx<Iterable<T>> values;
+class MenuItemsController<T extends ActionEnum>
+    extends RemoteConfigController<Iterable<T>> {
+  MenuItemsController(super.iter);
 }
 
 class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
@@ -65,7 +65,7 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
 //This should be a modal bottom sheet if on Mobile (See https://mercyjemosop.medium.com/select-and-upload-images-to-firebase-storage-flutter-6fac855970a9)
   Widget builder(BuildContext context, {Iterable<T>? vals}) {
     Iterable<T> values = vals ?? values_!;
-    return values.length == 1 ||
+    return values.length <= 1 ||
             Get.mediaQuery.orientation == Orientation.portrait
         // : Get.context!.isPortrait
         ? (icon != null
