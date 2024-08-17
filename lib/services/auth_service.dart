@@ -1,10 +1,9 @@
-// ignore_for_file: avoid_print
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/models/access_level.dart';
 
 import '../models/screens.dart';
 import '../constants.dart';
@@ -24,7 +23,7 @@ class AuthService extends GetxService {
   Role get maxRole => _userRole.value;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
     if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
     _firebaseUser.bindStream(_auth.authStateChanges());
@@ -35,6 +34,18 @@ class AuthService extends GetxService {
         });
       }
     });
+  }
+
+  AccessLevel get accessLevel {
+    if (user != null) {
+      if (user!.isAnonymous) {
+        return _userRole.value.index > Role.buyer.index
+            ? AccessLevel.roleBased
+            : AccessLevel.authenticated;
+      }
+      return AccessLevel.guest;
+    }
+    return AccessLevel.public;
   }
 
   bool get isEmailVerified =>
@@ -52,8 +63,12 @@ class AuthService extends GetxService {
       ? (user!.displayName ?? user!.email)
       : 'Guest';
 
+  String? get userPhotoUrl => user?.photoURL;
+  String? get userEmail => user?.email;
+
   void login() {
-    // this is not needed as we are using Firebase UI for the login part
+    // Firebase UI handles the login process
+    // This method is left empty intentionally
   }
 
   void sendVerificationMail({EmailAuthCredential? emailAuth}) async {
@@ -61,13 +76,6 @@ class AuthService extends GetxService {
       if (_auth.currentUser != null) {
         await _auth.currentUser?.sendEmailVerification();
       } else if (emailAuth != null) {
-        // Approach 1: sending email auth link requires deep linking which is
-        // a TODO as the current Flutter methods are deprecated
-        // sendSingInLink(emailAuth);
-
-        // Approach 2: This is a hack.
-        // We are using createUser to send the verification link from the server side by adding suffix .verify in the email
-        // if the user already exists and the password is also same and sign in occurs via custom token on server side
         try {
           await _auth.createUserWithEmailAndPassword(
               email: "${credential.value!.email}.verify",
@@ -84,21 +92,11 @@ class AuthService extends GetxService {
     }
   }
 
-  void sendSingInLink(EmailAuthCredential emailAuth) {
+  void sendSignInLink(EmailAuthCredential emailAuth) {
     var acs = ActionCodeSettings(
-      // URL you want to redirect back to. The domain (www.example.com) for this
-      // URL must be whitelisted in the Firebase Console.
       url:
           '$baseUrl:5001/flutterfast-92c25/us-central1/handleEmailLinkVerification',
-      //     // This must be true if deep linking.
-      //     // If deeplinking. See [https://firebase.google.com/docs/dynamic-links/flutter/receive]
       handleCodeInApp: true,
-      //     iOSBundleId: '$bundleID.ios',
-      //     androidPackageName: '$bundleID.android',
-      //     // installIfNotAvailable
-      //     androidInstallApp: true,
-      //     // minimumVersion
-      //     androidMinimumVersion: '12'
     );
     _auth
         .sendSignInLinkToEmail(email: emailAuth.email, actionCodeSettings: acs)
@@ -109,11 +107,10 @@ class AuthService extends GetxService {
 
   void register() {
     registered.value = true;
-    // logout(); // Uncomment if we need to enforce relogin
     final thenTo =
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate
-        .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
+        .offAndToNamed(thenTo ?? Screen.PROFILE.route); // Profile has the forms
   }
 
   void logout() {
@@ -122,14 +119,21 @@ class AuthService extends GetxService {
     _firebaseUser.value = null;
   }
 
-  Future<bool?> guest() async {
-    return await Get.defaultDialog(
-        middleText: 'Sign in as Guest',
-        barrierDismissible: true,
-        onConfirm: loginAsGuest,
-        onCancel: () => Get.back(result: false),
-        textConfirm: 'Yes, will SignUp later',
-        textCancel: 'No, will SignIn now');
+Future<bool?> guest() async {
+  return await Get.defaultDialog(
+    title: 'Sign in Required',
+    middleText: 'You are currently signed in as a guest. Would you like to sign in now or later?',
+    barrierDismissible: true,
+    onConfirm: () {
+      Get.rootDelegate.toNamed(Screen.LOGIN.route);
+      Get.back(result: false);
+    },
+    onCancel: () {
+      Get.back(result: true); // Keeps the user as a guest
+    },
+    textConfirm: 'Sign In Now',
+    textCancel: 'Sign In Later',  
+  );
   }
 
   void loginAsGuest() async {
@@ -158,12 +162,9 @@ class AuthService extends GetxService {
         (BuildContext context, FirebaseAuthException e) {
       final defaultLabels = FirebaseUILocalizations.labelsOf(context);
 
-      // for verification error, also set a boolean flag to trigger button visibility to resend verification mail
       String? verification;
       if (e.code == "internal-error" &&
           e.message!.contains('"status":"UNAUTHENTICATED"')) {
-        // Note that (possibly in Emulator only) the e.email is always coming as null
-        // String? email = e.email ?? parseEmail(e.message!);
         callback(true, credential.value);
         verification =
             "Please verify email id by clicking the link on the email sent";
@@ -181,21 +182,4 @@ class AuthService extends GetxService {
       };
     };
   }
-}
-
-class MyCredential extends AuthCredential {
-  final EmailAuthCredential cred;
-  MyCredential(this.cred)
-      : super(providerId: "custom", signInMethod: cred.signInMethod);
-
-  @override
-  Map<String, String?> asMap() {
-    return cred.asMap();
-  }
-}
-
-parseEmail(String message) {
-  int i = message.indexOf('"message":') + 13;
-  int j = message.indexOf('"', i);
-  return message.substring(i, j - 1);
 }
