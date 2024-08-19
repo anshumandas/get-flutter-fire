@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 
 import 'app/routes/app_pages.dart';
 import 'firebase_options.dart';
+import 'services/applinks_deeplink.dart';
 import 'services/auth_service.dart';
 
 void main() async {
@@ -15,6 +16,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final AppLinksDeepLink appLinksDeepLink = Get.put(AppLinksDeepLink());
+  appLinksDeepLink.initDeepLinks();
 
   runApp(
     GetMaterialApp.router(
