@@ -121,7 +121,19 @@ class AuthService extends GetxService {
 
 Future<bool?> guest() async {
   return await Get.defaultDialog(
+<<<<<<< HEAD
     title: 'Sign in Required',
+=======
+<<<<<<< HEAD
+    title: 'Sign in Required',
+=======
+<<<<<<< HEAD
+    title: 'Sign in Required',
+=======
+    title: 'Sign in as Guest',
+>>>>>>> dbf771fddc3f1e60b7f7d1df5117f9dd06f61dd6
+>>>>>>> 702ea24b0a8011c719515d0533b30a0bd796d698
+>>>>>>> 2cacd2f6d6101e0f8f72fc187e313d8fa5dc41c4
     middleText: 'You are currently signed in as a guest. Would you like to sign in now or later?',
     barrierDismissible: true,
     onConfirm: () {

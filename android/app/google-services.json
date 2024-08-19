@@ -12,6 +12,10 @@
           "package_name": "com.flutter.app"
         }
       },
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 2cacd2f6d6101e0f8f72fc187e313d8fa5dc41c4
       "oauth_client": [
         {
           "client_id": "10805628758-pcfmdlfqgkh7dlomjg4qlrfqskem5fpb.apps.googleusercontent.com",
@@ -26,6 +30,12 @@
           "client_type": 3
         }
       ],
+<<<<<<< HEAD
+=======
+=======
+      "oauth_client": [],
+>>>>>>> 702ea24b0a8011c719515d0533b30a0bd796d698
+>>>>>>> 2cacd2f6d6101e0f8f72fc187e313d8fa5dc41c4
       "api_key": [
         {
           "current_key": "AIzaSyAeYor2LT0jsmg5BUtWJqIsPAHLjvDBHVc"
@@ -33,6 +43,10 @@
       ],
       "services": {
         "appinvite_service": {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 2cacd2f6d6101e0f8f72fc187e313d8fa5dc41c4
           "other_platform_oauth_client": [
             {
               "client_id": "10805628758-73fae8otaess29ltcqt9uj09opcccgl3.apps.googleusercontent.com",
@@ -46,6 +60,12 @@
               }
             }
           ]
+<<<<<<< HEAD
+=======
+=======
+          "other_platform_oauth_client": []
+>>>>>>> 702ea24b0a8011c719515d0533b30a0bd796d698
+>>>>>>> 2cacd2f6d6101e0f8f72fc187e313d8fa5dc41c4
         }
       }
     }
