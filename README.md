@@ -14,10 +14,10 @@ This was created as part of my own learning process and you will find that git c
 I am also using this codebase as an experiment towards hiring people (freshers especially but not limited to them) for my development team. If you are in Mumbai and are interested to join my team, you can use this codebase in the following manner:
 
 * Fork the codebase
-* Build your own application using this as a base, or complete a TODO or fix a bug
+* Add your own firebase_options.dart (follow steps and see firebase_options.template)
+* **Build your own application using this as a base (integrating any existing project of yours also works)**, or complete a TODO or fix a bug (only if you have no other ideas)
 * Send me a Pull Request. Mention a way of connecting with you in the commit message along with details of commit. Also modify ReadMe to say what you have changed in detail.
 * I will go through the request and then connect with you if I find the entry to be interesting and take an interview round.
-
 
 ## The Steps
 
