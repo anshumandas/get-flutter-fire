@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../routes/app_pages.dart';
 import '../../models/role.dart';
 import '../../models/screens.dart';
+import 'login_widgets.dart';
 
 class ScreenWidget extends StatelessWidget {
   final Widget body;
@@ -71,5 +72,33 @@ class ScreenWidget extends StatelessWidget {
       );
     }
     return null; //TODO multi fab button on press
+  }
+}
+
+extension ScreenWidgetExtension on Screen {
+  Widget? widget(GetNavConfig current) {
+    //those with accessor == widget must be handled here
+    switch (this) {
+      case Screen.SEARCH:
+        return IconButton(onPressed: () => {}, icon: Icon(icon));
+      case Screen.LOGIN:
+        return LoginBottomSheetToggle(current);
+      case Screen.LOGOUT:
+        return LoginBottomSheetToggle(current);
+      default:
+    }
+    return null;
+  }
+
+//This could be used to add icon buttons in expanded web view instead of the context menu
+  static List<Widget> topRightMenuButtons(GetNavConfig current) {
+    List<Widget> widgets = [];
+    for (var screen in Screen.topRightMenu()) {
+      widgets.add(Container(
+          margin: const EdgeInsets.only(right: 15),
+          child: screen.widget(current)));
+    }
+
+    return widgets; //This will return empty. We need a Obx
   }
 }
