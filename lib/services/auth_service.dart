@@ -3,6 +3,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/routes/app_pages.dart';
 import 'package:get_flutter_fire/models/access_level.dart';
 
 import '../models/screens.dart';
@@ -113,60 +114,65 @@ class AuthService extends GetxService {
         .offAndToNamed(thenTo ?? Screen.PROFILE.route); // Profile has the forms
   }
 
-  void logout() {
-    _auth.signOut();
-    if (isAnon) _auth.currentUser?.delete();
+ void logout() async {
+  try {
+    // Check if there's a current user and if the user is a guest
+    if (_auth.currentUser != null) {
+      if (_auth.currentUser!.isAnonymous) {
+        // Delete the anonymous user if logged in as guest
+        await _auth.currentUser!.delete();
+      }
+      // Sign out the user
+      await _auth.signOut();
+    }
+    // Clear the current user value
     _firebaseUser.value = null;
+    // Navigate to the login screen or initial screen
+    Get.offAllNamed(Routes.LOGIN); // Update this as per your routing setup
+  } catch (e) {
+    print("Error during logout: $e");
+    // Optionally handle or display the error
   }
+}
 
-Future<bool?> guest() async {
-  return await Get.defaultDialog(
-<<<<<<< HEAD
-    title: 'Sign in Required',
-=======
-<<<<<<< HEAD
-    title: 'Sign in Required',
-=======
-<<<<<<< HEAD
-    title: 'Sign in Required',
-=======
-    title: 'Sign in as Guest',
->>>>>>> dbf771fddc3f1e60b7f7d1df5117f9dd06f61dd6
->>>>>>> 702ea24b0a8011c719515d0533b30a0bd796d698
->>>>>>> 2cacd2f6d6101e0f8f72fc187e313d8fa5dc41c4
-    middleText: 'You are currently signed in as a guest. Would you like to sign in now or later?',
-    barrierDismissible: true,
-    onConfirm: () {
-      Get.rootDelegate.toNamed(Screen.LOGIN.route);
-      Get.back(result: false);
-    },
-    onCancel: () {
-      Get.back(result: true); // Keeps the user as a guest
-    },
-    textConfirm: 'Sign In Now',
-    textCancel: 'Sign In Later',  
-  );
+
+  Future<bool?> checkGuestStatus() async {
+    return await Get.defaultDialog(
+      title: 'Sign in Required',
+      middleText: 'You are currently signed in as a guest. Would you like to sign in now or later?',
+      barrierDismissible: true,
+      onConfirm: () {
+        Get.rootDelegate.toNamed(Screen.LOGIN.route);
+        Get.back(result: false);
+      },
+      onCancel: () {
+        Get.back(result: true); // Keeps the user as a guest
+      },
+      textConfirm: 'Sign In Now',
+      textCancel: 'Sign In Later',
+    );
   }
 
   void loginAsGuest() async {
-    try {
-      await FirebaseAuth.instance.signInAnonymously();
-      Get.back(result: true);
-      Get.snackbar(
-        'Alert!',
-        'Signed in with temporary account.',
-      );
-    } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "operation-not-allowed":
-          print("Anonymous auth hasn't been enabled for this project.");
-          break;
-        default:
-          print("Unknown error.");
-      }
-      Get.back(result: false);
+  try {
+    await FirebaseAuth.instance.signInAnonymously();
+    Get.snackbar(
+      'Alert!',
+      'Signed in with a temporary account.',
+    );
+    // No need to navigate here; it will be handled by auth state changes
+  } on FirebaseAuthException catch (e) {
+    switch (e.code) {
+      case "operation-not-allowed":
+        print("Anonymous auth hasn't been enabled for this project.");
+        break;
+      default:
+        print("Unknown error.");
     }
+    Get.back(result: false);
   }
+}
+
 
   void errorMessage(BuildContext context, fbui.AuthFailed state,
       Function(bool, EmailAuthCredential?) callback) {
