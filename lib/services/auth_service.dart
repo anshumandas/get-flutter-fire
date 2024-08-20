@@ -23,19 +23,22 @@ class AuthService extends GetxService {
   User? get user => _firebaseUser.value;
   Role get maxRole => _userRole.value;
 
-  @override
-  void onInit() {
-    super.onInit();
-    if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
-    _firebaseUser.bindStream(_auth.authStateChanges());
-    _auth.authStateChanges().listen((User? user) {
-      if (user != null) {
-        user.getIdTokenResult().then((token) {
-          _userRole.value = Role.fromString(token.claims?["role"]);
-        });
-      }
-    });
-  }
+@override
+void onInit() {
+  super.onInit();
+  if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
+  _firebaseUser.bindStream(_auth.authStateChanges());
+  
+  _auth.userChanges().listen((User? user) {
+    _firebaseUser.value = user;
+    if (user != null) {
+      user.getIdTokenResult().then((token) {
+        _userRole.value = Role.fromString(token.claims?["role"]);
+      });
+    }
+  });
+}
+
 
   AccessLevel get accessLevel {
     if (user != null) {
@@ -114,32 +117,32 @@ class AuthService extends GetxService {
         .offAndToNamed(thenTo ?? Screen.PROFILE.route); // Profile has the forms
   }
 
- void logout() async {
-  try {
-    // Check if there's a current user and if the user is a guest
-    if (_auth.currentUser != null) {
-      if (_auth.currentUser!.isAnonymous) {
-        // Delete the anonymous user if logged in as guest
-        await _auth.currentUser!.delete();
+  void logout() async {
+    try {
+      // Check if there's a current user and if the user is a guest
+      if (_auth.currentUser != null) {
+        if (_auth.currentUser!.isAnonymous) {
+          // Delete the anonymous user if logged in as guest
+          await _auth.currentUser!.delete();
+        }
+        // Sign out the user
+        await _auth.signOut();
       }
-      // Sign out the user
-      await _auth.signOut();
+      // Clear the current user value
+      _firebaseUser.value = null;
+      // Navigate to the login screen or initial screen
+      Get.offAllNamed(Routes.LOGIN); // Update this as per your routing setup
+    } catch (e) {
+      print("Error during logout: $e");
+      // Optionally handle or display the error
     }
-    // Clear the current user value
-    _firebaseUser.value = null;
-    // Navigate to the login screen or initial screen
-    Get.offAllNamed(Routes.LOGIN); // Update this as per your routing setup
-  } catch (e) {
-    print("Error during logout: $e");
-    // Optionally handle or display the error
   }
-}
-
 
   Future<bool?> checkGuestStatus() async {
     return await Get.defaultDialog(
       title: 'Sign in Required',
-      middleText: 'You are currently signed in as a guest. Would you like to sign in now or later?',
+      middleText:
+          'You are currently signed in as a guest. Would you like to sign in now or later?',
       barrierDismissible: true,
       onConfirm: () {
         Get.rootDelegate.toNamed(Screen.LOGIN.route);
@@ -154,25 +157,24 @@ class AuthService extends GetxService {
   }
 
   void loginAsGuest() async {
-  try {
-    await FirebaseAuth.instance.signInAnonymously();
-    Get.snackbar(
-      'Alert!',
-      'Signed in with a temporary account.',
-    );
-    // No need to navigate here; it will be handled by auth state changes
-  } on FirebaseAuthException catch (e) {
-    switch (e.code) {
-      case "operation-not-allowed":
-        print("Anonymous auth hasn't been enabled for this project.");
-        break;
-      default:
-        print("Unknown error.");
+    try {
+      await FirebaseAuth.instance.signInAnonymously();
+      Get.snackbar(
+        'Alert!',
+        'Signed in with a temporary account.',
+      );
+      // No need to navigate here; it will be handled by auth state changes
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "operation-not-allowed":
+          print("Anonymous auth hasn't been enabled for this project.");
+          break;
+        default:
+          print("Unknown error.");
+      }
+      Get.back(result: false);
     }
-    Get.back(result: false);
   }
-}
-
 
   void errorMessage(BuildContext context, fbui.AuthFailed state,
       Function(bool, EmailAuthCredential?) callback) {

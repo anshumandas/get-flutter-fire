@@ -117,8 +117,7 @@ class DrawerWidget extends StatelessWidget {
                         child: Text(
                           '${AuthService.to.userName}',
                           style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

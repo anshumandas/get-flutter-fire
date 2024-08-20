@@ -1,4 +1,4 @@
-package com.flutter.hehe
+package com.flutter.app
 
 import io.flutter.embedding.android.FlutterActivity
 
