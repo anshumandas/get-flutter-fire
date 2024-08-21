@@ -63,9 +63,9 @@ void onInit() {
 
   bool get isAnon => user != null && user!.isAnonymous;
 
-  String? get userName => (user != null && !user!.isAnonymous)
-      ? (user!.displayName ?? user!.email)
-      : 'Guest';
+  String? get userName => (user != null)
+    ? (user!.displayName ?? (user!.isAnonymous ? 'Guest' : user!.email))
+    : 'Guest';
 
   String? get userPhotoUrl => user?.photoURL;
   String? get userEmail => user?.email;
@@ -118,25 +118,26 @@ void onInit() {
   }
 
   void logout() async {
-    try {
-      // Check if there's a current user and if the user is a guest
-      if (_auth.currentUser != null) {
-        if (_auth.currentUser!.isAnonymous) {
-          // Delete the anonymous user if logged in as guest
-          await _auth.currentUser!.delete();
-        }
-        // Sign out the user
-        await _auth.signOut();
-      }
-      // Clear the current user value
-      _firebaseUser.value = null;
-      // Navigate to the login screen or initial screen
-      Get.offAllNamed(Routes.LOGIN); // Update this as per your routing setup
-    } catch (e) {
-      print("Error during logout: $e");
-      // Optionally handle or display the error
+  try {
+    if (_auth.currentUser != null) {
+      if (_auth.currentUser!.isAnonymous) {
+        // Delete the anonymous user if logged in as guest
+        await _auth.currentUser!.delete();
+      } 
+      await _auth.signOut();
     }
+    
+    // Clear the current user value and role
+    _firebaseUser.value = null;
+    _userRole.value = Role.buyer; // Reset to default role or desired initial role
+
+    // Optionally, reload the app state
+    Get.offAllNamed(Routes.LOGIN); 
+  } catch (e) {
+    print("Error during logout: $e");
   }
+}
+
 
   Future<bool?> checkGuestStatus() async {
     return await Get.defaultDialog(
@@ -156,25 +157,33 @@ void onInit() {
     );
   }
 
-  void loginAsGuest() async {
-    try {
-      await FirebaseAuth.instance.signInAnonymously();
-      Get.snackbar(
-        'Alert!',
-        'Signed in with a temporary account.',
-      );
-      // No need to navigate here; it will be handled by auth state changes
-    } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "operation-not-allowed":
-          print("Anonymous auth hasn't been enabled for this project.");
-          break;
-        default:
-          print("Unknown error.");
-      }
-      Get.back(result: false);
+  void loginAsGuest({String? guestName}) async {
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+    
+    // Set a display name for the guest user if provided
+    if (guestName != null && guestName.isNotEmpty) {
+      await userCredential.user?.updateDisplayName(guestName);
+      await userCredential.user?.reload();
+      _firebaseUser.value = _auth.currentUser;
     }
+
+    Get.snackbar(
+      'Alert!',
+      'Signed in with a temporary account${guestName != null ? ' as $guestName' : ''}.',
+    );
+    // No need to navigate here; it will be handled by auth state changes
+  } on FirebaseAuthException catch (e) {
+    switch (e.code) {
+      case "operation-not-allowed":
+        print("Anonymous auth hasn't been enabled for this project.");
+        break;
+      default:
+        print("Unknown error.");
+    }
+    Get.back(result: false);
   }
+}
 
   void errorMessage(BuildContext context, fbui.AuthFailed state,
       Function(bool, EmailAuthCredential?) callback) {

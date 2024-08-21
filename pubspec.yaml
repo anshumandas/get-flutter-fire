@@ -31,6 +31,7 @@ dependencies:
   http: ^1.2.2
   win32: ^5.5.0
   cached_network_image: ^3.3.1
+  cloud_firestore: ^4.17.5
 
 dev_dependencies: 
   flutter_lints: 3.0.2

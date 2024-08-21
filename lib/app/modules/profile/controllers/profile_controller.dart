@@ -76,15 +76,22 @@ class ProfileController extends GetxController {
   }
 
   Future<void> updatePhotoURL(String dest) async {
-    try {
-      String downloadURL = await storage.ref(dest).getDownloadURL();
-      await auth.currentUser?.updatePhotoURL(downloadURL);
-      _photoURL.value = downloadURL;
-      Get.snackbar('Success', 'Picture stored and linked');
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to update profile picture: ${e.toString()}');
+  try {
+    final user = auth.currentUser;
+    if (user == null) {
+      throw StateError('No user is currently logged in.');
     }
+
+    String downloadURL = await storage.ref(dest).getDownloadURL();
+    await user.updatePhotoURL(downloadURL);
+    _photoURL.value = downloadURL;
+    Get.snackbar('Success', 'Picture stored and linked');
+  } catch (e) {
+    Get.snackbar('Error', 'Failed to update profile picture: ${e.toString()}');
+    print('Error updating photo URL: $e');
   }
+}
+
 
   Future<void> deleteAccount() async {
     try {
