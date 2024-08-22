@@ -36,9 +36,32 @@ void main() async {
       //       PreventDuplicateHandlingMode.ReorderRoutes,
       // ),
       theme: ThemeData(
-          highlightColor: Colors.black.withOpacity(0.5),
-          bottomSheetTheme:
-              const BottomSheetThemeData(surfaceTintColor: Colors.blue)),
+        primarySwatch: Colors.pink,
+        primaryColor: Colors.pinkAccent,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.pink,
+          primary: Colors.pinkAccent,
+          secondary: Colors.purpleAccent,
+        ),
+        scaffoldBackgroundColor: Colors.pink.shade50, // Updated from backgroundColor
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.pinkAccent,
+          textTheme: ButtonTextTheme.primary,
+        ),
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(color: Colors.pink.shade900), // Updated from bodyText1
+          bodyMedium: TextStyle(color: Colors.pink.shade600), // Updated from bodyText2
+          titleMedium: TextStyle(color: Colors.white, fontSize: 20), // Updated from headline6
+        ),
+        appBarTheme: AppBarTheme(
+          color: Colors.pink,
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 20), // Updated textTheme
+        ),
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Colors.pink.shade100,
+        ),
+        cardColor: Colors.pink.shade50,
+      ),
     ),
   );
 }
