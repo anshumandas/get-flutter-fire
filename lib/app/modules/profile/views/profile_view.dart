@@ -1,39 +1,28 @@
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/profile_controller.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-
 import '../../../../services/auth_service.dart';
 import '../../../../models/screens.dart';
 import '../../../widgets/change_password_dialog.dart';
-import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  const ProfileView({super.key});
+  const ProfileView({Key? key}) : super(key: key);
 
   ShapeBorder get shape => const CircleBorder();
   double get size => 120;
   Color get placeholderColor => Colors.grey;
 
-  Widget _imageFrameBuilder(
-      BuildContext context,
-      Widget? child,
-      int? frame,
-      bool? _,
-      ) {
-    if (frame == null) {
-      return Container(color: placeholderColor);
-    }
-    return child!;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Obx(() => profileScreen(context));
+    final TextEditingController passwordController = TextEditingController();
+
+    return Obx(() => profileScreen(context, passwordController));
   }
 
-  Widget profileScreen(BuildContext context) {
+  Widget profileScreen(BuildContext context, TextEditingController passwordController) {
     return AuthService.to.isLoggedInValue
         ? ProfileScreen(
             appBar: AppBar(
@@ -55,7 +44,6 @@ class ProfileView extends GetView<ProfileController> {
                           cacheWidth: size.toInt(),
                           cacheHeight: size.toInt(),
                           fit: BoxFit.cover,
-                          frameBuilder: _imageFrameBuilder,
                         )
                       : Center(
                           child: Image.asset(
@@ -72,35 +60,50 @@ class ProfileView extends GetView<ProfileController> {
                 controller.logout();
                 Get.rootDelegate.toNamed(Screen.PROFILE.route);
               }),
-              AccountDeletedAction((context, user) {
+              /*AccountDeletedAction((context, user) {
                 Get.defaultDialog(
                   title: 'Delete Account',
-                  middleText: 'Are you sure you want to delete your account? This action cannot be undone.',
+                  content: Column(
+                    children: [
+                      const Text("Please enter your password to confirm:"),
+                      TextField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                        ),
+                      ),
+                    ],
+                  ),
                   textConfirm: 'Delete',
                   textCancel: 'Cancel',
-                  confirmTextColor: Colors.white,
                   onConfirm: () async {
-                    Get.back();
-                    try {
-                      await user.delete();
-                      Get.defaultDialog(
-                        title: 'Account Deleted',
-                        middleText: 'Your account has been successfully deleted.',
-                        onConfirm: () {
-                          controller.logout();
-                          Get.offAllNamed(Screen.HOME.route);
-                        },
-                      );
-                    } catch (e) {
-                      Get.defaultDialog(
-                        title: 'Error',
-                        middleText: 'Failed to delete account: ${e.toString()}',
-                        onConfirm: () => Get.back(),
-                      );
+                    String password = passwordController.text.trim();
+                    if (password.isNotEmpty) {
+                      try {
+                        await user.delete();
+                        Get.defaultDialog(
+                          title: 'Account Deleted',
+                          middleText: 'Your account has been successfully deleted.',
+                          onConfirm: () {
+                            controller.logout();
+                            Get.offAllNamed(Screen.HOME.route);
+                          },
+                        );
+                      } catch (e) {
+                        Get.defaultDialog(
+                          title: 'Error',
+                          middleText: 'Failed to delete account: ${e.toString()}',
+                          onConfirm: () => Get.back(),
+                        );
+                      }
+                    } else {
+                      Get.snackbar('Error', 'Password cannot be empty');
                     }
+                    Get.back();
                   },
                 );
-              }),
+              }),*/
             ],
             children: [
               const Divider(),
@@ -114,6 +117,37 @@ class ProfileView extends GetView<ProfileController> {
                 onPressed: () => _pickImage(),
                 label: const Text('Change Profile Picture'),
                 icon: const Icon(Icons.image),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.defaultDialog(
+                    title: "Delete Account",
+                    content: Column(
+                      children: [
+                        const Text("Please enter your password to confirm:"),
+                        TextField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Password',
+                          ),
+                        ),
+                      ],
+                    ),
+                    textConfirm: "Delete",
+                    textCancel: "Cancel",
+                    onConfirm: () {
+                      String password = passwordController.text.trim();
+                      if (password.isNotEmpty) {
+                        controller.deleteAccount(password);
+                      } else {
+                        Get.snackbar('Error', 'Password cannot be empty');
+                      }
+                      Get.back();
+                    },
+                  );
+                },
+                child: const Text('Delete Account'),
               ),
             ],
           )

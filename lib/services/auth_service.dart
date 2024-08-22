@@ -138,12 +138,44 @@ void onInit() {
   }
 }
 
+// Reauthenticate user with the provided password
+  Future<void> reauthenticateUser(String password) async {
+    final user = _auth.currentUser;
+    if (user == null) throw FirebaseAuthException(code: 'no-current-user');
+
+    final cred = EmailAuthProvider.credential(
+      email: user.email!,
+      password: password,
+    );
+    await user.reauthenticateWithCredential(cred);
+  }
+
+ Future<void> deleteUser(String password) async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: password,
+        );
+
+        // Reauthenticate the user with the provided credentials
+        await user.reauthenticateWithCredential(credential);
+
+        // Delete user from Firebase Auth
+        await user.delete();
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to delete account: $e');
+      rethrow;
+    }
+  }
 
   Future<bool?> checkGuestStatus() async {
     return await Get.defaultDialog(
       title: 'Sign in Required',
       middleText:
-          'You are currently signed in as a guest. Would you like to sign in now or later?',
+          'You are currently not signed in. Would you like to sign in now or later?',
       barrierDismissible: true,
       onConfirm: () {
         Get.rootDelegate.toNamed(Screen.LOGIN.route);

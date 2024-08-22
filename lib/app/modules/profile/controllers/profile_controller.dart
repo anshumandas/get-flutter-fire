@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../../../services/auth_service.dart';
-import '../../../../models/screens.dart';
+
 
 class ProfileController extends GetxController {
   final FirebaseStorage storage = FirebaseStorage.instance;
@@ -16,6 +16,8 @@ class ProfileController extends GetxController {
   User? get currentUser => auth.currentUser;
   final Rxn<String> _photoURL = Rxn<String>();
   String? get photoURLValue => _photoURL.value;
+  final AuthService _authService = Get.find<AuthService>();
+
 
   @override
   void onInit() {
@@ -93,19 +95,14 @@ class ProfileController extends GetxController {
 }
 
 
-  Future<void> deleteAccount() async {
+  Future<void> deleteAccount(String password) async {
     try {
-      await auth.currentUser?.delete();
-      Get.defaultDialog(
-        title: 'Account Deleted',
-        middleText: 'Your account has been successfully deleted.',
-        onConfirm: () {
-          logout();
-          Get.offAllNamed(Screen.HOME.route);
-        },
-      );
+      await _authService.deleteUser(password);
+      Get.snackbar('Success', 'Your account has been deleted');
+      Get.offAllNamed('/login'); // Navigate to login screen after deletion
     } catch (e) {
-      Get.snackbar('Error', 'Failed to delete account: ${e.toString()}');
+      // Handle errors gracefully
+      Get.snackbar('Error', 'Account deletion failed: $e');
     }
   }
 }
