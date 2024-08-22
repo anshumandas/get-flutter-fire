@@ -24,6 +24,13 @@ dependencies:
   firebase_ui_localizations: ^1.12.0
   firebase_remote_config: ^4.4.7
   firebase_analytics: ^10.10.7
+  g_recaptcha_v3: ^0.0.6
+  webview_flutter_plus: ^0.4.5
+  lottie: ^3.1.2
+  carousel_slider: ^4.2.1
+  http: ^1.2.2
+  win32: ^5.5.4
+  cached_network_image: ^3.3.1
 
 dev_dependencies: 
   flutter_lints: 3.0.2
@@ -36,8 +43,7 @@ flutter:
       fonts:
         - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
   assets:
-    - assets/images/flutterfire_300x.png
-    - assets/images/dash.png
-    - assets/icons/logo.png
+    - assets/
+    - assets/images/
+    - assets/icons/
   uses-material-design: true
-
