@@ -36,9 +36,11 @@ void main() async {
       //       PreventDuplicateHandlingMode.ReorderRoutes,
       // ),
       theme: ThemeData(
-          highlightColor: Colors.black.withOpacity(0.5),
-          bottomSheetTheme:
-              const BottomSheetThemeData(surfaceTintColor: Colors.blue)),
+        highlightColor: Colors.black.withOpacity(0.5),
+        bottomSheetTheme: const BottomSheetThemeData(
+          surfaceTintColor: Colors.blue,
+        ),
+      ),
     ),
   );
 }
