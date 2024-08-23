@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,8 +17,24 @@ class ProductsView extends GetView<ProductsController> {
               ? FloatingActionButton.extended(
                   onPressed: controller.loadDemoProductsFromSomeWhere,
                   label: const Text('Add'),
+                  backgroundColor: Colors.pinkAccent, // Theme color for FAB
                 )
               : null,
+      appBar: AppBar(
+        title: const Text('Perfumes'),
+        backgroundColor: Colors.pink, // Theme color for AppBar
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: controller.setCategory,
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: '', child: Text('All')),
+              const PopupMenuItem(value: 'Women', child: Text('Women')),
+              const PopupMenuItem(value: 'Men', child: Text('Men')),
+              const PopupMenuItem(value: 'Unisex', child: Text('Unisex')),
+            ],
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const Hero(
@@ -35,16 +49,70 @@ class ProductsView extends GetView<ProductsController> {
                   controller.loadDemoProductsFromSomeWhere();
                 },
                 child: ListView.builder(
-                  itemCount: controller.products.length,
+                  itemCount: controller.filteredProducts.length,
                   itemBuilder: (context, index) {
-                    final item = controller.products[index];
-                    return ListTile(
-                      onTap: () {
-                        Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(
-                            item.id)); //we could use Get Parameters
-                      },
-                      title: Text(item.name),
-                      subtitle: Text(item.id),
+                    final item = controller.filteredProducts[index];
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.pink.withOpacity(0.1), // Theme color for shadow
+                            spreadRadius: 2,
+                            blurRadius: 6,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.all(16),
+                        onTap: () {
+                          Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(item.id));
+                        },
+                        title: Text(
+                          item.name,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            '${item.description}\n${item.category.isNotEmpty ? item.category : 'No Category'}',
+                            style: const TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                        ),
+                        leading: item.productImage.isNotEmpty
+                            ? Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(
+                                    image: NetworkImage(item.productImage),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Icon(Icons.image_not_supported, size: 30, color: Colors.white),
+                              ),
+                        trailing: Text(
+                          '₹${item.sellingPrice.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.pink, // Theme color for price
+                          ),
+                        ),
+                      ),
                     );
                   },
                 ),
