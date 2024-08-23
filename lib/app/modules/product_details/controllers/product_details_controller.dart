@@ -10,7 +10,7 @@ class ProductDetailsController extends GetxController {
       'sellingPrice': 1800.0,
       'description': 'Luxury Chanel Perfume.',
       'productImage': [
-        'https://i.ibb.co/chanel_perfume.jpg',
+        'https://i.ibb.co/PQW82z4/1.png',
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
       ]
@@ -21,9 +21,9 @@ class ProductDetailsController extends GetxController {
       'sellingPrice': 3500.0,
       'description': 'Exclusive Men\'s Perfume.',
       'productImage': [
-        'assets/images/1.png',
-        'assets/images/2.png',
-        'assets/images/3.png',
+        'https://i.ibb.co/n1nG68M/4.png',
+        'https://via.placeholder.com/150x150?text=Image+1',
+        'https://via.placeholder.com/150x150?text=Image+2',
       ]
     },
     '3': {
@@ -32,9 +32,8 @@ class ProductDetailsController extends GetxController {
       'sellingPrice': 5000.0,
       'description': 'Versatile unisex fragrance.',
       'productImage': [
-        'assets/images/1.png',
-        'assets/images/2.png',
-        'assets/images/3.png',
+        'https://i.ibb.co/WgntTLS/3.png',
+        
       ]
     },
     '4': {
@@ -43,9 +42,8 @@ class ProductDetailsController extends GetxController {
       'sellingPrice': 7000.0,
       'description': 'Elegant fragrance for women.',
       'productImage': [
-        'https://i.ibb.co/elegant_perfume.jpg',
-        'https://via.placeholder.com/150x150?text=Image+1',
-        'https://via.placeholder.com/150x150?text=Image+2',
+        'https://i.ibb.co/72h1Zzp/2.png',
+        
       ]
     },
     '5': {
@@ -54,9 +52,8 @@ class ProductDetailsController extends GetxController {
       'sellingPrice': 2700.0,
       'description': 'Luxurious night fragrance.',
       'productImage': [
-        'https://i.ibb.co/luxury_night_perfume.jpg',
-        'https://via.placeholder.com/150x150?text=Image+1',
-        'https://via.placeholder.com/150x150?text=Image+2',
+        'https://i.ibb.co/NVjdssC/5.png'
+        
       ]
     },
     '6': {
@@ -65,9 +62,8 @@ class ProductDetailsController extends GetxController {
       'sellingPrice': 1300.0,
       'description': 'Refreshing citrus scent.',
       'productImage': [
-        'https://i.ibb.co/fresh_citrus_perfume.jpg',
-        'https://via.placeholder.com/150x150?text=Image+1',
-        'https://via.placeholder.com/150x150?text=Image+2',
+        'https://i.ibb.co/GnphSbv/6.png'
+        
       ]
     },
   };

@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controllers/product_details_controller.dart';
 
 class ProductDetailsView extends GetWidget<ProductDetailsController> {
@@ -22,7 +20,7 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
           return Center(
             child: Text(
               'Failed to load product details',
-              style: TextStyle(fontSize: 16, color: Colors.red),
+              style: TextStyle(fontSize: 16, color: const Color.fromARGB(255, 226, 36, 188)),
             ),
           );
         }
@@ -103,7 +101,7 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                               height: 8,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(index == (pageController.page?.round() ?? 0) ? 1 : 0.5),
+                                color: const Color.fromARGB(255, 218, 125, 184).withOpacity(index == 0 ? 1 : 0.5),
                               ),
                             ),
                           ),
@@ -131,7 +129,7 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.redAccent,
+                          color: const Color.fromARGB(255, 224, 151, 213),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -174,7 +172,7 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
+                      backgroundColor: const Color.fromARGB(255, 244, 210, 242),
                       padding: EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -193,7 +191,7 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: const Color.fromARGB(255, 244, 210, 242),
                       padding: EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -205,8 +203,6 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                Text('ProductId: ${controller.productId}'),
               ],
             ),
           ),

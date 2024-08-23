@@ -7,7 +7,8 @@ class DashboardController extends GetxController {
 
   // Product lists
   final RxList<Map<String, String>> products = <Map<String, String>>[].obs;
-  final RxList<Map<String, String>> trendingProducts = <Map<String, String>>[].obs;
+  final RxList<Map<String, String>> trendingProducts =
+      <Map<String, String>>[].obs;
 
   @override
   void onInit() {
@@ -25,18 +26,18 @@ class DashboardController extends GetxController {
   void fetchProducts() {
     products.assignAll([
       {
-        'name': 'Chanel Perfume for women',
+        'name': 'Womens Perfume Collection',
         'image': 'assets/images/1.png',
         'price': '\$2000'
       },
       {
-        'name': 'Mens perfume',
+        'name': 'Mens Perfume Collection',
         'image': 'assets/images/2.png',
         'price': '\$4000'
       },
       {'name': 'Unisex', 'image': 'assets/images/3.png', 'price': '\$5600'},
       {
-        'name': 'Womens perfume',
+        'name': 'Luxury perfume Collection',
         'image': 'assets/images/4.png',
         'price': '\$7600'
       },

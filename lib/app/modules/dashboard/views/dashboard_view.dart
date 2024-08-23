@@ -149,12 +149,12 @@ class DashboardView extends GetView<DashboardController> {
           ),
           title: Text(product['name']!),
           subtitle: Text(product['price']!),
-          trailing: ElevatedButton(
-            onPressed: () {
-              // Add navigation or action logic here
-            },
-            child: const Text('View'),
-          ),
+          // // trailing: ElevatedButton(
+          // //   onPressed: () {
+          // //     // Add navigation or action logic here
+          // //   },
+          // //   child: const Text('View'),
+          // ),
         ),
       ),
     );
