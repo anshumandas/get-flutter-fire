@@ -243,4 +243,37 @@ void onInit() {
       };
     };
   }
+   // Phone Authentication Methods
+  Future<void> verifyPhoneNumber(String phoneNumber, Function(String) onCodeSent, Function(String) onVerificationCompleted) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // Automatically sign in the user on verification completion
+        await _auth.signInWithCredential(credential);
+        _firebaseUser.value = _auth.currentUser;
+        onVerificationCompleted(_auth.currentUser?.uid ?? '');
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        Get.snackbar('Error', 'Phone number verification failed: ${e.message}');
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        onCodeSent(verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  Future<void> signInWithPhoneNumber(String verificationId, String smsCode) async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
+      await _auth.signInWithCredential(credential);
+      _firebaseUser.value = _auth.currentUser;
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to sign in: $e');
+    }
+  }
 }
+

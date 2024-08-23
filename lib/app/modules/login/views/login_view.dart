@@ -1,14 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart' as fba;
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart' as fba;
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:get_flutter_fire/firebase_options.dart';
-
+import '../../../../firebase_options.dart';
 import '../../../../models/screens.dart';
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
-import '../../../widgets/captcha.dart';  // Import the Captcha widget
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -34,43 +32,60 @@ class LoginView extends GetView<LoginController> {
   Widget loginScreen(BuildContext context) {
     Widget ui;
     if (!controller.isLoggedIn) {
-      if (GetPlatform.isWeb && !controller.isRecaptchaVerified.value) {
-        ui = recaptcha();
-      } else {
-        ui = SignInScreen(
-          providers: [
-            GoogleProvider(clientId: DefaultFirebaseOptions.currentPlatform.appId),
-            MyEmailAuthProvider(),
-          ],
-          showAuthActionSwitch: !controller.isRegistered,
-          showPasswordVisibilityToggle: true,
-          headerBuilder: LoginWidgets.headerBuilder,
-          subtitleBuilder: subtitleBuilder,
-          footerBuilder: (context, action) => footerBuilder(
-              controller.showReverificationButton,
-              controller.credential),
-          sideBuilder: LoginWidgets.sideBuilder,
-          actions: getActions(),
-        );
-      }
+      ui = !(GetPlatform.isAndroid || GetPlatform.isIOS) && controller.isRobot
+          ? recaptcha()
+          : SignInScreen(
+              providers: [
+                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
+                MyEmailAuthProvider(),
+                PhoneAuthProvider(), // Add PhoneAuthProvider for phone login
+              ],
+              showAuthActionSwitch: !controller.isRegistered,
+              showPasswordVisibilityToggle: true,
+              headerBuilder: LoginWidgets.headerBuilder,
+              subtitleBuilder: subtitleBuilder,
+              footerBuilder: (context, action) => Column(
+                children: [
+                  footerBuilder(controller.showReverificationButton,
+                      LoginController.to.credential),
+                  // Add "Login as Guest" Button
+                  ElevatedButton(
+                    onPressed: () => controller.loginAsGuest(),
+                    child: const Text('Login as Guest'),
+                  ),
+                ],
+              ),
+              sideBuilder: LoginWidgets.sideBuilder,
+              actions: getActions(),
+            );
     } else if (controller.isAnon) {
       ui = RegisterScreen(
         providers: [
           MyEmailAuthProvider(),
+          PhoneAuthProvider(), // Add PhoneAuthProvider for phone sign-up
         ],
-        showAuthActionSwitch: !controller.isAnon,
+        showAuthActionSwitch: !controller.isAnon, // if Anon only SignUp
         showPasswordVisibilityToggle: true,
         headerBuilder: LoginWidgets.headerBuilder,
         subtitleBuilder: subtitleBuilder,
-        footerBuilder: (context, action) => footerBuilder(
-            controller.showReverificationButton, controller.credential),
+        footerBuilder: (context, action) => Column(
+          children: [
+            footerBuilder(controller.showReverificationButton,
+                LoginController.to.credential),
+            // Add "Login as Guest" Button
+            ElevatedButton(
+              onPressed: () => controller.loginAsGuest(),
+              child: const Text('Login as Guest'),
+            ),
+          ],
+        ),
         sideBuilder: LoginWidgets.sideBuilder,
         actions: getActions(),
       );
     } else {
       final thenTo = Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
-      Get.rootDelegate.offNamed(thenTo ??
-          (controller.isRegistered ? Screen.HOME : Screen.REGISTER).route);
+      Get.rootDelegate.offNamed(thenTo ?? 
+        (controller.isRegistered ? Screen.HOME : Screen.REGISTER).route);
       ui = const Scaffold();
     }
     return ui;
@@ -78,34 +93,9 @@ class LoginView extends GetView<LoginController> {
 
   Widget recaptcha() {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Please verify that you're not a robot"),
-            const SizedBox(height: 20),
-            Captcha((String token) async {
-              bool isValid = await LoginController.to.verifyRecaptcha(token);
-              if (isValid) {
-                LoginController.to.isRecaptchaVerified.value = true;
-              } else {
-                Get.snackbar('Error', 'reCAPTCHA verification failed. Please try again.');
-              }
-            }),
-            const SizedBox(height: 20),
-            Obx(() => ElevatedButton(
-              onPressed: () {
-                if (LoginController.to.isRecaptchaVerified.value) {
-                  // Force navigation to login page
-                  Get.offNamed(Screen.LOGIN.route);
-                } else {
-                  Get.snackbar('Error', 'Please complete the reCAPTCHA verification.');
-                }
-              },
-              child: const Text('Submit'),
-            )),
-          ],
-        ),
+      body: TextButton(
+        onPressed: () => controller.robot = false,
+        child: const Text("Are you a Robot ?"),
       ),
     );
   }

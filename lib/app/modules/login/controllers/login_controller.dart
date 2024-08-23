@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fba;
-
+import 'package:get_flutter_fire/models/screens.dart';
 import '../../../../services/auth_service.dart';
-
 
 class LoginController extends GetxController {
   static LoginController get to => Get.find();
@@ -12,7 +11,8 @@ class LoginController extends GetxController {
   final Rx<bool> showReverificationButton = Rx(false);
   final Rxn<fba.EmailAuthCredential> credential = Rxn<fba.EmailAuthCredential>();
 
-  final Rx<bool> isRecaptchaVerified = Rx(false);
+  final RxString verificationId = ''.obs;
+  final RxString smsCode = ''.obs;
 
   bool get isRobot => AuthService.to.robot.value == true;
   set robot(bool v) => AuthService.to.robot.value = v;
@@ -26,16 +26,6 @@ class LoginController extends GetxController {
     AuthService.to.loginAsGuest();
   }
 
-  Future<bool> verifyRecaptcha(String token) async {
-    // For simplicity, assume any non-empty token is valid
-    // You might want to add more robust validation logic here
-    if (token.isNotEmpty) {
-      isRecaptchaVerified.value = true;
-      return true;
-    }
-    return false;
-  }
-
   void handleAuthError(BuildContext context, AuthFailed state) {
     Get.snackbar('Login Error', state.exception.toString());
   }
@@ -43,4 +33,19 @@ class LoginController extends GetxController {
   void sendVerificationMail({fba.EmailAuthCredential? emailAuth}) {
     AuthService.to.sendVerificationMail(emailAuth: emailAuth);
   }
+
+  // Phone Authentication Methods
+  void verifyPhoneNumber(String phoneNumber) {
+    AuthService.to.verifyPhoneNumber(phoneNumber, (String verificationId) {
+      this.verificationId.value = verificationId;
+    }, (String userId) {
+      // Handle successful verification, e.g., navigate to the home screen
+      Get.offAllNamed(Screen.HOME.route);
+    });
+  }
+
+  void signInWithSmsCode() {
+    AuthService.to.signInWithPhoneNumber(verificationId.value, smsCode.value);
+  }
+
 }
