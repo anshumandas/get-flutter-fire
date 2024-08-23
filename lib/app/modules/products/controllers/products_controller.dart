@@ -6,7 +6,8 @@ class ProductsController extends GetxController {
   final products = <Product>[].obs;
   final filteredProducts = <Product>[].obs;
   final selectedCategory = ''.obs;
-  final cartItems = <CartItem>[].obs;  // Add this line to manage cart items
+  final cartItems = <CartItem>[].obs;
+  final trendingProducts = <Product>[].obs;  // Add this line for trending products
   final box = GetStorage();  // Initialize GetStorage for saving cart items
 
   @override
@@ -74,6 +75,13 @@ class ProductsController extends GetxController {
         description: 'Stylish sunglasses for sunny days.',
       ),
     ]);
+    
+    // Assign some products as trending
+    trendingProducts.assignAll([
+      products[0],  // Example: T-Shirt
+      products[3],  // Example: Sneakers
+    ]);
+
     applyFilter();
   }
 
