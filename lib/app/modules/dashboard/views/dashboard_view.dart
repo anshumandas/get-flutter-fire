@@ -10,7 +10,7 @@ class DashboardView extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     // Fixed image sizes for mobile and web
-    final double headerImageWidth = GetPlatform.isWeb ? 1200 : double.infinity; // Adjust width for web
+    final double headerImageWidth = GetPlatform.isWeb ? 1500 : double.infinity; // Adjust width for web
     final double headerImageHeight = GetPlatform.isWeb ? 300 : 150; // Adjust height for web
     final double trendingImageWidth = GetPlatform.isWeb ? 150 : 100; // Adjust width for web
     final double trendingImageHeight = GetPlatform.isWeb ? 150 : 100; // Adjust height for web
@@ -19,7 +19,13 @@ class DashboardView extends GetView<ProductsController> {
       appBar: AppBar(
         title: const Text('Dashboard'),
         actions: [
-          // Add any actions you need here
+          // Search icon in the app bar
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: ProductSearchDelegate(controller));
+            },
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -37,6 +43,27 @@ class DashboardView extends GetView<ProductsController> {
             // Trending Products Section with horizontal scrolling
             _buildTrendingProducts(trendingImageWidth, trendingImageHeight),
             const SizedBox(height: 20),
+            // Filters
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Obx(
+                () => Wrap(
+                  spacing: 8,
+                  children: controller.filters.map((filter) {
+                    final isSelected = controller.selectedCategory.value == filter;
+                    return ChoiceChip(
+                      label: Text(filter),
+                      selected: isSelected,
+                      selectedColor: Colors.blue, // Color when selected
+                      backgroundColor: Colors.grey[300], // Color when not selected
+                      onSelected: (selected) {
+                        controller.setCategory(selected ? filter : '');
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
             // Product List
             Obx(
               () => ListView.builder(
@@ -170,6 +197,76 @@ class DashboardView extends GetView<ProductsController> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ProductSearchDelegate extends SearchDelegate<Product?> {
+  final ProductsController controller;
+
+  ProductSearchDelegate(this.controller);
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final results = controller.products
+        .where((product) => product.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return ListView.builder(
+      itemCount: results.length,
+      itemBuilder: (context, index) {
+        final product = results[index];
+        return ListTile(
+          title: Text(product.name),
+          subtitle: Text('\$${product.price}'),
+          onTap: () {
+            Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(product.id));
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestions = controller.products
+        .where((product) => product.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return ListView.builder(
+      itemCount: suggestions.length,
+      itemBuilder: (context, index) {
+        final product = suggestions[index];
+        return ListTile(
+          title: Text(product.name),
+          subtitle: Text('\$${product.price}'),
+          onTap: () {
+            Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(product.id));
+          },
+        );
+      },
     );
   }
 }

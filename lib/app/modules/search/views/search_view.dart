@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide SearchController;
+/*import 'package:flutter/material.dart' hide SearchController;
 
 import 'package:get/get.dart';
 
@@ -21,4 +21,4 @@ class SearchView extends GetView<SearchController> {
       ),
     );
   }
-}
+}*/

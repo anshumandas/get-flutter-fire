@@ -10,6 +10,8 @@ class ProductsController extends GetxController {
   final trendingProducts = <Product>[].obs;  // Add this line for trending products
   final box = GetStorage();  // Initialize GetStorage for saving cart items
 
+  final filters = ['All', 'Male', 'Female', 'Unisex'].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -86,11 +88,14 @@ class ProductsController extends GetxController {
   }
 
   void applyFilter() {
-    if (selectedCategory.isEmpty) {
-      filteredProducts.assignAll(products);
-    } else {
-      filteredProducts.assignAll(products.where((product) => product.category == selectedCategory.value).toList());
-    }
+    filteredProducts.assignAll(
+      products.where((product) {
+        if (selectedCategory.value.isEmpty || selectedCategory.value == 'All') {
+          return true;
+        }
+        return product.category == selectedCategory.value;
+      }).toList(),
+    );
   }
 
   void setCategory(String category) {

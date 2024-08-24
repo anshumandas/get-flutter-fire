@@ -35,13 +35,7 @@ class RootView extends GetView<RootController> {
                         : Get.rootDelegate.toNamed(Screen.HOME.route),
                   ),
             actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () {
-                  // Toggle search bar visibility
-                  isSearchBarVisible.value = !isSearchBarVisible.value;
-                },
-              ),
+              // Search button removed from here
               if (AuthService.to.isLoggedInValue)
                 IconButton(
                   icon: const Icon(Icons.logout),

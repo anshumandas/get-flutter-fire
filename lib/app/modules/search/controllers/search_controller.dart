@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+/*import 'package:get/get.dart';
 
 class SearchController extends GetxController {
   //TODO: Implement SearchController
@@ -20,4 +20,4 @@ class SearchController extends GetxController {
   }
 
   void increment() => count.value++;
-}
+}*/
