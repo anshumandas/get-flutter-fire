@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "670209964454",
+    "project_id": "sharekhan-task-28983",
+    "storage_bucket": "sharekhan-task-28983.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670209964454:android:ea40aa3930719a20137767",
+        "android_client_info": {
+          "package_name": "com.example.get_flutter_fire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBTgyYTRifMuE6pI7jDVOpo_O1Kvj2ZMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
