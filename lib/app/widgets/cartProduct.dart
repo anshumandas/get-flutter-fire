@@ -43,6 +43,11 @@ class CartCard extends GetWidget<CartController> {
                     cartItem.product.name,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 4), // Space between name and size
+                  Text(
+                    'Size: ${cartItem.product.size}', // Display the size
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  ),
                   SizedBox(height: 30),
                   Text(
                     '\$${(cartItem.product.price * cartItem.quantity.value).toStringAsFixed(2)}',

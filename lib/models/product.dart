@@ -6,6 +6,7 @@ class Product {
   final String brandName;
   final String category;
   final String description;
+  final String size;
 
   Product({
     required this.id,
@@ -15,6 +16,7 @@ class Product {
     required this.brandName,
     required this.category,
     required this.description,
+    required this.size,
   });
 
   Map<String, dynamic> toJson() {
@@ -26,6 +28,7 @@ class Product {
       'brandName': brandName,
       'category': category,
       'description': description,
+      'size': size,
     };
   }
 
@@ -38,6 +41,7 @@ class Product {
       brandName: json['brandName'],
       category: json['category'],
       description: json['description'],
+      size: json['size'] ?? 'N/A',
     );
   }
 }

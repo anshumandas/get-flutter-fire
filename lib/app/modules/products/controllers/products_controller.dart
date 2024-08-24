@@ -30,6 +30,7 @@ class ProductsController extends GetxController {
         brandName: 'Brand A',
         category: 'Male',
         description: 'A comfortable cotton T-Shirt.',
+        size: 'M',  
       ),
       Product(
         name: 'Jeans',
@@ -39,6 +40,7 @@ class ProductsController extends GetxController {
         brandName: 'Brand B',
         category: 'Male',
         description: 'Stylish blue jeans for everyday wear.',
+        size: 'L',  
       ),
       Product(
         name: 'Women Jeans',
@@ -48,6 +50,7 @@ class ProductsController extends GetxController {
         brandName: 'Brand C',
         category: 'Female',
         description: 'Stylish blue jeans for Women.',
+        size: 'S',  
       ),
       Product(
         name: 'Sneakers',
@@ -57,6 +60,7 @@ class ProductsController extends GetxController {
         brandName: 'Brand D',
         category: 'Unisex',
         description: 'Comfortable sneakers for active lifestyle.',
+        size: '8',  
       ),
       Product(
         name: 'Dress',
@@ -66,6 +70,7 @@ class ProductsController extends GetxController {
         brandName: 'Brand E',
         category: 'Female',
         description: 'Elegant dress for special occasions.',
+        size: 'M',  
       ),
       Product(
         name: 'Sunglasses',
@@ -75,9 +80,10 @@ class ProductsController extends GetxController {
         brandName: 'Brand F',
         category: 'Unisex',
         description: 'Stylish sunglasses for sunny days.',
+        size: 'One Size',  
       ),
     ]);
-    
+
     // Assign some products as trending
     trendingProducts.assignAll([
       products[0],  // Example: T-Shirt

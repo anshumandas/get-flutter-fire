@@ -1,10 +1,54 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class SettingsController extends GetxController {
   final box = GetStorage();
-  final RxBool isDarkMode = false.obs;
+  final RxInt selectedThemeIndex = 0.obs;
+
+  final List<ThemeData> themes = [
+    ThemeData.light(), // Light Theme
+    ThemeData.dark(),  // Dark Theme
+    ThemeData(        // Midnight Theme
+      brightness: Brightness.light,
+      primaryColor: Colors.deepPurple,
+      scaffoldBackgroundColor: Colors.deepPurple[50],
+      textTheme: const TextTheme(
+        bodyLarge: TextStyle(color: Colors.deepPurple),
+        bodyMedium: TextStyle(color: Colors.deepPurpleAccent),
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
+    ),
+    ThemeData(        // Emerald Theme
+      brightness: Brightness.light,
+      primaryColor: Colors.teal,
+      scaffoldBackgroundColor: Colors.teal[50],
+      textTheme: const TextTheme(
+        bodyLarge: TextStyle(color: Colors.teal),
+        bodyMedium: TextStyle(color: Colors.tealAccent),
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.teal,
+        foregroundColor: Colors.white,
+      ),
+    ),
+    ThemeData(        // Pink Theme (Cotton Candy)
+      brightness: Brightness.light,
+      primaryColor: Colors.pink,
+      scaffoldBackgroundColor: Colors.pink[50],
+      textTheme: const TextTheme(
+        bodyLarge: TextStyle(color: Colors.pink),
+        bodyMedium: TextStyle(color: Colors.pinkAccent),
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.pink,
+        foregroundColor: Colors.white,
+      ),
+    ),
+  ];
 
   @override
   void onInit() {
@@ -13,29 +57,17 @@ class SettingsController extends GetxController {
   }
 
   void loadSettings() {
-    isDarkMode.value = box.read('isDarkMode') ?? false;
+    selectedThemeIndex.value = box.read('selectedThemeIndex') ?? 0;
     updateTheme();
   }
 
-  void toggleDarkMode() {
-    isDarkMode.toggle();
-    box.write('isDarkMode', isDarkMode.value);
+  void selectTheme(int index) {
+    selectedThemeIndex.value = index;
+    box.write('selectedThemeIndex', index);
     updateTheme();
   }
 
   void updateTheme() {
-    Get.changeTheme(ThemeData(
-      brightness: isDarkMode.value ? Brightness.dark : Brightness.light,
-      primaryColor: isDarkMode.value ? Colors.grey[900] : Colors.blue,
-      scaffoldBackgroundColor: isDarkMode.value ? Colors.black : Colors.white,
-      textTheme: TextTheme(
-        bodyLarge: TextStyle(color: isDarkMode.value ? Colors.white : Colors.black),
-        bodyMedium: TextStyle(color: isDarkMode.value ? Colors.white70 : Colors.black54),
-      ),
-      appBarTheme: AppBarTheme(
-        backgroundColor: isDarkMode.value ? Colors.grey[850] : Colors.blue,
-        foregroundColor: isDarkMode.value ? Colors.white : Colors.black,
-      ),
-    ));
+    Get.changeTheme(themes[selectedThemeIndex.value]);
   }
 }

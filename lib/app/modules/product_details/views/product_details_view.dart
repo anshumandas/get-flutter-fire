@@ -144,6 +144,15 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                   ],
                 ),
                 const SizedBox(height: 8),
+                Text(
+                  '\$$sellingPrice',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Text(
@@ -166,11 +175,37 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                   ],
                 ),
                 const SizedBox(height: 16),
+                // Size Selection Dropdown
+                DropdownButtonFormField<String>(
+                  value: controller.selectedSize.value,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    labelText: 'Select Size',
+                  ),
+                  items: controller.availableSizes.map((String size) {
+                    return DropdownMenuItem<String>(
+                      value: size,
+                      child: Text(size),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    controller.selectedSize.value = newValue!;
+                  },
+                ),
+                const SizedBox(height: 16),
                 // Add to Cart Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: controller.addToCart,
+                    onPressed: () {
+                      if (controller.selectedSize.value.isEmpty) {
+                        Get.snackbar('Error', 'Please select a size');
+                        return;
+                      }
+                      controller.addToCart();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 109, 251, 1),
                       padding: EdgeInsets.symmetric(vertical: 12),

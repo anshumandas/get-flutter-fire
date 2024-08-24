@@ -17,7 +17,8 @@ class ProductDetailsController extends GetxController {
         'https://i.ibb.co/9wh4mFv/t-shirt.jpg',
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
-      ]
+      ],
+      'sizes': ['S', 'M', 'L']
     },
     '2': {
       'name': 'Jeans',
@@ -28,7 +29,8 @@ class ProductDetailsController extends GetxController {
         'https://i.ibb.co/ZK6vYDx/Jeans.jpg',
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
-      ]
+      ],
+      'sizes': ['S', 'M', 'L']
     },
     '3': {
       'name': 'Jeans',
@@ -39,7 +41,8 @@ class ProductDetailsController extends GetxController {
         'https://i.ibb.co/V3CBYKz/Jeans_F.jpg',
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
-      ]
+      ],
+      'sizes': ['S', 'M', 'L']
     },
     '4': {
       'name': 'Sneakers',
@@ -50,7 +53,8 @@ class ProductDetailsController extends GetxController {
         'https://i.ibb.co/XkVQNJp/Sneakers.jpg',
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
-      ]
+      ],
+      'sizes': ['S', 'M', 'L']
     },
     '5': {
       'name': 'Dress',
@@ -61,7 +65,8 @@ class ProductDetailsController extends GetxController {
         'https://i.ibb.co/d0gWMwX/Dress.jpg',
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
-      ]
+      ],
+      'sizes': ['S', 'M', 'L']
     },
     '6': {
       'name': 'Sunglasses',
@@ -72,12 +77,16 @@ class ProductDetailsController extends GetxController {
         'https://i.ibb.co/XttT0xh/Sunglasses.jpg',
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
-      ]
+      ],
+      'sizes': ['S', 'M', 'L']
     },
   };
 
   var productDetails = {}.obs;
   var isLoading = true.obs;
+  var selectedSize = ''.obs;
+
+  List<String> get availableSizes => productDetails['sizes']?.cast<String>() ?? [];
 
   ProductDetailsController(this.productId);
 
@@ -92,6 +101,7 @@ class ProductDetailsController extends GetxController {
       final product = products[productId];
       if (product != null) {
         productDetails.value = product;
+        selectedSize.value = product['sizes']?.first ?? '';
       } else {
         Get.snackbar('Error', 'Product not found');
       }
@@ -111,12 +121,13 @@ class ProductDetailsController extends GetxController {
         'brandName': 'N/A',
         'category': 'N/A',
         'description': product['description'],
+        'size': selectedSize.value,
       }),
       quantity: RxInt(1),
     );
     cartController.cartItems.add(cartItem);
     Get.snackbar('Success', 'Product added to cart');
-    }
+  }
 
   @override
   void onClose() {
