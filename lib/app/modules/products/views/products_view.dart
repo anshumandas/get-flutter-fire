@@ -1,5 +1,6 @@
 // ignore_for_file: inference_failure_on_function_invocation
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,9 +57,10 @@ class ProductsView extends GetView<ProductsController> {
                           clipBehavior: Clip.hardEdge,
                           duration: const Duration(seconds: 1),
                           curve: Curves.easeOut,
-                          child: Image.network(
-                            "https://picsum.photos/seed/picsum/72/72",
+                          child: CachedNetworkImage(
+                            imageUrl: item.imageUrl,
                             height: 72,
+                            width: 72,
                           ),
                         ),
                         onTap: () {

@@ -10,6 +10,10 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add_shopping_cart_rounded),
+      ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
