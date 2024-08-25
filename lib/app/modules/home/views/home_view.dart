@@ -1,34 +1,34 @@
+// lib/app/modules/home/views/home_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../routes/app_pages.dart';
-import '../../../widgets/screen_widget.dart';
+
 import '../controllers/home_controller.dart';
 
-class HomeView extends GetView<HomeController> {
-  const HomeView({super.key});
-
+class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetRouterOutlet.builder(
-      builder: (context, delegate, currentRoute) {
-        var arg = Get.rootDelegate.arguments();
-        if (arg != null) {
-          controller.chosenRole.value = arg["role"];
-        }
-        var route = controller.chosenRole.value.tabs[0].route;
-        //This router outlet handles the appbar and the bottom navigation bar
-        return ScreenWidget(
-          screen: screen!,
-          body: GetRouterOutlet(
-            initialRoute: route,
-            // anchorRoute: Routes.HOME,
-            key: Get.nestedKey(route),
+    // Get the instance of the controller
+    final HomeController controller = Get.find<HomeController>();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Page'),
+      ),
+      body: Center(
+        child: Obx(
+              () => Text(
+            'Welcome ${controller.userName.value}!',
+            style: TextStyle(fontSize: 20),
           ),
-          role: controller.chosenRole.value,
-          delegate: delegate,
-          currentRoute: currentRoute,
-        );
-      },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Example of action, you can replace it with your functionality
+          Get.snackbar('Action', 'Floating action button pressed');
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

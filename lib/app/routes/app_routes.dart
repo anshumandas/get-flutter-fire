@@ -1,54 +1,28 @@
-// ignore_for_file: non_constant_identifier_names, constant_identifier_names
+// lib/app/routes/app_routes.dart
+import 'package:get/get.dart';
+import '../modules/auth/views/login_view.dart';
+import '../modules/auth/views/signup_view.dart';
+import '../modules/home/views/home_view.dart';
+import '../modules/home/bindings/home_binding.dart';
 
-part of 'app_pages.dart';
-// DO NOT EDIT. This is code generated via package:get_cli/get_cli.dart
+class AppRoutes {
+  static const String login = '/login';
+  static const String signup = '/signup';
+  static const String home = '/home';
 
-abstract class Routes {
-  static const HOME = _Paths.HOME;
-  // static String PROFILE = Screen.PROFILE.fullPath;
-  // static String SETTINGS = Screen.SETTINGS.fullPath;
-  static String LOGIN = Screen.LOGIN.route;
-  static String REGISTER = Screen.REGISTER.route;
-  // static String DASHBOARD = Screen.DASHBOARD.fullPath;
-  // static String PRODUCTS = Screen.PRODUCTS.fullPath;
-  // static String CART = Screen.CART.fullPath;
-  // static String CHECKOUT = Screen.CHECKOUT.fullPath;
-  // static const CATEGORIES = _Paths.HOME + _Paths.CATEGORIES;
-  // static const TASKS = _Paths.HOME + _Paths.TASKS;
-  // static const USERS = _Paths.HOME + _Paths.USERS;
-  // static const MY_PRODUCTS = _Paths.HOME + _Paths.MY_PRODUCTS;
-
-  static String PRODUCT_DETAILS(String productId) =>
-      '${Screen.PRODUCTS.route}/$productId';
-  static String CART_DETAILS(String productId) =>
-      '${Screen.CART.route}/$productId';
-  static String TASK_DETAILS(String taskId) => '${Screen.TASKS.route}/$taskId';
-  static String USER_PROFILE(String uId) => '${Screen.USERS.route}/$uId';
-
-  Routes._();
-  static String LOGIN_THEN(String afterSuccessfulLogin) =>
-      '${Screen.LOGIN.route}?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
-  static String REGISTER_THEN(String afterSuccessfulLogin) =>
-      '${Screen.REGISTER.route}?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
-}
-
-// Keeping this as Get_Cli will require it. Any addition can later be added to Screen
-abstract class _Paths {
-  static const String HOME = '/home';
-  // static const DASHBOARD = '/dashboard';
-  // static const PRODUCTS = '/products';
-  // static const PROFILE = '/profile';
-  // static const SETTINGS = '/settings';
-  // static const PRODUCT_DETAILS = '/:productId';
-  // static const CART_DETAILS = '/:productId';
-  // static const LOGIN = '/login';
-  // static const CART = '/cart';
-  // static const CHECKOUT = '/checkout';
-  // static const REGISTER = '/register';
-  // static const CATEGORIES = '/categories';
-  // static const TASKS = '/tasks';
-  // static const TASK_DETAILS = '/:taskId';
-  // static const USERS = '/users';
-  // static const USER_PROFILE = '/:uId';
-  // static const MY_PRODUCTS = '/my-products';
+  static final routes = [
+    GetPage(
+      name: login,
+      page: () => LoginView(),
+    ),
+    GetPage(
+      name: signup,
+      page: () => SignUpView(),
+    ),
+    GetPage(
+      name: home,
+      page: () => HomeView(),
+      binding: HomeBinding(),
+    ),
+  ];
 }
