@@ -11,8 +11,6 @@ class ProductDetailsController extends GetxController {
       'description': 'Luxury Chanel Perfume.',
       'productImage': [
         'https://i.ibb.co/PQW82z4/1.png',
-        'https://via.placeholder.com/150x150?text=Image+1',
-        'https://via.placeholder.com/150x150?text=Image+2',
       ]
     },
     '2': {
@@ -22,8 +20,6 @@ class ProductDetailsController extends GetxController {
       'description': 'Exclusive Men\'s Perfume.',
       'productImage': [
         'https://i.ibb.co/n1nG68M/4.png',
-        'https://via.placeholder.com/150x150?text=Image+1',
-        'https://via.placeholder.com/150x150?text=Image+2',
       ]
     },
     '3': {
@@ -33,7 +29,6 @@ class ProductDetailsController extends GetxController {
       'description': 'Versatile unisex fragrance.',
       'productImage': [
         'https://i.ibb.co/WgntTLS/3.png',
-        
       ]
     },
     '4': {
@@ -43,7 +38,6 @@ class ProductDetailsController extends GetxController {
       'description': 'Elegant fragrance for women.',
       'productImage': [
         'https://i.ibb.co/72h1Zzp/2.png',
-        
       ]
     },
     '5': {
@@ -51,20 +45,14 @@ class ProductDetailsController extends GetxController {
       'price': 3000.0,
       'sellingPrice': 2700.0,
       'description': 'Luxurious night fragrance.',
-      'productImage': [
-        'https://i.ibb.co/NVjdssC/5.png'
-        
-      ]
+      'productImage': ['https://i.ibb.co/NVjdssC/5.png']
     },
     '6': {
       'name': 'Fresh Citrus Perfume',
       'price': 1500.0,
       'sellingPrice': 1300.0,
       'description': 'Refreshing citrus scent.',
-      'productImage': [
-        'https://i.ibb.co/GnphSbv/6.png'
-        
-      ]
+      'productImage': ['https://i.ibb.co/GnphSbv/6.png']
     },
   };
 

@@ -52,6 +52,30 @@ class AuthService extends GetxService {
       ? (user!.displayName ?? user!.email)
       : 'Guest';
 
+  String? get userPhotoUrl => user?.photoURL;
+  String? get userEmail => user?.email;
+
+   Future<void> updatePhotoURL(String photoURL) async {
+    try {
+      await user?.updatePhotoURL(photoURL);
+      // Refresh the user to ensure the latest data is available.
+      await user?.reload();
+      _firebaseUser.value = _auth.currentUser; // Update the Rxn<User> to trigger listeners
+      Get.snackbar("Success", "Profile picture updated successfully");
+    } catch (e) {
+      Get.snackbar("Error", "Failed to update profile picture: $e");
+    }
+  }
+ void updateProfileImage(String imagePath) async {
+  try {
+    // Assuming `updatePhotoURL` is a method in `AuthService`
+    await AuthService.to.updatePhotoURL(imagePath);
+  } catch (e) {
+    Get.snackbar("Error", "Failed to update profile picture: $e");
+  }
+}
+
+
   void login() {
     // this is not needed as we are using Firebase UI for the login part
   }

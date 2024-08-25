@@ -19,7 +19,7 @@ class ProductsController extends GetxController {
       Product(
         name: 'Chanel Perfume for Women',
         id: '1',
-        productImage: 'https://i.ibb.co/chanel_perfume.jpg',
+        productImage: 'https://i.ibb.co/PQW82z4/1.png',
         price: 2000.0,
         sellingPrice: 1800.0,
         description: 'Luxury Chanel Perfume.',
@@ -28,7 +28,7 @@ class ProductsController extends GetxController {
       Product(
         name: 'Men\'s Exclusive Perfume',
         id: '2',
-        productImage: 'https://i.ibb.co/mens_perfume.jpg',
+        productImage: 'https://i.ibb.co/n1nG68M/4.png',
         price: 4000.0,
         sellingPrice: 3500.0,
         description: 'Exclusive Men\'s Perfume.',
@@ -37,7 +37,7 @@ class ProductsController extends GetxController {
       Product(
         name: 'Unisex Perfume',
         id: '3',
-        productImage: 'https://i.ibb.co/unisex_perfume.jpg',
+        productImage: 'https://i.ibb.co/WgntTLS/3.png',
         price: 5600.0,
         sellingPrice: 5000.0,
         description: 'Versatile unisex fragrance.',
@@ -46,7 +46,7 @@ class ProductsController extends GetxController {
       Product(
         name: 'Elegant Women\'s Perfume',
         id: '4',
-        productImage: 'https://i.ibb.co/elegant_perfume.jpg',
+        productImage: 'https://i.ibb.co/72h1Zzp/2.png',
         price: 7600.0,
         sellingPrice: 7000.0,
         description: 'Elegant fragrance for women.',
@@ -55,7 +55,7 @@ class ProductsController extends GetxController {
       Product(
         name: 'Luxury Night Perfume',
         id: '5',
-        productImage: 'https://i.ibb.co/luxury_night_perfume.jpg',
+        productImage: 'https://i.ibb.co/NVjdssC/5.png',
         price: 3000.0,
         sellingPrice: 2700.0,
         description: 'Luxurious night fragrance.',
@@ -64,7 +64,7 @@ class ProductsController extends GetxController {
       Product(
         name: 'Fresh Citrus Perfume',
         id: '6',
-        productImage: 'https://i.ibb.co/fresh_citrus_perfume.jpg',
+        productImage: 'https://i.ibb.co/GnphSbv/6.png',
         price: 1500.0,
         sellingPrice: 1300.0,
         description: 'Refreshing citrus scent.',

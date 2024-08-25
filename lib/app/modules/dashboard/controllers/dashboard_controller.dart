@@ -28,18 +28,18 @@ class DashboardController extends GetxController {
       {
         'name': 'Womens Perfume Collection',
         'image': 'assets/images/1.png',
-        'price': '\$2000'
+        'price': '\₹2000'
       },
       {
         'name': 'Mens Perfume Collection',
         'image': 'assets/images/2.png',
-        'price': '\$4000'
+        'price': '\₹4000'
       },
-      {'name': 'Unisex', 'image': 'assets/images/3.png', 'price': '\$5600'},
+      {'name': 'Unisex', 'image': 'assets/images/3.png', 'price': '\₹5600'},
       {
         'name': 'Luxury perfume Collection',
         'image': 'assets/images/4.png',
-        'price': '\$7600'
+        'price': '\₹7600'
       },
     ]);
   }
@@ -49,12 +49,12 @@ class DashboardController extends GetxController {
       {
         'name': 'Trending Perfume',
         'image': 'assets/images/1.png',
-        'price': '\$2000'
+        'price': '\₹2000'
       },
       {
         'name': 'Trending for Men',
         'image': 'assets/images/2.png',
-        'price': '\$5600'
+        'price': '\₹5600'
       },
     ]);
   }
