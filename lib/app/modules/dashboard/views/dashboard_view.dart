@@ -10,9 +10,9 @@ class DashboardView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Obx(
-          () => SingleChildScrollView(
-            child: Column(
+        child: SingleChildScrollView(
+          child: Obx(
+            () => Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
