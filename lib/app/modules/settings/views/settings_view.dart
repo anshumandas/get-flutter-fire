@@ -37,7 +37,7 @@ class SettingsView extends GetView<SettingsController> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 1.5, // Adjusted aspect ratio
+                childAspectRatio: 1.8, // Adjusted aspect ratio
               ),
               itemCount: controller.personas.length,
               itemBuilder: (context, index) {
@@ -63,22 +63,22 @@ class SettingsView extends GetView<SettingsController> {
                                 color: persona.primaryColor,
                                 size: 36, // Slightly reduced icon size
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: 4),
                               Text(
                                 persona.name,
                                 style: TextStyle(
                                   color: persona.textColor,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12, // Slightly reduced font size
+                                  fontSize: 14, // Slightly reduced font size
                                 ),
                                 textAlign: TextAlign.center, // Center text to fit well
                               ),
-                              const SizedBox(height: 8), // Adjusted spacing
+                              const SizedBox(height: 12), // Adjusted spacing
                             ],
                           ),
                         ),
                         Positioned(
-                          bottom: 8, // Adjusted bottom position to prevent overlap
+                          bottom: 4, // Adjusted bottom position to prevent overlap
                           left: 0,
                           right: 0,
                           child: Center(

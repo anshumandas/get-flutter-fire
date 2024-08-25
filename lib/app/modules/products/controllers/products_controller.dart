@@ -43,7 +43,7 @@ class ProductsController extends GetxController {
         size: '30',  
       ),
       Product(
-        name: 'Women Jeans',
+        name: 'Jeans',
         id: '3',
         productImage: 'https://i.ibb.co/V3CBYKz/Jeans_F.jpg',
         price: 60.0,
