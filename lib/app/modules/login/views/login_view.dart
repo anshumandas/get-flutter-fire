@@ -142,8 +142,6 @@ class MyEmailAuthProvider extends EmailAuthProvider {
   }
 }
 
-class MyPhoneAuthProvider extends fba.PhoneAuthProvider {}
-
 class EmailLinkButton extends StatelessWidget {
   final Rx<bool> show;
   final Rxn<fba.EmailAuthCredential> credential;
@@ -156,13 +154,19 @@ class EmailLinkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Visibility(
+    return Obx(
+      () => Visibility(
         visible: show.value,
         child: Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: ElevatedButton(
-                onPressed: () => LoginController.to
-                    .sendVerificationMail(emailAuth: credential.value),
-                child: const Text('Resend Verification Mail')))));
+          padding: const EdgeInsets.only(top: 16),
+          child: ElevatedButton(
+            onPressed: () => LoginController.to.sendVerificationMail(
+              emailAuth: credential.value,
+            ),
+            child: const Text('Resend Verification Mail'),
+          ),
+        ),
+      ),
+    );
   }
 }
