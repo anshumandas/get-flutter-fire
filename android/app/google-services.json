@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "665419326653",
+    "project_id": "chess-central-4c15f",
+    "storage_bucket": "chess-central-4c15f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665419326653:android:077cf8ab4494bd67c183d4",
+        "android_client_info": {
+          "package_name": "com.chesscentral.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDN0LWO7i8Wpe6REmBbaTu5SmcGnUs0e4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665419326653:android:fc87c58fc51e9fd9c183d4",
+        "android_client_info": {
+          "package_name": "com.saubh.chesscentral"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDN0LWO7i8Wpe6REmBbaTu5SmcGnUs0e4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

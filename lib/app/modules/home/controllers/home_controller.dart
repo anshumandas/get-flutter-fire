@@ -1,14 +1,16 @@
+// lib/app/modules/home/controllers/home_controller.dart
 import 'package:get/get.dart';
 
-import '../../../../models/role.dart';
-import '../../../../services/auth_service.dart';
-
 class HomeController extends GetxController {
-  final Rx<Role> chosenRole = Rx<Role>(AuthService.to.maxRole);
+  // Example observable variable
+  RxString userName = ''.obs;
 
-  // Role get role => AuthService.to.maxRole;
+  @override
+  void onInit() {
+    super.onInit();
+    // Initialize your data or state here
+    userName.value = 'User'; // Set a default value or fetch user info
+  }
 
-  get isBuyer => chosenRole.value == Role.buyer;
-
-  get isAdmin => chosenRole.value == Role.admin;
+// Add more methods or functionality here if needed
 }
