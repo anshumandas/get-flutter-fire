@@ -5,7 +5,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../firebase_options.dart';
+import 'package:get_flutter_fire/firebase_options.dart';
 
 import '../../../../models/screens.dart';
 import '../../../widgets/login_widgets.dart';
@@ -55,7 +55,9 @@ class LoginView extends GetView<LoginController> {
           ? recaptcha()
           : SignInScreen(
               providers: [
-                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
+                GoogleProvider(
+                  clientId: DefaultFirebaseOptions.currentPlatform.iosClientId!,
+                ),
                 MyEmailAuthProvider(),
               ],
               showAuthActionSwitch: !controller.isRegistered,

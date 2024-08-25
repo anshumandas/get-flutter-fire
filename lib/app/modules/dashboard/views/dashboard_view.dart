@@ -11,15 +11,18 @@ class DashboardView extends GetView<DashboardController> {
     return Scaffold(
       body: Center(
         child: Obx(
-          () => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'DashboardView is working',
-                style: TextStyle(fontSize: 20),
-              ),
-              Text('Time: ${controller.now.value.toString()}'),
-            ],
+          () => SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'DashboardView is working',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text('Time: ${controller.now.value.toString()}'),
+                for (final i in controller.items) Text('Time: $i'),
+              ],
+            ),
           ),
         ),
       ),

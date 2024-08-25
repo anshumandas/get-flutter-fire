@@ -2,7 +2,7 @@
 FLUTTER_ROOT=/Users/chiragsuthar/development/flutter
 FLUTTER_APPLICATION_PATH=/Users/chiragsuthar/Downloads/Flutter apps/flutter_fire_get
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=lib/main.dart
+FLUTTER_TARGET=/Users/chiragsuthar/Downloads/Flutter apps/flutter_fire_get/lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
@@ -11,4 +11,4 @@ EXCLUDED_ARCHS[sdk=iphoneos*]=armv7
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=.dart_tool/package_config.json
+PACKAGE_CONFIG=/Users/chiragsuthar/Downloads/Flutter apps/flutter_fire_get/.dart_tool/package_config.json

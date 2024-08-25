@@ -27,14 +27,14 @@ void main() async {
         },
       ),
       getPages: AppPages.routes,
-      // routeInformationParser: GetInformationParser(
-      //     // initialRoute: Routes.HOME,
-      //     ),
-      // routerDelegate: GetDelegate(
-      //   backButtonPopMode: PopMode.History,
-      //   preventDuplicateHandlingMode:
-      //       PreventDuplicateHandlingMode.ReorderRoutes,
-      // ),
+      routeInformationParser: GetInformationParser(
+        initialRoute: Routes.HOME,
+      ),
+      routerDelegate: GetDelegate(
+        backButtonPopMode: PopMode.History,
+        preventDuplicateHandlingMode:
+            PreventDuplicateHandlingMode.ReorderRoutes,
+      ),
       theme: ThemeData(
         highlightColor: Colors.black.withOpacity(0.5),
         bottomSheetTheme: const BottomSheetThemeData(
