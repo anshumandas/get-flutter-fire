@@ -35,6 +35,10 @@ class LoginView extends GetView<LoginController> {
     return Obx(() => loginScreen(context));
   }
 
+  Widget footerBuilder(Rx<bool> show, Rxn<fba.EmailAuthCredential> credential) {
+    return LoginWidgets.footerBuilder(EmailLinkButton(show, credential));
+  }
+
   Widget subtitleBuilder(context, action) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -44,9 +48,6 @@ class LoginView extends GetView<LoginController> {
     );
   }
 
-  Widget footerBuilder(Rx<bool> show, Rxn<fba.EmailAuthCredential> credential) {
-    return LoginWidgets.footerBuilder(EmailLinkButton(show, credential));
-  }
 
   Widget loginScreen(BuildContext context) {
     Widget ui;

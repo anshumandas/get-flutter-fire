@@ -5,6 +5,8 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/routes/app_pages.dart';
+import 'package:get_flutter_fire/models/access_level.dart';
 
 import '../models/screens.dart';
 import '../constants.dart';
@@ -28,7 +30,8 @@ class AuthService extends GetxService {
     super.onInit();
     if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
     _firebaseUser.bindStream(_auth.authStateChanges());
-    _auth.authStateChanges().listen((User? user) {
+    _auth.userChanges().listen((User? user) {
+      _firebaseUser.value = user;
       if (user != null) {
         user.getIdTokenResult().then((token) {
           _userRole.value = Role.fromString(token.claims?["role"]);
@@ -36,6 +39,18 @@ class AuthService extends GetxService {
       }
     });
   }
+
+  // AccessLevel get accessLevel {
+  //   if (user != null) {
+  //     if (user!.isAnonymous) {
+  //       return _userRole.value.index > Role.buyer.index
+  //           ? AccessLevel.roleBased
+  //           : AccessLevel.authenticated;
+  //     }
+  //     return AccessLevel.guest;
+  //   }
+  //   return AccessLevel.public;
+  // }
 
   bool get isEmailVerified =>
       user != null && (user!.email == null || user!.emailVerified);
@@ -48,33 +63,33 @@ class AuthService extends GetxService {
 
   bool get isAnon => user != null && user!.isAnonymous;
 
-  String? get userName => (user != null && !user!.isAnonymous)
-      ? (user!.displayName ?? user!.email)
+  String? get userName => (user != null)
+      ? (user!.displayName ?? (user!.isAnonymous ? 'Guest' : user!.email))
       : 'Guest';
-
   String? get userPhotoUrl => user?.photoURL;
   String? get userEmail => user?.email;
 
-   Future<void> updatePhotoURL(String photoURL) async {
+  Future<void> updatePhotoURL(String photoURL) async {
     try {
       await user?.updatePhotoURL(photoURL);
       // Refresh the user to ensure the latest data is available.
       await user?.reload();
-      _firebaseUser.value = _auth.currentUser; // Update the Rxn<User> to trigger listeners
+      _firebaseUser.value =
+          _auth.currentUser; // Update the Rxn<User> to trigger listeners
       Get.snackbar("Success", "Profile picture updated successfully");
     } catch (e) {
       Get.snackbar("Error", "Failed to update profile picture: $e");
     }
   }
- void updateProfileImage(String imagePath) async {
-  try {
-    // Assuming `updatePhotoURL` is a method in `AuthService`
-    await AuthService.to.updatePhotoURL(imagePath);
-  } catch (e) {
-    Get.snackbar("Error", "Failed to update profile picture: $e");
-  }
-}
 
+  void updateProfileImage(String imagePath) async {
+    try {
+      // Assuming `updatePhotoURL` is a method in `AuthService`
+      await AuthService.to.updatePhotoURL(imagePath);
+    } catch (e) {
+      Get.snackbar("Error", "Failed to update profile picture: $e");
+    }
+  }
 
   void login() {
     // this is not needed as we are using Firebase UI for the login part
@@ -140,18 +155,39 @@ class AuthService extends GetxService {
         .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
   }
 
-  void logout() {
-    _auth.signOut();
-    if (isAnon) _auth.currentUser?.delete();
-    _firebaseUser.value = null;
+  void logout() async {
+    try {
+      if (_auth.currentUser != null) {
+        if (_auth.currentUser!.isAnonymous) {
+          // Delete the anonymous user if logged in as guest
+          await _auth.currentUser!.delete();
+        }
+        await _auth.signOut();
+      }
+
+      // Clear the current user value and role
+      _firebaseUser.value = null;
+      _userRole.value =
+          Role.buyer; // Reset to default role or desired initial role
+
+      // Optionally, reload the app state
+      Get.offAllNamed(Routes.LOGIN);
+    } catch (e) {
+      print("Error during logout: $e");
+    }
   }
 
   Future<bool?> guest() async {
     return await Get.defaultDialog(
         middleText: 'Sign in as Guest',
         barrierDismissible: true,
-        onConfirm: loginAsGuest,
-        onCancel: () => Get.back(result: false),
+        onConfirm: () {
+          Get.rootDelegate.toNamed(Screen.LOGIN.route);
+          Get.back(result: false);
+        },
+        onCancel: () {
+          Get.back(result: true); // Keeps the user as a guest
+        },
         textConfirm: 'Yes, will SignUp later',
         textCancel: 'No, will SignIn now');
   }
