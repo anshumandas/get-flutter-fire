@@ -8,27 +8,27 @@ class ProductsController extends GetxController {
   void loadDemoProductsFromSomeWhere() {
     products.addAll([
       Product(
-        name: 'Product added on: ${DateTime.now().toString()}',
+        name: 'T-Shirt for Anita',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
       ),
       Product(
-        name: 'Product added on: ${DateTime.now().toString()}',
+        name: 'T-Shirt Designed by Anita',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
       ),
       Product(
-        name: 'Product added on: ${DateTime.now().toString()}',
+        name: 'Jeans Designed By Mr. Chaturvedi',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
       ),
       Product(
-        name: 'Product added on: ${DateTime.now().toString()}',
+        name: 'Miami Beach T-Shirt',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
       ),
       Product(
-        name: 'Product added on: ${DateTime.now().toString()}',
+        name: 'No Name T-Shirt',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
       ),
       Product(
-        name: 'Product added on: ${DateTime.now().toString()}',
+        name: 'Beach Lower by Kailash',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
       ),
     ]);

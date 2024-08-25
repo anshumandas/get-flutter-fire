@@ -23,10 +23,6 @@ class ProductsView extends GetView<ProductsController> {
               : null,
       body: Column(
         children: [
-          const Hero(
-            tag: 'heroLogo',
-            child: FlutterLogo(),
-          ),
           Expanded(
             child: Obx(
               () => RefreshIndicator(
@@ -38,13 +34,47 @@ class ProductsView extends GetView<ProductsController> {
                   itemCount: controller.products.length,
                   itemBuilder: (context, index) {
                     final item = controller.products[index];
-                    return ListTile(
-                      onTap: () {
-                        Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(
-                            item.id)); //we could use Get Parameters
-                      },
-                      title: Text(item.name),
-                      subtitle: Text(item.id),
+
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context).dividerColor,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ListTile(
+                        leading: AnimatedContainer(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.easeOut,
+                          child: Image.network(
+                            "https://picsum.photos/seed/picsum/72/72",
+                            height: 72,
+                          ),
+                        ),
+                        onTap: () {
+                          Get.rootDelegate.toNamed(
+                            Routes.PRODUCT_DETAILS(
+                              item.id,
+                            ),
+                          );
+                        },
+                        title: Text(
+                          item.name,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        subtitle: Text(item.id),
+                      ),
                     );
                   },
                 ),

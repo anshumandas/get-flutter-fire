@@ -18,7 +18,8 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
               'ProductDetailsView is working',
               style: TextStyle(fontSize: 20),
             ),
-            Text('ProductId: ${controller.productId}')
+            Text('ProductId: ${controller.productId}'),
+            Text('Product Name: ${controller.productName}'),
           ],
         ),
       ),

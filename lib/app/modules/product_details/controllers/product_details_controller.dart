@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 class ProductDetailsController extends GetxController {
   final String productId;
+  final String productName = 'Anshuman Das Gandu hai';
 
   ProductDetailsController(this.productId);
   @override
