@@ -40,7 +40,7 @@ class ProductsController extends GetxController {
         brandName: 'Brand B',
         category: 'Male',
         description: 'Stylish blue jeans for everyday wear.',
-        size: 'L',  
+        size: '30',  
       ),
       Product(
         name: 'Women Jeans',
@@ -50,7 +50,7 @@ class ProductsController extends GetxController {
         brandName: 'Brand C',
         category: 'Female',
         description: 'Stylish blue jeans for Women.',
-        size: 'S',  
+        size: '28',  
       ),
       Product(
         name: 'Sneakers',

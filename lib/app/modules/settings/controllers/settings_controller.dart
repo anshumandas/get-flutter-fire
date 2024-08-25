@@ -4,49 +4,45 @@ import 'package:get_storage/get_storage.dart';
 
 class SettingsController extends GetxController {
   final box = GetStorage();
-  final RxInt selectedThemeIndex = 0.obs;
+  final RxBool isDarkMode = false.obs;
+  final Rx<Persona?> selectedPersona = Rx<Persona?>(null);
 
-  final List<ThemeData> themes = [
-    ThemeData.light(), // Light Theme
-    ThemeData.dark(),  // Dark Theme
-    ThemeData(        // Midnight Theme
-      brightness: Brightness.light,
+  final Persona defaultLight = Persona(
+    name: 'Classic Light',
+    primaryColor: Colors.blue,
+    secondaryColor: Colors.blueAccent,
+    backgroundColor: Colors.white,
+    textColor: Colors.black,
+  );
+
+  final List<Persona> personas = [
+    Persona(
+      name: 'Mystic Purple',
       primaryColor: Colors.deepPurple,
-      scaffoldBackgroundColor: Colors.deepPurple[50],
-      textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: Colors.deepPurple),
-        bodyMedium: TextStyle(color: Colors.deepPurpleAccent),
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
-      ),
+      secondaryColor: Colors.deepPurpleAccent,
+      backgroundColor: Colors.deepPurple[50]!,
+      textColor: Colors.deepPurple,
     ),
-    ThemeData(        // Emerald Theme
-      brightness: Brightness.light,
+    Persona(
+      name: 'Emerald Delight',
       primaryColor: Colors.teal,
-      scaffoldBackgroundColor: Colors.teal[50],
-      textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: Colors.teal),
-        bodyMedium: TextStyle(color: Colors.tealAccent),
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.teal,
-        foregroundColor: Colors.white,
-      ),
+      secondaryColor: Colors.tealAccent,
+      backgroundColor: Colors.teal[50]!,
+      textColor: Colors.teal,
     ),
-    ThemeData(        // Pink Theme (Cotton Candy)
-      brightness: Brightness.light,
+    Persona(
+      name: 'Cotton Candy',
       primaryColor: Colors.pink,
-      scaffoldBackgroundColor: Colors.pink[50],
-      textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: Colors.pink),
-        bodyMedium: TextStyle(color: Colors.pinkAccent),
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.pink,
-        foregroundColor: Colors.white,
-      ),
+      secondaryColor: Colors.pinkAccent,
+      backgroundColor: Colors.pink[50]!,
+      textColor: Colors.pink,
+    ),
+    Persona(
+      name: 'Ocean Breeze',
+      primaryColor: Color(0xFF2196F3),
+      secondaryColor: Color(0xFFBBDEFB),
+      backgroundColor: Color(0xFFE3F2FD),
+      textColor: Colors.black,
     ),
   ];
 
@@ -57,17 +53,79 @@ class SettingsController extends GetxController {
   }
 
   void loadSettings() {
-    selectedThemeIndex.value = box.read('selectedThemeIndex') ?? 0;
+    try {
+      isDarkMode.value = box.read('isDarkMode') ?? false;
+      final savedPersonaIndex = box.read('selectedPersonaIndex') as int?;
+      if (savedPersonaIndex != null && savedPersonaIndex < personas.length) {
+        selectedPersona.value = personas[savedPersonaIndex];
+      } else {
+        selectedPersona.value = null;
+      }
+      print('Loaded settings: Dark Mode = ${isDarkMode.value}, Persona = ${selectedPersona.value?.name}');
+    } catch (e) {
+      print('Error loading settings: $e');
+      isDarkMode.value = false;
+      selectedPersona.value = null;
+    }
     updateTheme();
   }
 
-  void selectTheme(int index) {
-    selectedThemeIndex.value = index;
-    box.write('selectedThemeIndex', index);
+  void toggleDarkMode(bool value) {
+    isDarkMode.value = value;
+    if (value) {
+      selectedPersona.value = null; // Disable persona when dark mode is selected
+    }
+    box.write('isDarkMode', value);
+    updateTheme();
+  }
+
+  void selectPersona(Persona persona) {
+    selectedPersona.value = persona;
+    isDarkMode.value = false; // Disable dark mode when persona is selected
+    box.write('selectedPersonaIndex', personas.indexOf(persona));
+    box.write('isDarkMode', false);
     updateTheme();
   }
 
   void updateTheme() {
-    Get.changeTheme(themes[selectedThemeIndex.value]);
+    try {
+      final themeData = isDarkMode.value
+          ? ThemeData.dark()
+          : selectedPersona.value != null
+              ? ThemeData(
+                  primaryColor: selectedPersona.value!.primaryColor,
+                  scaffoldBackgroundColor: selectedPersona.value!.backgroundColor,
+                  textTheme: TextTheme(
+                    bodyLarge: TextStyle(color: selectedPersona.value!.textColor),
+                    bodyMedium: TextStyle(color: selectedPersona.value!.textColor.withOpacity(0.7)),
+                  ),
+                  appBarTheme: AppBarTheme(
+                    backgroundColor: selectedPersona.value!.primaryColor,
+                    foregroundColor: Colors.white,
+                  ),
+                )
+              : ThemeData.light();
+
+      Get.changeTheme(themeData);
+    } catch (e) {
+      print('Error updating theme: $e');
+      Get.changeTheme(ThemeData.light()); // Fallback to light theme
+    }
   }
+}
+
+class Persona {
+  final String name;
+  final Color primaryColor;
+  final Color secondaryColor;
+  final Color backgroundColor;
+  final Color textColor;
+
+  Persona({
+    required this.name,
+    required this.primaryColor,
+    required this.secondaryColor,
+    required this.backgroundColor,
+    required this.textColor,
+  });
 }

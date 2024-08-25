@@ -12,45 +12,94 @@ class SettingsView extends GetView<SettingsController> {
         title: const Text('Settings'),
       ),
       body: ListView(
+        padding: const EdgeInsets.all(16),
         children: [
-          Obx(() => ListTile(
-                title: const Text('Select Theme'),
-                subtitle: Text('Current theme: ${_getThemeName(controller.selectedThemeIndex.value)}'),
-                trailing: DropdownButton<int>(
-                  value: controller.selectedThemeIndex.value,
-                  items: [
-                    DropdownMenuItem(value: 0, child: Text('Classic Light')),
-                    DropdownMenuItem(value: 1, child: Text('Midnight Dark')),
-                    DropdownMenuItem(value: 2, child: Text('Mystic Purple')),
-                    DropdownMenuItem(value: 3, child: Text('Emerald Delight')),
-                    DropdownMenuItem(value: 4, child: Text('Cotton Candy')),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                      controller.selectTheme(value);
-                    }
-                  },
-                ),
+          Obx(() => SwitchListTile(
+                title: const Text('Dark Mode'),
+                value: controller.isDarkMode.value,
+                onChanged: (value) {
+                  controller.toggleDarkMode(value);
+                },
               )),
+          const SizedBox(height: 20),
+          Text(
+            'Select Persona',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 10),
+          // Wrap GridView in a Container to provide additional padding if needed
+          Container(
+            padding: const EdgeInsets.only(bottom: 16), // Extra padding to prevent overflow
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 1.5, // Adjusted aspect ratio
+              ),
+              itemCount: controller.personas.length,
+              itemBuilder: (context, index) {
+                final persona = controller.personas[index];
+                final isSelected = controller.selectedPersona.value == persona;
+
+                return GestureDetector(
+                  onTap: () => controller.selectPersona(persona),
+                  child: Card(
+                    color: persona.backgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.color_lens,
+                                color: persona.primaryColor,
+                                size: 36, // Slightly reduced icon size
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                persona.name,
+                                style: TextStyle(
+                                  color: persona.textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12, // Slightly reduced font size
+                                ),
+                                textAlign: TextAlign.center, // Center text to fit well
+                              ),
+                              const SizedBox(height: 8), // Adjusted spacing
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 8, // Adjusted bottom position to prevent overlap
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: isSelected
+                                ? Icon(
+                                    Icons.circle,
+                                    color: persona.primaryColor,
+                                    size: 12, // Adjusted dot size
+                                  )
+                                : Container(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
-  }
-
-  String _getThemeName(int index) {
-    switch (index) {
-      case 0:
-        return 'Classic Light';
-      case 1:
-        return 'Midnight Dark';
-      case 2:
-        return 'Mystic Purple';
-      case 3:
-        return 'Emerald Delight';
-      case 4:
-        return 'Cotton Candy';
-      default:
-        return 'Unknown';
-    }
   }
 }

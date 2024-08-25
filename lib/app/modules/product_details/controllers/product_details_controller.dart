@@ -30,7 +30,7 @@ class ProductDetailsController extends GetxController {
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
       ],
-      'sizes': ['S', 'M', 'L']
+      'sizes': ['28', '30', '32']
     },
     '3': {
       'name': 'Jeans',
@@ -42,7 +42,7 @@ class ProductDetailsController extends GetxController {
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
       ],
-      'sizes': ['S', 'M', 'L']
+      'sizes': ['28', '30', '32']
     },
     '4': {
       'name': 'Sneakers',
@@ -54,7 +54,7 @@ class ProductDetailsController extends GetxController {
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
       ],
-      'sizes': ['S', 'M', 'L']
+      'sizes': ['US 7', 'US 8', 'US 9']
     },
     '5': {
       'name': 'Dress',
@@ -78,7 +78,7 @@ class ProductDetailsController extends GetxController {
         'https://via.placeholder.com/150x150?text=Image+1',
         'https://via.placeholder.com/150x150?text=Image+2',
       ],
-      'sizes': ['S', 'M', 'L']
+      'sizes': ['OneSize']
     },
   };
 
