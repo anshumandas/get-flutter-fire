@@ -68,6 +68,10 @@ class ProductsView extends GetView<ProductsController> {
                             Routes.PRODUCT_DETAILS(
                               item.id,
                             ),
+                            parameters: {
+                              "productName": item.name,
+                              'imageUrl': item.imageUrl,
+                            },
                           );
                         },
                         title: Text(

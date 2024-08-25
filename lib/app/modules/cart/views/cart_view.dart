@@ -15,10 +15,15 @@ class CartView extends GetView<CartController> {
         title: Text('${AuthService.to.userName} Cart'),
         centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'CartView is working',
-          style: TextStyle(fontSize: 20),
+      body: Center(
+        child: Column(
+          children: [
+            // const Text(
+            //   'CartView is working',
+            //   style: TextStyle(fontSize: 20),
+            // ),
+            for (final i in controller.getProducts()) Text(i.name),
+          ],
         ),
       ),
       screen: screen!,

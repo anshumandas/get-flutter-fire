@@ -2,9 +2,15 @@ import 'package:get/get.dart';
 
 class ProductDetailsController extends GetxController {
   final String productId;
-  final String productName = 'Anshuman Das Gandu hai';
+  final String productName;
+  final String imageUrl;
 
-  ProductDetailsController(this.productId);
+  ProductDetailsController(
+    this.productId,
+    this.productName,
+    this.imageUrl,
+  );
+
   @override
   void onInit() {
     super.onInit();
