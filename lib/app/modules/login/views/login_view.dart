@@ -59,6 +59,7 @@ class LoginView extends GetView<LoginController> {
                   clientId: DefaultFirebaseOptions.currentPlatform.iosClientId!,
                 ),
                 MyEmailAuthProvider(),
+                PhoneAuthProvider(),
               ],
               showAuthActionSwitch: !controller.isRegistered,
               showPasswordVisibilityToggle: true,
@@ -74,6 +75,7 @@ class LoginView extends GetView<LoginController> {
       ui = RegisterScreen(
         providers: [
           MyEmailAuthProvider(),
+          PhoneAuthProvider(),
         ],
         showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
         showPasswordVisibilityToggle: true,
@@ -139,6 +141,8 @@ class MyEmailAuthProvider extends EmailAuthProvider {
     super.onCredentialReceived(credential, action);
   }
 }
+
+class MyPhoneAuthProvider extends fba.PhoneAuthProvider {}
 
 class EmailLinkButton extends StatelessWidget {
   final Rx<bool> show;

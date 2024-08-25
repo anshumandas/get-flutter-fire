@@ -6,12 +6,32 @@ class ProductsController extends GetxController {
   final products = <Product>[].obs;
 
   void loadDemoProductsFromSomeWhere() {
-    products.add(
+    products.addAll([
       Product(
         name: 'Product added on: ${DateTime.now().toString()}',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
       ),
-    );
+      Product(
+        name: 'Product added on: ${DateTime.now().toString()}',
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      ),
+      Product(
+        name: 'Product added on: ${DateTime.now().toString()}',
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      ),
+      Product(
+        name: 'Product added on: ${DateTime.now().toString()}',
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      ),
+      Product(
+        name: 'Product added on: ${DateTime.now().toString()}',
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      ),
+      Product(
+        name: 'Product added on: ${DateTime.now().toString()}',
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      ),
+    ]);
   }
 
   @override
