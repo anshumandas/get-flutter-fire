@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import '../../../widgets/cartProduct.dart';
 import '../../settings/controllers/settings_controller.dart';
 import '../controllers/cart_controller.dart';
-import '../../../../services/auth_service.dart'; // Import your AuthService
+import '../../../../services/auth_service.dart';
 
 class CartView extends GetView<CartController> {
   CartView({super.key});
 
   final SettingsController themeController = Get.find<SettingsController>();
-  final AuthService authService = Get.find<AuthService>(); // Get the AuthService
+  final AuthService authService = Get.find<AuthService>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class CartView extends GetView<CartController> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Total: \$${controller.total.toStringAsFixed(2)}'),
+                          Obx(() => Text('Total: \$${controller.total.toStringAsFixed(2)}')),
                           Text('Number of items: ${controller.itemCount}'),
                         ],
                       ),
@@ -52,26 +52,20 @@ class CartView extends GetView<CartController> {
                       ElevatedButton(
                         onPressed: () async {
                           if (authService.isLoggedInValue) {
-                            // User is logged in, proceed with the purchase
-                            controller.buyItems();
+                            controller.proceedToCheckout();
                           } else {
-                            // User is not logged in, show sign-in dialog
                             bool? result = await authService.checkGuestStatus();
 
                             if (result == true) {
-                              // User chose to proceed as a guest, do nothing (don't buy items)
                               Get.snackbar(
                                 'Purchase not completed',
                                 'You chose to proceed as a guest. Please sign in to complete the purchase.',
                                 snackPosition: SnackPosition.BOTTOM,
                               );
                             } else if (result == false) {
-                              // User chose to sign in now, wait for sign in to complete
                               if (authService.isLoggedInValue) {
-                                // If the user successfully signs in, proceed with the purchase
-                                controller.buyItems();
+                                controller.proceedToCheckout();
                               } else {
-                                // User canceled or failed sign-in, no action needed
                                 Get.snackbar(
                                   'Sign-In Required',
                                   'Please sign in to complete the purchase.',
@@ -81,7 +75,7 @@ class CartView extends GetView<CartController> {
                             }
                           }
                         },
-                        child: Text('Buy'),
+                        child: Text('Checkout'),
                       ),
                     ],
                   ),

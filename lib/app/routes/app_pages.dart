@@ -115,7 +115,7 @@ class AppPages {
               children: [
                 Screen.CHECKOUT.getPage(
                   //if this is after cart details, it never gets reached
-                  page: () => const CheckoutView(),
+                  page: () => CheckoutView(),
                   binding: CheckoutBinding(),
                 ),
                 Screen.CART_DETAILS.getPages(

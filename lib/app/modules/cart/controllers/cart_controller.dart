@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/checkout/controllers/checkout_controller.dart';
+import 'package:get_flutter_fire/app/modules/checkout/views/checkout_view.dart';
 import 'package:get_flutter_fire/models/cart_item.dart' as model; // Use alias for the model CartItem
 import '../../products/controllers/products_controller.dart';
 
@@ -25,9 +27,10 @@ class CartController extends GetxController {
     }
   }
 
-  void buyItems() {
-    Get.snackbar('Success', 'Items purchased successfully!');
-    cartItems.clear();
-    productsController.saveCartItems();
+   void proceedToCheckout() {
+    // Navigate to CheckoutView
+    Get.to(() => CheckoutView(), binding: BindingsBuilder(() {
+      Get.put(CheckoutController());
+    }));
   }
 }
