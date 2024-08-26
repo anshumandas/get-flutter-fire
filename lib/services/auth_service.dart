@@ -19,14 +19,14 @@ class AuthService extends GetxService {
   late Rxn<EmailAuthCredential> credential = Rxn<EmailAuthCredential>();
   final Rxn<User> _firebaseUser = Rxn<User>();
   final Rx<Role> _userRole = Rx<Role>(Role.buyer);
-  final Rx<bool> robot = RxBool(useRecaptcha);
+  final RxBool robot = RxBool(useRecaptcha);
   final RxBool registered = false.obs;
 
   User? get user => _firebaseUser.value;
   Role get maxRole => _userRole.value;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
     if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
     _firebaseUser.bindStream(_auth.authStateChanges());
@@ -72,7 +72,6 @@ class AuthService extends GetxService {
 
   void updateProfileImage(String imagePath) async {
     try {
-      // Assuming `updatePhotoURL` is a method in `AuthService`
       await AuthService.to.updatePhotoURL(imagePath);
     } catch (e) {
       Get.snackbar("Error", "Failed to update profile picture: $e");
@@ -80,7 +79,7 @@ class AuthService extends GetxService {
   }
 
   void login() {
-    // this is not needed as we are using Firebase UI for the login part
+    // Not needed as we use Firebase UI for login
   }
 
   void sendVerificationMail({EmailAuthCredential? emailAuth}) async {
@@ -113,19 +112,9 @@ class AuthService extends GetxService {
 
   void sendSingInLink(EmailAuthCredential emailAuth) {
     var acs = ActionCodeSettings(
-      // URL you want to redirect back to. The domain (www.example.com) for this
-      // URL must be whitelisted in the Firebase Console.
       url:
           '$baseUrl:5001/flutterfast-92c25/us-central1/handleEmailLinkVerification',
-      //     // This must be true if deep linking.
-      //     // If deeplinking. See [https://firebase.google.com/docs/dynamic-links/flutter/receive]
       handleCodeInApp: true,
-      //     iOSBundleId: '$bundleID.ios',
-      //     androidPackageName: '$bundleID.android',
-      //     // installIfNotAvailable
-      //     androidInstallApp: true,
-      //     // minimumVersion
-      //     androidMinimumVersion: '12'
     );
     _auth
         .sendSignInLinkToEmail(email: emailAuth.email, actionCodeSettings: acs)
@@ -136,29 +125,24 @@ class AuthService extends GetxService {
 
   void register() {
     registered.value = true;
-    // logout(); // Uncomment if we need to enforce relogin
     final thenTo =
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate
-        .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
+        .offAndToNamed(thenTo ?? Screen.PROFILE.route); // Profile has the forms
   }
 
   void logout() async {
     try {
       if (_auth.currentUser != null) {
         if (_auth.currentUser!.isAnonymous) {
-          // Delete the anonymous user if logged in as guest
           await _auth.currentUser!.delete();
         }
         await _auth.signOut();
       }
 
-      // Clear the current user value and role
       _firebaseUser.value = null;
-      _userRole.value =
-          Role.buyer; // Reset to default role or desired initial role
+      _userRole.value = Role.buyer;
 
-      // Optionally, reload the app state
       Get.offAllNamed(Routes.LOGIN);
     } catch (e) {
       print("Error during logout: $e");
@@ -182,23 +166,20 @@ class AuthService extends GetxService {
 
   void guestlogin({String? name}) async {
     try {
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInAnonymously();
+      final UserCredential userCredential = await _auth.signInAnonymously();
 
       print("Signed in with temporary account.");
 
-      // Optional: Update the display name if provided
       if (name != null && name.isNotEmpty) {
         await userCredential.user?.updateDisplayName(name);
         await userCredential.user?.reload();
-        _firebaseUser.value = FirebaseAuth
-            .instance.currentUser; // Ensure the current user is updated
+        _firebaseUser.value =
+            _auth.currentUser; // Ensure the current user is updated
       }
 
-      // Display a message to the user using Get.snackbar
       Get.snackbar(
         'Alert!',
-        'Signed in anonymousy${name != null ? ' as $name' : ''}.',
+        'Signed in anonymously${name != null ? ' as $name' : ''}.',
       );
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -213,19 +194,15 @@ class AuthService extends GetxService {
     }
   }
 
-
   void errorMessage(BuildContext context, fbui.AuthFailed state,
       Function(bool, EmailAuthCredential?) callback) {
     fbui.ErrorText.localizeError =
         (BuildContext context, FirebaseAuthException e) {
       final defaultLabels = FirebaseUILocalizations.labelsOf(context);
 
-      // for verification error, also set a boolean flag to trigger button visibility to resend verification mail
       String? verification;
       if (e.code == "internal-error" &&
           e.message!.contains('"status":"UNAUTHENTICATED"')) {
-        // Note that (possibly in Emulator only) the e.email is always coming as null
-        // String? email = e.email ?? parseEmail(e.message!);
         callback(true, credential.value);
         verification =
             "Please verify email id by clicking the link on the email sent";
@@ -243,6 +220,52 @@ class AuthService extends GetxService {
       };
     };
   }
+
+  // Phone Authentication Methods
+  Future<void> pnVerify(
+      String phoneNumber,
+      Function(String) onCodeSent,
+      Function(String) onVerificationCompleted) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // Sign in the user automatically once verification is completed
+        await _auth.signInWithCredential(credential);
+        _firebaseUser.value = _auth.currentUser;
+        // Notify the caller that verification is completed
+        onVerificationCompleted(_auth.currentUser?.uid ?? '');
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        // Display an error message if verification fails
+        Get.snackbar('Error', 'Failed to verify phone number: ${e.message}');
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        // Return the verification ID to the caller
+        onCodeSent(verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Handle the timeout of auto-retrieval
+      },
+    );
+  }
+
+  Future<void> pnsignin(
+      String verificationId, String smsCode) async {
+    try {
+      // Create a credential for sign-in using the provided verification ID and SMS code
+      final credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
+      // Attempt to sign in with the generated credential
+      await _auth.signInWithCredential(credential);
+      _firebaseUser.value = _auth.currentUser;
+    } catch (e) {
+      // Show an error message if sign-in fails
+      Get.snackbar('Error', 'Sign-in process failed: $e');
+    }
+  }
+
 }
 
 class MyCredential extends AuthCredential {
