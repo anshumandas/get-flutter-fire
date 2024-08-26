@@ -40,18 +40,6 @@ class AuthService extends GetxService {
     });
   }
 
-  // AccessLevel get accessLevel {
-  //   if (user != null) {
-  //     if (user!.isAnonymous) {
-  //       return _userRole.value.index > Role.buyer.index
-  //           ? AccessLevel.roleBased
-  //           : AccessLevel.authenticated;
-  //     }
-  //     return AccessLevel.guest;
-  //   }
-  //   return AccessLevel.public;
-  // }
-
   bool get isEmailVerified =>
       user != null && (user!.email == null || user!.emailVerified);
 
@@ -192,25 +180,39 @@ class AuthService extends GetxService {
         textCancel: 'No, will SignIn now');
   }
 
-  void loginAsGuest() async {
+  void guestlogin({String? name}) async {
     try {
-      await FirebaseAuth.instance.signInAnonymously();
-      Get.back(result: true);
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInAnonymously();
+
+      print("Signed in with temporary account.");
+
+      // Optional: Update the display name if provided
+      if (name != null && name.isNotEmpty) {
+        await userCredential.user?.updateDisplayName(name);
+        await userCredential.user?.reload();
+        _firebaseUser.value = FirebaseAuth
+            .instance.currentUser; // Ensure the current user is updated
+      }
+
+      // Display a message to the user using Get.snackbar
       Get.snackbar(
         'Alert!',
-        'Signed in with temporary account.',
+        'Signed in anonymousy${name != null ? ' as $name' : ''}.',
       );
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "operation-not-allowed":
           print("Anonymous auth hasn't been enabled for this project.");
+          Get.snackbar('Error', 'Anonymous authentication is not enabled.');
           break;
         default:
-          print("Unknown error.");
+          print("Unknown error: ${e.message}");
+          Get.snackbar('Error', 'An unknown error occurred: ${e.message}');
       }
-      Get.back(result: false);
     }
   }
+
 
   void errorMessage(BuildContext context, fbui.AuthFailed state,
       Function(bool, EmailAuthCredential?) callback) {

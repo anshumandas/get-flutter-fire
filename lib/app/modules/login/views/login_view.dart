@@ -36,7 +36,16 @@ class LoginView extends GetView<LoginController> {
   }
 
   Widget footerBuilder(Rx<bool> show, Rxn<fba.EmailAuthCredential> credential) {
-    return LoginWidgets.footerBuilder(EmailLinkButton(show, credential));
+    return Column(
+      children: [
+        LoginWidgets.footerBuilder(EmailLinkButton(show, credential)),
+        const SizedBox(height: 16), // Add spacing between the terms and the button
+        ElevatedButton(
+          onPressed: () => controller.guestlogin(),
+          child: const Text('Anonymous login'),
+        ),
+      ],
+    );
   }
 
   Widget subtitleBuilder(context, action) {
@@ -47,7 +56,6 @@ class LoginView extends GetView<LoginController> {
           : const Text('New to Get Flutter Fire, please sign up!'),
     );
   }
-
 
   Widget loginScreen(BuildContext context) {
     Widget ui;

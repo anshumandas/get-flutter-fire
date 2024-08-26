@@ -9,6 +9,7 @@ class LoginController extends GetxController {
   final Rx<bool> showReverificationButton = Rx(false);
   final Rxn<fba.EmailAuthCredential> credential = Rxn<fba.EmailAuthCredential>();
   final RxString verificationId = ''.obs;
+  
 
   bool get isRobot => AuthService.to.robot.value == true;
 
@@ -24,5 +25,11 @@ class LoginController extends GetxController {
   void sendVerificationMail({fba.EmailAuthCredential? emailAuth}) {
     AuthService.to.sendVerificationMail(emailAuth: emailAuth);
   }
+  void guestlogin() {
+    AuthService.to.guestlogin();
+  }
 
 }
+
+
+
