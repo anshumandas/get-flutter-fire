@@ -83,6 +83,7 @@ class LoginView extends GetView<LoginController> {
         providers: [
           MyEmailAuthProvider(),
           PhoneAuthProvider(),
+
         ],
         showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
         showPasswordVisibilityToggle: true,
@@ -121,8 +122,17 @@ class LoginView extends GetView<LoginController> {
 
   List<FirebaseUIAction> getActions() {
     return [
+      // AuthStateChangeAction<CredentialReceived>((context, state) {
       AuthStateChangeAction<AuthFailed>((context, state) => LoginController.to
           .errorMessage(context, state, showReverificationButton)),
+      // AuthStateChangeAction<SignedIn>((context, state) {
+      //   // This is not required due to the AuthMiddleware
+      // }),
+      // EmailLinkSignInAction((context) {
+      //   final thenTo = Get.rootDelegate.currentConfiguration!.currentPage!
+      //       .parameters?['then'];
+      //   Get.rootDelegate.offNamed(thenTo ?? Routes.PROFILE);
+      // }),
     ];
   }
 }
@@ -160,97 +170,5 @@ class EmailLinkButton extends StatelessWidget {
                 onPressed: () => LoginController.to
                     .sendVerificationMail(emailAuth: credential.value),
                 child: const Text('Resend Verification Mail')))));
-  }
-}
-
-class CountryCodeDropdown extends StatelessWidget {
-  final Rx<String> selectedCountryCode;
-  final List<Map<String, String>> countryCodes;
-
-  const CountryCodeDropdown({
-    required this.selectedCountryCode,
-    required this.countryCodes,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: selectedCountryCode.value,
-      items: countryCodes
-          .map((country) => DropdownMenuItem<String>(
-                value: country['code'],
-                child: Text('${country['name']} (${country['code']})'),
-              ))
-          .toList(),
-      onChanged: (value) {
-        if (value != null) {
-          selectedCountryCode.value = value;
-        }
-      },
-    );
-  }
-}
-
-class PhoneNumberInput extends StatelessWidget {
-  final Rx<String> phoneNumber;
-  final Rx<String> selectedCountryCode;
-
-  const PhoneNumberInput({
-    required this.phoneNumber,
-    required this.selectedCountryCode,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 2,
-          child: CountryCodeDropdown(
-            selectedCountryCode: selectedCountryCode,
-            countryCodes: [
-  {'name': 'Argentina', 'code': '+54'},
-  {'name': 'Australia', 'code': '+61'},
-  {'name': 'Brazil', 'code': '+55'},
-  {'name': 'Canada', 'code': '+1'},
-  {'name': 'China', 'code': '+86'},
-  {'name': 'France', 'code': '+33'},
-  {'name': 'Germany', 'code': '+49'},
-  {'name': 'India', 'code': '+91'},
-  {'name': 'Italy', 'code': '+39'},
-  {'name': 'Japan', 'code': '+81'},
-  {'name': 'Mexico', 'code': '+52'},
-  {'name': 'Netherlands', 'code': '+31'},
-  {'name': 'New Zealand', 'code': '+64'},
-  {'name': 'Nigeria', 'code': '+234'},
-  {'name': 'Russia', 'code': '+7'},
-  {'name': 'South Africa', 'code': '+27'},
-  {'name': 'South Korea', 'code': '+82'},
-  {'name': 'Spain', 'code': '+34'},
-  {'name': 'United Arab Emirates', 'code': '+971'},
-  {'name': 'United Kingdom', 'code': '+44'},
-  {'name': 'United States', 'code': '+1'}
-]
-
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          flex: 5,
-          child: TextField(
-            keyboardType: TextInputType.phone,
-            decoration: const InputDecoration(
-              labelText: 'Phone Number',
-              border: OutlineInputBorder(),
-            ),
-            onChanged: (value) {
-              phoneNumber.value = value;
-            },
-          ),
-        ),
-      ],
-    );
   }
 }
