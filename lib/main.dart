@@ -16,7 +16,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(
+  runApp( has been changed
     GetMaterialApp.router(
       debugShowCheckedModeBanner:
           false, //the debug banner will automatically disappear in prod build
