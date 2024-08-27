@@ -1,6 +1,8 @@
-import 'package:bucketlist/controllers/login_controller.dart';
-import 'package:bucketlist/screens/signupscreen.dart';
+
 import 'package:flutter/material.dart';
+import 'package:get_flutter_fire/Screens/signupscreen.dart';
+import 'package:get_flutter_fire/controllers/login_controller.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

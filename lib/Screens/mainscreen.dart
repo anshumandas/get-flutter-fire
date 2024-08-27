@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bucketlist/services/firestoreservices.dart';
+import 'package:get_flutter_fire/services/firestore_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:bucketlist/screens/Loginscreen.dart'; 
+
+import 'package:get_flutter_fire/Screens/Loginscreen.dart'; 
 
 class Mainscreen extends StatefulWidget {
   const Mainscreen({super.key});

@@ -1,4 +1,4 @@
-import 'package:bucketlist/controllers/signup_controller.dart';
+import 'package:get_flutter_fire/controllers/signup_controller.dart';
 import 'package:flutter/material.dart';
 
 class Signupscreen extends StatefulWidget {

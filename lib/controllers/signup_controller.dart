@@ -1,6 +1,7 @@
-import 'package:bucketlist/screens/mainscreen.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_flutter_fire/Screens/mainscreen.dart';
 
 class SignupController {
 

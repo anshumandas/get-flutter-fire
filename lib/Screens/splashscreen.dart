@@ -1,8 +1,9 @@
-import 'package:bucketlist/screens/Loginscreen.dart';
-import 'package:bucketlist/screens/mainscreen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get_flutter_fire/Screens/Loginscreen.dart';
+import 'package:get_flutter_fire/Screens/mainscreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

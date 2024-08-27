@@ -7,9 +7,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:459007933515:android:5325f75d6fb463fa0da1ce",
+        "mobilesdk_app_id": "1:459007933515:android:08f0e142998f543d0da1ce",
         "android_client_info": {
           "package_name": "com.dummyapps.bucketlist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSG67xn1JBwpzJXRLpreGbjRwwC_MYPLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459007933515:android:2b13172815ae35fd0da1ce",
+        "android_client_info": {
+          "package_name": "com.bucketli"
         }
       },
       "oauth_client": [],
