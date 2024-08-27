@@ -24,7 +24,8 @@ dependencies:
   firebase_ui_localizations: ^1.12.0
   firebase_remote_config: ^4.4.7
   firebase_analytics: ^10.10.7
-
+  flutter_native_splash: ^2.4.1
+  url_launcher: ^6.1.6
 dev_dependencies: 
   flutter_lints: 3.0.2
   flutter_test: 
@@ -36,8 +37,11 @@ flutter:
       fonts:
         - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
   assets:
-    - assets/images/flutterfire_300x.png
+    - assets/images/
     - assets/images/dash.png
     - assets/icons/logo.png
   uses-material-design: true
+flutter_native_splash:
+  image: assets/images/splash.png
+  color: "#000000"
 
