@@ -79,14 +79,14 @@ class HomeView extends StatelessWidget {
                         label2: 'Gukesh D'),
                     SizedBox(height: 40),
                     Text(
-                      'Top 100 Players',
+                      'Top 10 Players',
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    RankingWidget(), // Add the RankingWidget here
+                    RankingWidget(numberOfPlayers: 10,), // Add the RankingWidget here
                   ],
                 ),
               ),

@@ -16,7 +16,7 @@ void main() async {
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Application',
-      initialRoute: AppRoutes.login, // Set the initial route
+      initialRoute: AppRoutes.main, // Set MainView as the initial route
       getPages: AppRoutes.routes, // Use the defined routes
       theme: ThemeData(
         highlightColor: Colors.black.withOpacity(0.5),
