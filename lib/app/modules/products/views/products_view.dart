@@ -46,39 +46,12 @@ class ProductsView extends GetView<ProductsController> {
                             color: Theme.of(context).dividerColor,
                           ),
                           borderRadius: const BorderRadius.all(
-                            Radius.circular(10),
+                            Radius.circular(16),
                           ),
                         ),
+                        clipBehavior: Clip.hardEdge,
                         margin: const EdgeInsets.all(10),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ListTile(
-                          leading: Stack(
-                            children: [
-                              AnimatedContainer(
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                                clipBehavior: Clip.hardEdge,
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.easeOut,
-                                child: CachedNetworkImage(
-                                  imageUrl: item.imageUrl,
-                                  height: 72,
-                                  width: 72,
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 4,
-                                right: 0,
-                                child: Icon(
-                                  Icons.visibility,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
+                        child: InkWell(
                           onTap: () {
                             Get.rootDelegate.toNamed(
                               Routes.PRODUCT_DETAILS(
@@ -90,12 +63,30 @@ class ProductsView extends GetView<ProductsController> {
                               },
                             );
                           },
-                          title: Text(
-                            item.name,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                          child: Row(
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: item.imageUrl,
+                                height: 72,
+                                width: 144,
+                                fit: BoxFit.cover,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.name,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                    Text(item.id),
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
-                          subtitle: Text(item.id),
                         ),
                       );
                     },

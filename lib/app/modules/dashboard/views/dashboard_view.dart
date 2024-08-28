@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 import '../controllers/dashboard_controller.dart';
 
@@ -11,22 +10,16 @@ class DashboardView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: _buildMainContent(),
-      ),
-    );
-  }
-
-  Widget _buildMainContent() {
-    return Column(
-      children: [
-        Stack(
-          clipBehavior: Clip.none,
+        child: Column(
           children: [
             _buildPurpleBackground(),
-            _buildContent(),
+            const SizedBox(height: 20),
+            _buildCarousel(context),
+            const SizedBox(height: 20),
+            _buildCarousel(context),
           ],
         ),
-      ],
+      ),
     );
   }
 
@@ -41,32 +34,23 @@ class DashboardView extends GetView<DashboardController> {
       ),
       padding: const EdgeInsets.all(0),
       child: Container(
-        width: 360,
-        height: 360,
+        width: double.infinity,
         padding: const EdgeInsets.all(0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(300),
           color: Colors.purple.withOpacity(0.4),
         ),
-      ),
-    );
-  }
-
-  Widget _buildContent() {
-    return Positioned(
-      top: 100,
-      left: 0,
-      right: 0,
-      child: Column(
-        children: [
-          _buildTitle(),
-          const SizedBox(height: 10),
-          _buildSearchBar(),
-          const SizedBox(height: 20),
-          _buildPopularCategories(),
-          const SizedBox(height: 20), // Add some spacing before the image
-          _buildCarousel(), // Add the carousel here
-        ],
+        child: Column(
+          children: [
+            const SizedBox(height: 100),
+            _buildTitle(),
+            const SizedBox(height: 10),
+            _buildSearchBar(),
+            const SizedBox(height: 20),
+            _buildPopularCategories(),
+            const SizedBox(height: 50),
+          ],
+        ),
       ),
     );
   }
@@ -74,9 +58,9 @@ class DashboardView extends GetView<DashboardController> {
   Widget _buildTitle() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Text(
             'Good Day For Shopping...',
             style: TextStyle(
@@ -98,12 +82,12 @@ class DashboardView extends GetView<DashboardController> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: TextField(
+        child: const TextField(
           decoration: InputDecoration(
             hintText: 'Search in store',
-            prefixIcon: const Icon(Icons.search),
+            prefixIcon: Icon(Icons.search),
             contentPadding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
             border: InputBorder.none,
           ),
         ),
@@ -112,41 +96,35 @@ class DashboardView extends GetView<DashboardController> {
   }
 
   Widget _buildPopularCategories() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 50.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text(
-            'Popular Categories',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Popular Categories',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   // New method to build the carousel
-  Widget _buildCarousel() {
-    final List<String> imgList = [
-      'assets/images/dash.png', // Replace with your image paths
-      'assets/images/dash.png', // Add more images if needed
-      'assets/images/dash.png',
-    ];
-
-    return CarouselSlider(
-      options: CarouselOptions(
-        height: 200.0,
-        autoPlay: true,
-        enlargeCenterPage: true,
-        aspectRatio: 16 / 9,
-        viewportFraction: 0.8,
+  Widget _buildCarousel(BuildContext context) {
+    return SizedBox(
+      height: 220,
+      child: CarouselView(
+        controller: CarouselController(),
+        backgroundColor: Colors.transparent,
+        itemSnapping: true,
+        shrinkExtent: MediaQuery.of(context).size.width,
+        itemExtent: double.infinity,
+        children: [
+          ...controller.items.map((item) => _buildImageContainer(item)),
+        ],
       ),
-      items: imgList.map((item) => _buildImageContainer(item)).toList(),
     );
   }
 
@@ -155,17 +133,29 @@ class DashboardView extends GetView<DashboardController> {
       margin: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-          image: AssetImage(imagePath),
-          fit: BoxFit.cover,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3), // Shadow color
-            spreadRadius: 2, // The spread of the shadow
-            blurRadius: 8, // The blur effect of the shadow
-            offset: const Offset(
-                0, 4), // The position of the shadow (horizontal, vertical)
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Image.asset(
+                imagePath,
+                height: 150,
+              ),
+              const Text("Very Good Lenin Shirt"),
+              const Text("\$1000"),
+            ],
+          ),
+          Column(
+            children: [
+              Image.asset(
+                imagePath,
+                height: 150,
+              ),
+              const Text("Very Good Lenin Shirt"),
+              const Text("\$1000"),
+            ],
           ),
         ],
       ),

@@ -16,41 +16,86 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
 
     return Obx(
       () => Scaffold(
-        floatingActionButton: cartController
-                .getProducts()
-                .where((p) => p.name == controller.productName)
-                .isNotEmpty
-            ? null
-            : FloatingActionButton(
-                onPressed: () {
-                  cartController.addProduct(
-                    Product(
-                      name: controller.productName,
-                      id: controller.productId,
-                      imageUrl: controller.imageUrl,
-                    ),
-                  );
-                },
-                child: const Icon(
-                  Icons.add_shopping_cart_rounded,
+          floatingActionButton: cartController
+                  .getProducts()
+                  .where((p) => p.name == controller.productName)
+                  .isNotEmpty
+              ? null
+              : FloatingActionButton(
+                  onPressed: () {
+                    cartController.addProduct(
+                      Product(
+                        name: controller.productName,
+                        id: controller.productId,
+                        imageUrl: controller.imageUrl,
+                      ),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.add_shopping_cart_rounded,
+                  ),
                 ),
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                flexibleSpace: Positioned.fill(
+                  child: CachedNetworkImage(
+                    imageUrl: controller.imageUrl,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                stretch: true,
+                automaticallyImplyLeading: false,
+                toolbarHeight: 200,
               ),
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'ProductDetailsView is working',
-                style: TextStyle(fontSize: 20),
+              SliverList.list(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // TODO: Make some UI Changes in here
+
+                        const SizedBox(height: 16),
+                        Text('ProductId: ${controller.productId}'),
+                        const SizedBox(height: 8),
+                        Text(controller.productName),
+                        const SizedBox(height: 8),
+                        Text('Image Url: ${controller.imageUrl}'),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Text('ProductId: ${controller.productId}'),
-              Text('Product Name: ${controller.productName}'),
-              Text('Image Url: ${controller.imageUrl}'),
-              CachedNetworkImage(imageUrl: controller.imageUrl),
             ],
+          )
+          // Column(
+          //   mainAxisSize: MainAxisSize.max,
+          //   children: [
+          //     CachedNetworkImage(
+          //       imageUrl: controller.imageUrl,
+          //       width: double.infinity,
+          //       fit: BoxFit.cover,
+          //     ),
+          //     Padding(
+          //       padding: const EdgeInsets.symmetric(horizontal: 8),
+          //       child: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           const SizedBox(height: 16),
+          //           Text('ProductId: ${controller.productId}'),
+          //           const SizedBox(height: 8),
+          //           Text(controller.productName),
+          //           const SizedBox(height: 8),
+          //           Text('Image Url: ${controller.imageUrl}'),
+          //         ],
+          //       ),
+          //     )
+          //   ],
+          // ),
           ),
-        ),
-      ),
     );
   }
 }
