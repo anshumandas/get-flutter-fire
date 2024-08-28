@@ -1,5 +1,5 @@
 name: get_flutter_fire
-escription: "Basic app."
+Description: "Basic app."
 
 publish_to: ' ' 
 
@@ -20,6 +20,7 @@ dependencies:
   firebase_auth: ^4.16.0
   firebase_core: ^2.24.2
   cloud_firestore: ^4.14.0
+  google_sign_in: ^6.2.1
 
 dev_dependencies:
   flutter_test:

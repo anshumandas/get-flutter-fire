@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:459007933515:android:08f0e142998f543d0da1ce",
+        "mobilesdk_app_id": "1:459007933515:android:aa08879157ec7beb0da1ce",
         "android_client_info": {
-          "package_name": "com.dummyapps.bucketlist"
+          "package_name": "com.buck"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "459007933515-k28he2n4ia0mrqqom0mj4h9dsfb4mq9g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buck",
+            "certificate_hash": "197fb5ef1cfb4005f364f2d6a54127fb997a1b72"
+          }
+        },
+        {
+          "client_id": "459007933515-dli3lsodgq4frstaq2928p2no7q2rfsn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCSG67xn1JBwpzJXRLpreGbjRwwC_MYPLA"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459007933515-dli3lsodgq4frstaq2928p2no7q2rfsn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "459007933515-0rh8hsjlag8354bcoc3mv4t6ph1taqj8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.buck"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +56,12 @@
           "package_name": "com.bucketli"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "459007933515-dli3lsodgq4frstaq2928p2no7q2rfsn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCSG67xn1JBwpzJXRLpreGbjRwwC_MYPLA"
@@ -39,7 +69,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459007933515-dli3lsodgq4frstaq2928p2no7q2rfsn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "459007933515-0rh8hsjlag8354bcoc3mv4t6ph1taqj8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.buck"
+              }
+            }
+          ]
         }
       }
     }
