@@ -13,13 +13,12 @@ class RemoteConfig {
   }
 
   final FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
-  final List listeners = [];
 
   Future<void> init() async {
     await _remoteConfig.setConfigSettings(RemoteConfigSettings(
       fetchTimeout: const Duration(minutes: 1),
       minimumFetchInterval: //const Duration(hours: 1), //use for prod
-          const Duration(minutes: 5), //use for testing only
+      const Duration(minutes: 5), //use for testing only
     ));
 
     await _remoteConfig.setDefaults(const {
@@ -38,7 +37,7 @@ class RemoteConfig {
   void addListener(String key, Typer typ, Function listener) async {
     if (!GetPlatform.isWeb) {
       _remoteConfig.onConfigUpdated. //not supported in web
-          listen((event) async {
+      listen((event) async {
         await _remoteConfig.activate();
         if (event.updatedKeys.contains(key)) {
           _remoteConfig.fetch();
@@ -67,12 +66,5 @@ class RemoteConfig {
 
   bool showSearchBarOnTop() {
     return _remoteConfig.getBool("showSearchBarOnTop");
-  }
-
-  void addUseBottomSheetForProfileOptionsListener(listener) {
-    addListener("useBottomSheetForProfileOptions", Typer.boolean, listener);
-    if (!listeners.contains(listener)) {
-      listeners.add(listener);
-    }
   }
 }

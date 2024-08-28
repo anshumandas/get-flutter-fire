@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/action_enum.dart';
+import 'remotely_config_obx.dart';
 
-class MenuItemsController<T extends ActionEnum> extends GetxController {
-  MenuItemsController(Iterable<T> iter) : values = Rx<Iterable<T>>(iter);
-
-  final Rx<Iterable<T>> values;
+class MenuItemsController<T extends ActionEnum>
+    extends RemoteConfigController<Iterable<T>> {
+  MenuItemsController(super.iter);
 }
 
 class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
@@ -16,9 +16,9 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
 
   const MenuSheetButton(
       {super.key,
-      this.values_,
-      this.icon,
-      this.label}); //passing scaffoldKey means that bottomSheet is added to it
+        this.values_,
+        this.icon,
+        this.label}); //passing scaffoldKey means that bottomSheet is added to it
 
   Iterable<T> get values => values_!;
 
@@ -32,17 +32,17 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
         children: values
             .map(
               (ActionEnum value) => ListTile(
-                  leading: Icon(value.icon),
-                  title: Text(
-                    value.label!,
-                  ),
-                  onTap: () async {
-                    Get.back();
-                    callback != null
-                        ? callback(await value.doAction())
-                        : await value.doAction();
-                  }),
-            )
+              leading: Icon(value.icon),
+              title: Text(
+                value.label!,
+              ),
+              onTap: () async {
+                Get.back();
+                callback != null
+                    ? callback(await value.doAction())
+                    : await value.doAction();
+              }),
+        )
             .toList(),
       ),
     );
@@ -53,9 +53,9 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
   }
 
   PopupMenuEntry<T> createPopupMenuItem(dynamic value) => PopupMenuItem<T>(
-        value: value,
-        child: Text(value.label ?? ''), //TODO add Icon
-      );
+    value: value,
+    child: Text(value.label ?? ''), //TODO add Icon
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -65,30 +65,30 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
 //This should be a modal bottom sheet if on Mobile (See https://mercyjemosop.medium.com/select-and-upload-images-to-firebase-storage-flutter-6fac855970a9)
   Widget builder(BuildContext context, {Iterable<T>? vals}) {
     Iterable<T> values = vals ?? values_!;
-    return values.length == 1 ||
-            Get.mediaQuery.orientation == Orientation.portrait
-        // : Get.context!.isPortrait
+    return values.length <= 1 ||
+        Get.mediaQuery.orientation == Orientation.portrait
+    // : Get.context!.isPortrait
         ? (icon != null
-            ? IconButton(
-                onPressed: () => buttonPressed(values),
-                icon: icon!,
-                tooltip: label,
-              )
-            : TextButton(
-                onPressed: () => buttonPressed(values),
-                child: Text(label ?? 'Need Label')))
+        ? IconButton(
+      onPressed: () => buttonPressed(values),
+      icon: icon!,
+      tooltip: label,
+    )
+        : TextButton(
+        onPressed: () => buttonPressed(values),
+        child: Text(label ?? 'Need Label')))
         : PopupMenuButton<T>(
-            itemBuilder: (context_) => getItems(context_, values),
-            icon: icon,
-            tooltip: label,
-            onSelected: (T value) async =>
-                callbackFunc(await value.doAction()));
+        itemBuilder: (context_) => getItems(context_, values),
+        icon: icon,
+        tooltip: label,
+        onSelected: (T value) async =>
+            callbackFunc(await value.doAction()));
   }
 
   void buttonPressed(Iterable<T> values) async => values.length == 1
       ? callbackFunc(await values.first.doAction())
       : Get.bottomSheet(MenuSheetButton.bottomSheet(values, callbackFunc),
-          backgroundColor: Colors.white);
+      backgroundColor: Colors.white);
 
   void callbackFunc(act) {}
 }

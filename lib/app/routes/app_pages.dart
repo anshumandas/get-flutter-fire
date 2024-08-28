@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// lib/app/routes/app_pages.dart
 
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import '../../models/access_level.dart';
 import '../../models/role.dart';
+import '../../models/screens.dart';
 import '../middleware/auth_middleware.dart';
 import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
@@ -28,6 +30,8 @@ import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/root/bindings/root_binding.dart';
 import '../modules/root/views/root_view.dart';
+import '../modules/search/bindings/search_binding.dart';
+import '../modules/search/views/search_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/task_details/bindings/task_details_binding.dart';
@@ -36,7 +40,6 @@ import '../modules/tasks/bindings/tasks_binding.dart';
 import '../modules/tasks/views/tasks_view.dart';
 import '../modules/users/bindings/users_binding.dart';
 import '../modules/users/views/users_view.dart';
-import '../../models/screens.dart';
 
 part 'app_routes.dart';
 part 'screen_extension.dart';
@@ -46,12 +49,10 @@ class AppPages {
 
   static const INITIAL = Routes.HOME;
 
-  //TODO create this using the information from Screen and Role data
-  //can use https://pub.dev/packages/freezed
   static final routes = [
     GetPage(
       name: '/',
-      page: () => const RootView(),
+      page: () => RootView(),
       binding: RootBinding(),
       participatesInRootNavigator: true,
       preventDuplicates: true,
@@ -74,9 +75,7 @@ class AppPages {
         ),
         Screen.HOME.getPage(
           page: () => const HomeView(),
-          bindings: [
-            HomeBinding(),
-          ],
+          bindings: [HomeBinding()],
           children: [
             Screen.DASHBOARD.getPage(
               page: () => const DashboardView(),
@@ -90,14 +89,14 @@ class AppPages {
                 Screen.USER_PROFILE.getPage(
                   page: () => const ProfileView(),
                   binding: ProfileBinding(),
-                )
+                ),
               ],
             ),
             Screen.PRODUCTS.getPage(
-              page: () => const ProductsView(),
+              page: () => const ProductPage(),
               binding: ProductsBinding(),
               children: [
-                Screen.PRODUCT_DETAILS.getPages(
+                Screen.PRODUCT_DETAILS.getPage(
                   page: () => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
                 ),
@@ -114,11 +113,10 @@ class AppPages {
               role: Role.buyer,
               children: [
                 Screen.CHECKOUT.getPage(
-                  //if this is after cart details, it never gets reached
                   page: () => const CheckoutView(),
                   binding: CheckoutBinding(),
                 ),
-                Screen.CART_DETAILS.getPages(
+                Screen.CART_DETAILS.getPage(
                   page: () => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
                 ),
@@ -129,7 +127,7 @@ class AppPages {
               binding: MyProductsBinding(),
               role: Role.seller,
               children: [
-                Screen.MY_PRODUCT_DETAILS.getPages(
+                Screen.MY_PRODUCT_DETAILS.getPage(
                   page: () => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
                 ),
@@ -147,8 +145,12 @@ class AppPages {
               ],
             ),
           ],
-        )
+        ),
       ],
+    ),
+    Screen.SEARCH.getPage(
+      page: () => const SearchView(),
+      binding: SearchBinding(),
     ),
   ];
 }
