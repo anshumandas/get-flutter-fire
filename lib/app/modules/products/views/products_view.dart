@@ -1,5 +1,4 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,45 +12,90 @@ class ProductsView extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     var arg = Get.rootDelegate.arguments();
-    return Scaffold(
-      floatingActionButton:
-          (arg != null && Get.rootDelegate.arguments()["role"] == Role.seller)
-              ? FloatingActionButton.extended(
-                  onPressed: controller.loadDemoProductsFromSomeWhere,
-                  label: const Text('Add'),
-                )
-              : null,
-      body: Column(
-        children: [
-          const Hero(
-            tag: 'heroLogo',
-            child: FlutterLogo(),
-          ),
-          Expanded(
-            child: Obx(
-              () => RefreshIndicator(
-                onRefresh: () async {
-                  controller.products.clear();
-                  controller.loadDemoProductsFromSomeWhere();
-                },
-                child: ListView.builder(
-                  itemCount: controller.products.length,
-                  itemBuilder: (context, index) {
-                    final item = controller.products[index];
-                    return ListTile(
-                      onTap: () {
-                        Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(
-                            item.id)); //we could use Get Parameters
-                      },
-                      title: Text(item.name),
-                      subtitle: Text(item.id),
-                    );
+    return Container(
+      color: Colors.purple[300], // Set the background color to purple
+      child: Scaffold(
+        backgroundColor:
+            Colors.transparent, // Make Scaffold's background transparent
+        floatingActionButton:
+            (arg != null && Get.rootDelegate.arguments()["role"] == Role.seller)
+                ? FloatingActionButton.extended(
+                    onPressed: controller.loadDemoProductsFromSomeWhere,
+                    label: const Text('Add'),
+                  )
+                : null,
+        body: Column(
+          children: [
+            Expanded(
+              child: Obx(
+                () => RefreshIndicator(
+                  onRefresh: () async {
+                    controller.products.clear();
+                    controller.loadDemoProductsFromSomeWhere();
                   },
+                  child: ListView.builder(
+                    itemCount: controller.products.length,
+                    itemBuilder: (context, index) {
+                      final item = controller.products[index];
+
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors
+                              .white, // Set container color to purple[300]
+                          border: Border.all(
+                            color: Theme.of(context).dividerColor,
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(16),
+                          ),
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        margin: const EdgeInsets.all(10),
+                        child: InkWell(
+                          onTap: () {
+                            Get.rootDelegate.toNamed(
+                              Routes.PRODUCT_DETAILS(
+                                item.id,
+                              ),
+                              parameters: {
+                                "productName": item.name,
+                                'imageUrl': item.imageUrl,
+                              },
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl: item.imageUrl,
+                                height: 72,
+                                width: 144,
+                                fit: BoxFit.cover,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.name,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                    Text(item.id),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

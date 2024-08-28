@@ -1,11 +1,13 @@
 // ignore_for_file: inference_failure_on_function_invocation
 
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../firebase_options.dart';
+import 'package:get_flutter_fire/firebase_options.dart';
 
 import '../../../../models/screens.dart';
 import '../../../widgets/login_widgets.dart';
@@ -55,8 +57,13 @@ class LoginView extends GetView<LoginController> {
           ? recaptcha()
           : SignInScreen(
               providers: [
-                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
+                GoogleProvider(
+                  clientId: Platform.isIOS
+                      ? DefaultFirebaseOptions.currentPlatform.iosClientId!
+                      : "60983052215-s6lggi6uveieglto1cqrshegs5dps4c8.apps.googleusercontent.com",
+                ),
                 MyEmailAuthProvider(),
+                PhoneAuthProvider(),
               ],
               showAuthActionSwitch: !controller.isRegistered,
               showPasswordVisibilityToggle: true,
@@ -72,6 +79,7 @@ class LoginView extends GetView<LoginController> {
       ui = RegisterScreen(
         providers: [
           MyEmailAuthProvider(),
+          PhoneAuthProvider(),
         ],
         showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
         showPasswordVisibilityToggle: true,
@@ -150,13 +158,19 @@ class EmailLinkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Visibility(
+    return Obx(
+      () => Visibility(
         visible: show.value,
         child: Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: ElevatedButton(
-                onPressed: () => LoginController.to
-                    .sendVerificationMail(emailAuth: credential.value),
-                child: const Text('Resend Verification Mail')))));
+          padding: const EdgeInsets.only(top: 16),
+          child: ElevatedButton(
+            onPressed: () => LoginController.to.sendVerificationMail(
+              emailAuth: credential.value,
+            ),
+            child: const Text('Resend Verification Mail'),
+          ),
+        ),
+      ),
+    );
   }
 }

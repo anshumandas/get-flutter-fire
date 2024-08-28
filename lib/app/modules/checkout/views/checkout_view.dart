@@ -8,12 +8,8 @@ class CheckoutView extends GetView<CheckoutController> {
   const CheckoutView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('CheckoutView'),
-        centerTitle: true,
-      ),
-      body: const Center(
+    return const Scaffold(
+      body: Center(
         child: Text(
           'CheckoutView is working',
           style: TextStyle(fontSize: 20),
