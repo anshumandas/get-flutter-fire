@@ -5,6 +5,16 @@ description: Boilerplate for Flutter with GetX, showing sample utilization of Fi
 environment: 
   sdk: '>=3.3.4 <4.0.0'
 
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^2.17.1
+  firebase_auth: ^6.11.0
+  google_sign_in: ^6.1.2
+
+
 dependencies: 
   cupertino_icons: ^1.0.6
   get: 4.6.6
