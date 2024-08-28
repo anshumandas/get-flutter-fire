@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'app/modules/home/views/home_view.dart';
 import 'app/modules/profile/views/profile_view.dart';
 import 'app/modules/ranking/views/ranking_view.dart';

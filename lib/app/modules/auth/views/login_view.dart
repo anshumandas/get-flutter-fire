@@ -64,6 +64,32 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white, // Google button color
+                  foregroundColor: Colors.black, // Google button text color
+                  padding: kButtonPadding,
+                ),
+                onPressed: () async {
+                  await authController.signInWithGoogle();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.g_translate, color: Colors.black), // Google icon color
+                    SizedBox(width: 10),
+                    Text(
+                      'Sign in with Google',
+                      style: TextStyle(
+                        color: Colors.black, // Google button text color
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
               TextButton(
                 onPressed: () => Get.toNamed('/signup'),
                 child: Text(

@@ -1,7 +1,8 @@
-import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../../../services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../../../services/auth_services.dart';
 import '../../../routes/app_routes.dart';
 
 class AuthController extends GetxController {
@@ -14,11 +15,32 @@ class AuthController extends GetxController {
     firebaseUser.bindStream(_authService.authStateChanges());
   }
 
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String name,
+    required String phoneNumber,
+  }) async {
     try {
       User? user = await _authService.signUpWithEmailPassword(email, password);
       if (user != null) {
-        Get.offAllNamed(AppRoutes.home); // Navigate to home on success
+        try {
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+            'name': name,
+            'email': email,
+            'phoneNumber': phoneNumber,
+            'imageUrl': 'https://via.placeholder.com/150',
+          });
+          Get.offAllNamed(AppRoutes.login); // Navigate to login after sign-up
+        } catch (e) {
+          Get.snackbar(
+            'Firestore Error',
+            'Failed to store user data: ${e.toString()}',
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+          print('Error writing document: $e'); // Print to console for debugging
+        }
       }
     } catch (e) {
       Get.snackbar(
@@ -34,7 +56,7 @@ class AuthController extends GetxController {
     try {
       User? user = await _authService.loginWithEmailPassword(email, password);
       if (user != null) {
-        Get.offAllNamed(AppRoutes.home); // Navigate to home on success
+        Get.offAllNamed(AppRoutes.main); // Navigate to MainView on success
       }
     } catch (e) {
       Get.snackbar(
@@ -46,8 +68,33 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> signInWithGoogle() async {
+    try {
+      User? user = await _authService.signInWithGoogle();
+      if (user != null) {
+        Get.offAllNamed(AppRoutes.main); // Navigate to MainView on success
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Google Sign-In failed: ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   Future<void> signOut() async {
-    await _authService.signOut();
-    Get.offAllNamed(AppRoutes.login); // Navigate to login on sign out
+    try {
+      await _authService.signOut();
+      Get.offAllNamed(AppRoutes.login); // Navigate to login on sign out
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Sign out failed: ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../constants.dart';
 import '../../../widgets/custom_text_field.dart';
-import '../controllers/auth_controller.dart';  // Import the constants
+import '../controllers/auth_controller.dart';
 
 class SignUpView extends StatelessWidget {
   final AuthController authController = Get.put(AuthController());
@@ -70,25 +69,30 @@ class SignUpView extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: kButtonBackgroundColor, // Use constant
-                  foregroundColor: kButtonTextColor, // Use constant
-                  padding: kButtonPadding, // Use constant
+                  backgroundColor: kButtonBackgroundColor,
+                  foregroundColor: kButtonTextColor,
+                  padding: kButtonPadding,
                 ),
                 onPressed: () async {
                   if (passwordController.text == retypePasswordController.text) {
                     await authController.signUp(
-                      emailController.text.trim(),
-                      passwordController.text.trim(),
+                      email: emailController.text.trim(),
+                      password: passwordController.text.trim(),
+                      name: nameController.text.trim(),
+                      phoneNumber: phoneController.text.trim(),
                     );
-                    Get.offAllNamed('/login');
                   } else {
-                    Get.snackbar('Error', 'Passwords do not match',
-                        backgroundColor: Colors.red, colorText: Colors.white);
+                    Get.snackbar(
+                      'Error',
+                      'Passwords do not match',
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
                   }
                 },
                 child: Text(
                   'Sign Up',
-                  style: kButtonTextStyle, // Use constant
+                  style: kButtonTextStyle,
                 ),
               ),
               const SizedBox(height: 16),

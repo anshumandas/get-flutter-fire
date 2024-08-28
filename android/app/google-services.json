@@ -12,7 +12,20 @@
           "package_name": "com.chesscentral.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "665419326653-7boc52h82ni06dlnc16oevcfeoored5e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chesscentral.app",
+            "certificate_hash": "4e961d881a11e79ac32d52e2a9a56fc31d17650c"
+          }
+        },
+        {
+          "client_id": "665419326653-uc4h9vcq20t5m38oglql9q34eah160fj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDDN0LWO7i8Wpe6REmBbaTu5SmcGnUs0e4"
@@ -20,26 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:665419326653:android:fc87c58fc51e9fd9c183d4",
-        "android_client_info": {
-          "package_name": "com.saubh.chesscentral"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDDN0LWO7i8Wpe6REmBbaTu5SmcGnUs0e4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665419326653-uc4h9vcq20t5m38oglql9q34eah160fj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "665419326653-a24rvt8u1atdcgvrhf08d6qq9h39d55n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.getFlutterFire"
+              }
+            }
+          ]
         }
       }
     }
