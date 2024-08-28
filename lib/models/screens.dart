@@ -20,7 +20,7 @@ enum AccessedVia {
 enum Screen implements ActionEnum {
   HOME('/home',
       icon: Icons.home,
-      label: "Home",
+      label: "PURPLE12",
       accessor_: AccessedVia.drawer,
       accessLevel: AccessLevel.public), //first screen is default screen
   DASHBOARD('/dashboard',
@@ -30,8 +30,8 @@ enum Screen implements ActionEnum {
       accessLevel: AccessLevel.public,
       parent: HOME),
   PRODUCTS('/products',
-      icon: Icons.dataset,
-      label: "Products",
+      icon: Icons.store,
+      label: "Store",
       accessor_: AccessedVia.navigator,
       accessLevel: AccessLevel.public,
       parent: HOME),

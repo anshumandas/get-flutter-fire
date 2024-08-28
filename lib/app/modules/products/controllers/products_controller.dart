@@ -10,27 +10,27 @@ class ProductsController extends GetxController {
       Product(
         name: 'Vidisha\'s T-Shirt',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        imageUrl: "https://picsum.photos/72/72?random=1",
+        imageUrl: "https://picsum.photos/id/91/72/72",
       ),
       Product(
-        name: 'T-Shirt for Anita',
+        name: 'Shoes for Anita',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        imageUrl: "https://picsum.photos/id/237/72/72",
+        imageUrl: "https://picsum.photos/id/103/72/72",
       ),
       Product(
-        name: 'T-Shirt Designed by Anita',
+        name: 'Frok Designed by Anita',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        imageUrl: "https://picsum.photos/id/234/72/72",
+        imageUrl: "https://picsum.photos/id/325/72/72",
       ),
       Product(
-        name: 'Jeans Designed By Mr. Chaturvedi',
+        name: 'Hoodie Designed By Mr. Chaturvedi',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        imageUrl: "https://picsum.photos/id/232/72/72",
+        imageUrl: "https://picsum.photos/id/338/72/72",
       ),
       Product(
         name: 'Miami Beach T-Shirt',
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        imageUrl: "https://picsum.photos/id/217/72/72",
+        imageUrl: "https://picsum.photos/id/349/72/72",
       ),
       Product(
         name: 'No Name T-Shirt',

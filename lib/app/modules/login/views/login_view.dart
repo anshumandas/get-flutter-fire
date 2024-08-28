@@ -1,5 +1,7 @@
 // ignore_for_file: inference_failure_on_function_invocation
 
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
@@ -56,7 +58,9 @@ class LoginView extends GetView<LoginController> {
           : SignInScreen(
               providers: [
                 GoogleProvider(
-                  clientId: DefaultFirebaseOptions.currentPlatform.iosClientId!,
+                  clientId: Platform.isIOS
+                      ? DefaultFirebaseOptions.currentPlatform.iosClientId!
+                      : "60983052215-s6lggi6uveieglto1cqrshegs5dps4c8.apps.googleusercontent.com",
                 ),
                 MyEmailAuthProvider(),
                 PhoneAuthProvider(),
