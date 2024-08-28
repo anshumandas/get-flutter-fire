@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
-
+import 'package:get_flutter_fire/models/cart_item.dart'; // Ensure this is the correct path
+import '../../cart/controllers/cart_controller.dart';
+import '../../../../models/product.dart';
 class ProductDetailsController extends GetxController {
   final String productId;
+  final CartController cartController = Get.find<CartController>();
   // Local product data
   final Map<String, Map<String, dynamic>> products = {
     '1': {
@@ -80,6 +83,23 @@ class ProductDetailsController extends GetxController {
       }
       isLoading.value = false;
     });
+  }
+  void addToCart() {
+    // ignore: invalid_use_of_protected_member
+    final product = productDetails.value;
+    final cartItem = CartItem(
+      product: Product.fromJson({
+        'id': productId,
+        'name': product['name'],  
+        'price': product['price'],
+        'productImage': product['productImage'][0],
+        'category': 'N/A',
+        'description': product['description'],
+      }),
+      quantity: RxInt(1),
+    );
+    cartController.cartItems.add(cartItem);
+    Get.snackbar('Success', 'Product added to cart');
   }
 
   @override

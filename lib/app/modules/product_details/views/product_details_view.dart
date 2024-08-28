@@ -170,7 +170,7 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {controller.addToCart();},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 244, 210, 242),
                       padding: EdgeInsets.symmetric(vertical: 12),
@@ -186,23 +186,23 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                 ),
                 const SizedBox(height: 12),
                 // Buy Now Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 244, 210, 242),
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      'Buy Now',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: ElevatedButton(
+                //     onPressed: () {},
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: const Color.fromARGB(255, 244, 210, 242),
+                //       padding: EdgeInsets.symmetric(vertical: 12),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(8),
+                //       ),
+                //     ),
+                //     child: Text(
+                //       'Buy Now',
+                //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

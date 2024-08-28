@@ -102,17 +102,17 @@ class ProductsView extends GetView<ProductsController> {
                                   color: Colors.grey,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: const Icon(Icons.image_not_supported, size: 30, color: Colors.white),
-                              ),
-                        trailing: Text(
-                          '₹${item.sellingPrice.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.pink, // Theme color for price
-                          ),
-                        ),
-                      ),
+                      //           child: const Icon(Icons.image_not_supported, size: 30, color: Colors.white),
+                      //         ),
+                      //   trailing: Text(
+                      //     '₹${item.sellingPrice.toStringAsFixed(2)}',
+                      //     style: const TextStyle(
+                      //       fontWeight: FontWeight.bold,
+                      //       fontSize: 16,
+                      //       color: Colors.pink, // Theme color for price
+                      //    ),
+                         ),
+                       ),
                     );
                   },
                 ),

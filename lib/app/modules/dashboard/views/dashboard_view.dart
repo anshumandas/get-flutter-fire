@@ -17,7 +17,7 @@ class DashboardView extends GetView<DashboardController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(
-              'assets/images/1.png', 
+              'assets/images/image1.jpg', 
               width: double.infinity,
               height: 150,
               fit: BoxFit.cover,
