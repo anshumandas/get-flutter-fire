@@ -7,7 +7,8 @@ import '../../../../models/role.dart';
 import '../../../../services/auth_service.dart';
 
 import '../../../../models/screens.dart';
-import '../controllers/my_drawer_controller.dart';
+import '../../../../services/remote_config.dart';
+import '../../../widgets/remotely_config_obx.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({
@@ -16,23 +17,26 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MyDrawerController controller = Get.put(MyDrawerController([]),
-        permanent: true); //must make true else gives error
-    Screen.drawer().then((v) => {controller.values.value = v});
-    return Obx(() => Drawer(
-          //changing the shape of the drawer
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(0), bottomRight: Radius.circular(20)),
-          ),
-          width: 200,
-          child: Column(
-            children: drawerItems(context, controller.values),
-          ),
-        ));
+    return RemotelyConfigObxVal.noparam(
+          (data) => Drawer(
+        //changing the shape of the drawer
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(0), bottomRight: Radius.circular(20)),
+        ),
+        width: 200,
+        child: Column(
+          children: drawerItems(context, data),
+        ),
+      ),
+      List<Screen>.empty().obs,
+      "useBottomSheetForProfileOptions",
+      Typer.boolean,
+      func: Screen.drawer,
+    );
   }
 
-  List<Widget> drawerItems(BuildContext context, Rx<Iterable<Screen>> values) {
+  List<Widget> drawerItems(BuildContext context, Iterable<Screen> values) {
     List<Widget> list = [
       Container(
         height: 100,
@@ -67,7 +71,7 @@ class DrawerWidget extends StatelessWidget {
       }
     }
 
-    for (Screen screen in values.value) {
+    for (Screen screen in values) {
       list.add(ListTile(
         title: Text(screen.label ?? ''),
         onTap: () {

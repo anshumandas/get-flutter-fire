@@ -19,12 +19,12 @@ extension GetPageExtension on GetPage {}
 extension ScreenExtension on Screen {
   GetPage<dynamic> getPage(
       {required GetView Function() page,
-      Bindings? binding,
-      List<Bindings> bindings = const [],
-      List<GetMiddleware>? middlewares,
-      List<GetPage<dynamic>>? children,
-      bool preventDuplicates = true,
-      Role? role}) {
+        Bindings? binding,
+        List<Bindings> bindings = const [],
+        List<GetMiddleware>? middlewares,
+        List<GetPage<dynamic>>? children,
+        bool preventDuplicates = true,
+        Role? role}) {
     // we are injecting the Screen variable here
     pageW() {
       GetView p = page();
@@ -49,12 +49,12 @@ extension ScreenExtension on Screen {
 
   GetPage<dynamic> getPages(
       {required GetWidget Function() page,
-      Bindings? binding,
-      List<Bindings> bindings = const [],
-      List<GetMiddleware>? middlewares,
-      List<GetPage<dynamic>>? children,
-      bool preventDuplicates = false,
-      Role? role}) {
+        Bindings? binding,
+        List<Bindings> bindings = const [],
+        List<GetMiddleware>? middlewares,
+        List<GetPage<dynamic>>? children,
+        bool preventDuplicates = false,
+        Role? role}) {
     pageW() {
       GetWidget p = page();
       p.screen = this;
@@ -75,46 +75,49 @@ extension ScreenExtension on Screen {
       Role? role) {
     return binding != null
         ? GetPage(
-            preventDuplicates: preventDuplicates,
-            middlewares: middlewares ?? defaultMiddlewares(role),
-            name: path,
-            page: pageW,
-            title: label,
-            transition: Transition.fade,
-            binding: binding,
-            children: children ?? const [])
+        preventDuplicates: preventDuplicates,
+        middlewares: middlewares ?? defaultMiddlewares(role),
+        name: path,
+        page: pageW,
+        title: label,
+        transition: Transition.fade,
+        binding: binding,
+        children: children ?? const [])
         : GetPage(
-            preventDuplicates: preventDuplicates,
-            middlewares: middlewares,
-            name: path,
-            page: pageW,
-            title: label,
-            transition: Transition.fade,
-            bindings: bindings,
-            children: children ?? const []);
+        preventDuplicates: preventDuplicates,
+        middlewares: middlewares,
+        name: path,
+        page: pageW,
+        title: label,
+        transition: Transition.fade,
+        bindings: bindings,
+        children: children ?? const []);
   }
 
   List<GetMiddleware>? defaultMiddlewares(Role? role) => (parent == null ||
-          parent!.accessLevel.index < accessLevel.index)
+      parent!.accessLevel.index < accessLevel.index)
       ? switch (accessLevel) {
-          AccessLevel.public => null,
-          AccessLevel.guest => [EnsureAuthOrGuestMiddleware()],
-          AccessLevel.authenticated => [EnsureAuthedAndNotGuestMiddleware()],
-          AccessLevel.roleBased => [EnsureRoleMiddleware(role ?? Role.buyer)],
-          AccessLevel.masked => throw UnimplementedError(), //not for screens
-          AccessLevel.secret => throw UnimplementedError(), //not for screens
-          AccessLevel.notAuthed => [EnsureNotAuthedOrGuestMiddleware()],
-        }
+    AccessLevel.public => null,
+    AccessLevel.guest => [EnsureAuthOrGuestMiddleware()],
+    AccessLevel.authenticated => [EnsureAuthedAndNotGuestMiddleware()],
+    AccessLevel.roleBased => [EnsureRoleMiddleware(role ?? Role.buyer)],
+    AccessLevel.masked => throw UnimplementedError(), //not for screens
+    AccessLevel.secret => throw UnimplementedError(), //not for screens
+    AccessLevel.notAuthed => [EnsureNotAuthedOrGuestMiddleware()],
+  }
       : null;
 }
 
 extension RoleExtension on Role {
   int getCurrentIndexFromRoute(GetNavConfig? currentRoute) {
-    final String? currentLocation = currentRoute?.location;
+    final String? currentLocation = currentRoute?.uri.path;
     int currentIndex = 0;
     if (currentLocation != null) {
-      currentIndex =
-          tabs.indexWhere((tab) => currentLocation.startsWith(tab.path));
+      currentIndex = tabs.indexWhere((tab) {
+        String parentPath = tab.parent?.path ?? '';
+        String fullPath = '$parentPath${tab.path}';
+        return currentLocation.startsWith(fullPath);
+      });
     }
     return (currentIndex > 0) ? currentIndex : 0;
   }

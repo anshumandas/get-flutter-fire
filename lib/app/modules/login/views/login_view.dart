@@ -54,20 +54,20 @@ class LoginView extends GetView<LoginController> {
       ui = !(GetPlatform.isAndroid || GetPlatform.isIOS) && controller.isRobot
           ? recaptcha()
           : SignInScreen(
-              providers: [
-                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
-                MyEmailAuthProvider(),
-              ],
-              showAuthActionSwitch: !controller.isRegistered,
-              showPasswordVisibilityToggle: true,
-              headerBuilder: LoginWidgets.headerBuilder,
-              subtitleBuilder: subtitleBuilder,
-              footerBuilder: (context, action) => footerBuilder(
-                  controller.showReverificationButton,
-                  LoginController.to.credential),
-              sideBuilder: LoginWidgets.sideBuilder,
-              actions: getActions(),
-            );
+        providers: [
+          GoogleProvider(clientId: "97275907144-518eg8t0ig5rf9l7dsdpkkjdl7v1nc7i.apps.googleusercontent.com"),
+          MyEmailAuthProvider(),
+        ],
+        showAuthActionSwitch: !controller.isRegistered,
+        showPasswordVisibilityToggle: true,
+        headerBuilder: LoginWidgets.headerBuilder,
+        subtitleBuilder: subtitleBuilder,
+        footerBuilder: (context, action) => footerBuilder(
+            controller.showReverificationButton,
+            LoginController.to.credential),
+        sideBuilder: LoginWidgets.sideBuilder,
+        actions: getActions(),
+      );
     } else if (controller.isAnon) {
       ui = RegisterScreen(
         providers: [
@@ -96,9 +96,9 @@ class LoginView extends GetView<LoginController> {
     //TODO: Add Recaptcha
     return Scaffold(
         body: TextButton(
-      onPressed: () => controller.robot = false,
-      child: const Text("Are you a Robot?"),
-    ));
+          onPressed: () => controller.robot = false,
+          child: const Text("Are you a Robot?"),
+        ));
   }
 
   /// The following actions are useful here:
@@ -128,9 +128,9 @@ class LoginView extends GetView<LoginController> {
 class MyEmailAuthProvider extends EmailAuthProvider {
   @override
   void onCredentialReceived(
-    fba.EmailAuthCredential credential,
-    AuthAction action,
-  ) {
+      fba.EmailAuthCredential credential,
+      AuthAction action,
+      ) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       LoginController.to.credential.value = credential;
     });
@@ -143,10 +143,10 @@ class EmailLinkButton extends StatelessWidget {
   final Rxn<fba.EmailAuthCredential> credential;
 
   const EmailLinkButton(
-    this.show,
-    this.credential, {
-    super.key,
-  });
+      this.show,
+      this.credential, {
+        super.key,
+      });
 
   @override
   Widget build(BuildContext context) {

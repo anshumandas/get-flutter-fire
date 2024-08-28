@@ -5,6 +5,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/models/access_level.dart';
 
 import '../models/screens.dart';
 import '../constants.dart';
@@ -36,6 +37,14 @@ class AuthService extends GetxService {
       }
     });
   }
+
+  AccessLevel get accessLevel => user != null
+      ? user!.isAnonymous
+      ? _userRole.value.index > Role.buyer.index
+      ? AccessLevel.roleBased
+      : AccessLevel.authenticated
+      : AccessLevel.guest
+      : AccessLevel.public;
 
   bool get isEmailVerified =>
       user != null && (user!.email == null || user!.emailVerified);
@@ -89,7 +98,7 @@ class AuthService extends GetxService {
       // URL you want to redirect back to. The domain (www.example.com) for this
       // URL must be whitelisted in the Firebase Console.
       url:
-          '$baseUrl:5001/flutterfast-92c25/us-central1/handleEmailLinkVerification',
+      '$baseUrl:5001/flutterfast-92c25/us-central1/handleEmailLinkVerification',
       //     // This must be true if deep linking.
       //     // If deeplinking. See [https://firebase.google.com/docs/dynamic-links/flutter/receive]
       handleCodeInApp: true,
@@ -111,7 +120,7 @@ class AuthService extends GetxService {
     registered.value = true;
     // logout(); // Uncomment if we need to enforce relogin
     final thenTo =
-        Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
+    Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate
         .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
   }
@@ -166,7 +175,7 @@ class AuthService extends GetxService {
         // String? email = e.email ?? parseEmail(e.message!);
         callback(true, credential.value);
         verification =
-            "Please verify email id by clicking the link on the email sent";
+        "Please verify email id by clicking the link on the email sent";
       } else {
         callback(false, credential.value);
       }

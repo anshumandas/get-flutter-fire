@@ -1,4 +1,4 @@
-// ignore_for_file: inference_failure_on_instance_creation
+  // ignore_for_file: inference_failure_on_instance_creation
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

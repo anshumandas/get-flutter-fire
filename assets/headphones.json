@@ -1,0 +1,183 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Headphone Model X",
+      "description": "High quality sound",
+      "category": "Headphones",
+      "price": 99.99,
+      "discountPercentage": 10,
+      "rating": 4.5,
+      "stock": 50,
+      "tags": ["wireless", "over-ear"],
+      "brand": "BrandName",
+      "sku": "XYZ123",
+      "weight": 300,
+      "dimensions": {
+        "width": 20,
+        "height": 15,
+        "depth": 8
+      },
+      "warrantyInformation": "2 years",
+      "shippingInformation": "Free shipping",
+      "availabilityStatus": "In Stock",
+      "reviews": [
+        {
+          "rating": 5,
+          "comment": "Excellent headphones!",
+          "date": "2024-08-28",
+          "reviewerName": "John Doe",
+          "reviewerEmail": "john.doe@example.com"
+        }
+      ],
+      "returnPolicy": "30 days return policy",
+      "minimumOrderQuantity": 1,
+      "meta": {
+        "createdAt": "2024-08-01T00:00:00Z",
+        "updatedAt": "2024-08-20T00:00:00Z",
+        "barcode": "123456789012",
+        "qrCode": "QR1234567890"
+      },
+      "images": [
+        "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg",
+        "https://t3.ftcdn.net/jpg/00/91/07/82/360_F_91078252_i7cx2uJzDzgoJGDdUAHtVAcpjugVauX9.jpg"
+      ],
+      "thumbnail": "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Headphone Model Y",
+      "description": "Noise-cancelling and comfortable",
+      "category": "Headphones",
+      "price": 129.99,
+      "discountPercentage": 15,
+      "rating": 4.7,
+      "stock": 30,
+      "tags": ["noise-cancelling", "over-ear"],
+      "brand": "BrandName",
+      "sku": "XYZ456",
+      "weight": 320,
+      "dimensions": {
+        "width": 22,
+        "height": 16,
+        "depth": 9
+      },
+      "warrantyInformation": "1 year",
+      "shippingInformation": "Standard shipping",
+      "availabilityStatus": "Limited Stock",
+      "reviews": [
+        {
+          "rating": 4,
+          "comment": "Very good, but a bit pricey.",
+          "date": "2024-08-20",
+          "reviewerName": "Jane Smith",
+          "reviewerEmail": "jane.smith@example.com"
+        }
+      ],
+      "returnPolicy": "14 days return policy",
+      "minimumOrderQuantity": 1,
+      "meta": {
+        "createdAt": "2024-07-15T00:00:00Z",
+        "updatedAt": "2024-08-10T00:00:00Z",
+        "barcode": "123456789013",
+        "qrCode": "QR1234567891"
+      },
+      "images": [
+        "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg",
+        "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg"
+      ],
+      "thumbnail": "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Headphone Model Z",
+      "description": "Affordable and stylish",
+      "category": "Headphones",
+      "price": 79.99,
+      "discountPercentage": 5,
+      "rating": 4.2,
+      "stock": 100,
+      "tags": ["wired", "on-ear"],
+      "brand": "AnotherBrand",
+      "sku": "ABC123",
+      "weight": 250,
+      "dimensions": {
+        "width": 18,
+        "height": 14,
+        "depth": 7
+      },
+      "warrantyInformation": "6 months",
+      "shippingInformation": "Free shipping",
+      "availabilityStatus": "In Stock",
+      "reviews": [
+        {
+          "rating": 3,
+          "comment": "Good for the price, but not the best.",
+          "date": "2024-08-25",
+          "reviewerName": "Alice Brown",
+          "reviewerEmail": "alice.brown@example.com"
+        }
+      ],
+      "returnPolicy": "30 days return policy",
+      "minimumOrderQuantity": 1,
+      "meta": {
+        "createdAt": "2024-06-10T00:00:00Z",
+        "updatedAt": "2024-08-05T00:00:00Z",
+        "barcode": "123456789014",
+        "qrCode": "QR1234567892"
+      },
+      "images": [
+        "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg",
+        "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg"
+      ],
+      "thumbnail": "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Headphone Model A",
+      "description": "Premium audio quality",
+      "category": "Headphones",
+      "price": 199.99,
+      "discountPercentage": 20,
+      "rating": 4.9,
+      "stock": 20,
+      "tags": ["high-end", "over-ear"],
+      "brand": "PremiumBrand",
+      "sku": "PREM123",
+      "weight": 350,
+      "dimensions": {
+        "width": 23,
+        "height": 17,
+        "depth": 10
+      },
+      "warrantyInformation": "3 years",
+      "shippingInformation": "Express shipping",
+      "availabilityStatus": "In Stock",
+      "reviews": [
+        {
+          "rating": 5,
+          "comment": "The best headphones I’ve ever used!",
+          "date": "2024-08-15",
+          "reviewerName": "Robert Johnson",
+          "reviewerEmail": "robert.johnson@example.com"
+        }
+      ],
+      "returnPolicy": "60 days return policy",
+      "minimumOrderQuantity": 1,
+      "meta": {
+        "createdAt": "2024-05-05T00:00:00Z",
+        "updatedAt": "2024-07-25T00:00:00Z",
+        "barcode": "123456789015",
+        "qrCode": "QR1234567893"
+      },
+      "images": [
+        "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg",
+        "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg"
+      ],
+      "thumbnail": "https://t3.ftcdn.net/jpg/05/95/78/78/360_F_595787852_efGpIfJmAJxcof7PBsQsDmirsZ3R8o50.jpg"
+    }
+  ],
+  "total": 4,
+  "skip": 0,
+  "limit": 10
+}

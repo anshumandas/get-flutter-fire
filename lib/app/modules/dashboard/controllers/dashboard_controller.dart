@@ -9,7 +9,7 @@ class DashboardController extends GetxController {
     super.onReady();
     Timer.periodic(
       const Duration(seconds: 1),
-      (timer) {
+          (timer) {
         now.value = DateTime.now();
       },
     );
