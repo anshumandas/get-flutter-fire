@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import '../../../../services/auth_service.dart';
 import '../../../../models/screens.dart';
 import '../../../widgets/change_password_dialog.dart';
-import '../../../widgets/image_picker_button.dart';
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -97,16 +96,6 @@ class ProfileView extends GetView<ProfileController> {
                       icon: const Icon(Icons.password_rounded),
                     )
                   : const SizedBox.shrink(),
-              ImagePickerButton(callback: (String? path) async {
-                if (path != null) {
-                  //Upload to Store
-                  String? dest = await controller.uploadFile(path);
-                  //attach it to User imageUrl
-                  if (dest != null) {
-                    await controller.updatePhotoURL(dest);
-                  }
-                }
-              })
             ],
           )
         : const Scaffold();

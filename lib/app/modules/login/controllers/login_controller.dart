@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/auth_service.dart';
@@ -17,4 +18,6 @@ class LoginController extends GetxController {
 
   bool get isRegistered =>
       AuthService.to.registered.value || AuthService.to.isEmailVerified;
+
+  loginAsGuest() async => await FirebaseAuth.instance.signInAnonymously();
 }

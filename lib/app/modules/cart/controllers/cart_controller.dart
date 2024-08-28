@@ -1,23 +1,22 @@
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/models/product.dart';
 
 class CartController extends GetxController {
   //TODO: Implement CartController
 
   final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+
+  final RxList<Product> _products = <Product>[].obs;
+
+  void addProduct(Product product) {
+    _products.add(product);
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  List<Product> getProducts() {
+    return _products;
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
+  get total => _products.length;
 
   void increment() => count.value++;
 }

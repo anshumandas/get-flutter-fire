@@ -124,12 +124,13 @@ class AuthService extends GetxService {
 
   Future<bool?> guest() async {
     return await Get.defaultDialog(
-        middleText: 'Sign in as Guest',
-        barrierDismissible: true,
-        onConfirm: loginAsGuest,
-        onCancel: () => Get.back(result: false),
-        textConfirm: 'Yes, will SignUp later',
-        textCancel: 'No, will SignIn now');
+      middleText: 'Do you Wish to Sign in as Guest?',
+      barrierDismissible: true,
+      onConfirm: loginAsGuest,
+      onCancel: () => Get.back(result: false),
+      textCancel: 'No',
+      textConfirm: 'Yes',
+    );
   }
 
   void loginAsGuest() async {

@@ -31,8 +31,9 @@ class RootView extends GetView<RootController> {
                   )
                 : IconButton(
                     icon: ImageIcon(
-                      const AssetImage("icons/logo.png"),
-                      color: Colors.grey.shade800,
+                      const AssetImage("assets/icons/logo.png"),
+                      size: 72,
+                      color: Colors.purple[700],
                     ),
                     onPressed: () => AuthService.to.isLoggedInValue
                         ? controller.openDrawer()

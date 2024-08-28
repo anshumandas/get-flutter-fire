@@ -8,6 +8,8 @@ class ProductDetailsBinding extends Bindings {
     Get.create<ProductDetailsController>(
       () => ProductDetailsController(
         Get.parameters['productId'] ?? '',
+        Get.rootDelegate.parameters['productName'] ?? '',
+        Get.rootDelegate.parameters['imageUrl'] ?? '',
       ),
     );
   }

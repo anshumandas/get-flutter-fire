@@ -11,7 +11,7 @@ import 'menu_sheet_button.dart';
 class LoginWidgets {
   static Widget headerBuilder(context, constraints, shrinkOffset) {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(0),
       child: AspectRatio(
         aspectRatio: 1,
         child: Image.asset('assets/images/flutterfire_300x.png'),
