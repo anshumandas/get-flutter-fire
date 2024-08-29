@@ -42,7 +42,8 @@ class DrawerWidget extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Container(
                 margin: const EdgeInsets.only(left: 15),
-                child: const Text('User Name', //Profile Icon also
+                // Username fetched from firebase profile
+                child: Text('${AuthService.to.userName}', //Profile Icon also
                     style: TextStyle(fontWeight: FontWeight.bold)))),
       )
     ];
