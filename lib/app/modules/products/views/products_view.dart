@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:get_flutter_fire/app/routes/app_pages.dart';
 import '../../../../models/role.dart';
-import '../../../routes/app_pages.dart';
 import '../controllers/products_controller.dart';
 
 class ProductsView extends GetView<ProductsController> {
@@ -48,71 +47,89 @@ class ProductsView extends GetView<ProductsController> {
                   controller.products.clear();
                   controller.loadDemoProductsFromSomeWhere();
                 },
-                child: ListView.builder(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Two products per row
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.75, // Adjust to control height/width ratio
+                  ),
                   itemCount: controller.filteredProducts.length,
                   itemBuilder: (context, index) {
                     final item = controller.filteredProducts[index];
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.pink.withOpacity(0.1), // Theme color for shadow
-                            spreadRadius: 2,
-                            blurRadius: 6,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(16),
-                        onTap: () {
-                          Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(item.id));
-                        },
-                        title: Text(
-                          item.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    return GestureDetector(
+                      onTap: () {
+                        Get.rootDelegate.toNamed(Routes.PRODUCT_DETAILS(item.id));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.pink.withOpacity(0.1), // Theme color for shadow
+                              spreadRadius: 2,
+                              blurRadius: 6,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            '${item.description}\n${item.category.isNotEmpty ? item.category : 'No Category'}',
-                            style: const TextStyle(color: Colors.grey, fontSize: 14),
-                          ),
-                        ),
-                        leading: item.productImage.isNotEmpty
-                            ? Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(12),
-                                  image: DecorationImage(
-                                    image: NetworkImage(item.productImage),
-                                    fit: BoxFit.cover,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                ),
+                                child: item.productImage.isNotEmpty
+                                    ? Image.network(
+                                        item.productImage,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Container(
+                                        color: Colors.grey,
+                                      ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
-                                ),
-                              )
-                            : Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                      //           child: const Icon(Icons.image_not_supported, size: 30, color: Colors.white),
-                      //         ),
-                      //   trailing: Text(
-                      //     '₹${item.sellingPrice.toStringAsFixed(2)}',
-                      //     style: const TextStyle(
-                      //       fontWeight: FontWeight.bold,
-                      //       fontSize: 16,
-                      //       color: Colors.pink, // Theme color for price
-                      //    ),
-                         ),
-                       ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '${item.description}\n${item.category.isNotEmpty ? item.category : 'No Category'}',
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '₹${item.price.toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.pink,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     );
                   },
                 ),

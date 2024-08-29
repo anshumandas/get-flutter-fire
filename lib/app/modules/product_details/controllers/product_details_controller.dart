@@ -1,10 +1,13 @@
 import 'package:get/get.dart';
-import 'package:get_flutter_fire/models/cart_item.dart'; // Ensure this is the correct path
 import '../../cart/controllers/cart_controller.dart';
 import '../../../../models/product.dart';
+import '../../../../models/cart_item.dart'; // Ensure this path is correct
+import 'package:flutter/material.dart';
+
 class ProductDetailsController extends GetxController {
   final String productId;
   final CartController cartController = Get.find<CartController>();
+
   // Local product data
   final Map<String, Map<String, dynamic>> products = {
     '1': {
@@ -14,7 +17,7 @@ class ProductDetailsController extends GetxController {
       'description': 'Luxury Chanel Perfume.',
       'productImage': [
         'https://i.ibb.co/PQW82z4/1.png',
-      ]
+      ],
     },
     '2': {
       'name': 'Men\'s Exclusive Perfume',
@@ -23,7 +26,7 @@ class ProductDetailsController extends GetxController {
       'description': 'Exclusive Men\'s Perfume.',
       'productImage': [
         'https://i.ibb.co/n1nG68M/4.png',
-      ]
+      ],
     },
     '3': {
       'name': 'Unisex Perfume',
@@ -32,7 +35,7 @@ class ProductDetailsController extends GetxController {
       'description': 'Versatile unisex fragrance.',
       'productImage': [
         'https://i.ibb.co/WgntTLS/3.png',
-      ]
+      ],
     },
     '4': {
       'name': 'Elegant Women\'s Perfume',
@@ -41,21 +44,21 @@ class ProductDetailsController extends GetxController {
       'description': 'Elegant fragrance for women.',
       'productImage': [
         'https://i.ibb.co/72h1Zzp/2.png',
-      ]
+      ],
     },
     '5': {
       'name': 'Luxury Night Perfume',
       'price': 3000.0,
       'sellingPrice': 2700.0,
       'description': 'Luxurious night fragrance.',
-      'productImage': ['https://i.ibb.co/NVjdssC/5.png']
+      'productImage': ['https://i.ibb.co/NVjdssC/5.png'],
     },
     '6': {
       'name': 'Fresh Citrus Perfume',
       'price': 1500.0,
       'sellingPrice': 1300.0,
       'description': 'Refreshing citrus scent.',
-      'productImage': ['https://i.ibb.co/GnphSbv/6.png']
+      'productImage': ['https://i.ibb.co/GnphSbv/6.png'],
     },
   };
 
@@ -64,6 +67,7 @@ class ProductDetailsController extends GetxController {
   var isLoading = true.obs;
 
   ProductDetailsController(this.productId);
+
   @override
   void onInit() {
     super.onInit();
@@ -84,21 +88,21 @@ class ProductDetailsController extends GetxController {
       isLoading.value = false;
     });
   }
+
   void addToCart() {
-    // ignore: invalid_use_of_protected_member
     final product = productDetails.value;
     final cartItem = CartItem(
       product: Product.fromJson({
         'id': productId,
-        'name': product['name'],  
+        'name': product['name'],
         'price': product['price'],
         'productImage': product['productImage'][0],
         'category': 'N/A',
         'description': product['description'],
       }),
-      quantity: RxInt(1),
+      quantity: RxInt(1), // Use a regular integer if RxInt is not supported
     );
-    cartController.cartItems.add(cartItem);
+    cartController.cartItems.add(cartItem); // Ensure cartItems is of type List<CartItem>
     Get.snackbar('Success', 'Product added to cart');
   }
 

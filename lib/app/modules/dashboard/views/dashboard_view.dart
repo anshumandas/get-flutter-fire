@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
@@ -10,35 +9,26 @@ class DashboardView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Solitaire Perfume '),
+        title: const Text('Solitaire Perfume'),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(
-              'assets/images/image1.jpg', 
+              'assets/images/image1.jpg',
               width: double.infinity,
               height: 150,
               fit: BoxFit.cover,
             ),
             const SizedBox(height: 10),
             _buildTrendingProducts(),
-            const SizedBox(height: 10),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Wrap(
-                spacing: 8,
-                children: [
-                  Chip(label: Text('Perfume for Men')),
-                  Chip(label: Text('Perfume for Women')),
-                  Chip(label: Text('Unisex ')),
-
-                  
-                ],
-              ),
-            ),
-            _buildProductList(),
+            const SizedBox(height: 20),
+            _buildSolitairePerfumeRange(),
+            const SizedBox(height: 20),
+            _buildLuxuryPerfumeCollection(),
+            const SizedBox(height: 20),
+            _buildDarkPerfumes(),
           ],
         ),
       ),
@@ -52,7 +42,7 @@ class DashboardView extends GetView<DashboardController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Trending Now',
+            'Perfumes You Must Try',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
@@ -62,7 +52,7 @@ class DashboardView extends GetView<DashboardController> {
               scrollDirection: Axis.horizontal,
               itemCount: controller.trendingProducts.length,
               itemBuilder: (context, index) {
-                return _buildTrendingProductCard(controller.trendingProducts[index]);
+                return _buildProductCard(controller.trendingProducts[index]);
               },
             ),
           ),
@@ -71,7 +61,85 @@ class DashboardView extends GetView<DashboardController> {
     );
   }
 
-  Widget _buildTrendingProductCard(Map<String, String> product) {
+  Widget _buildSolitairePerfumeRange() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Solitaire Perfume Range',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 255,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.products.length,
+              itemBuilder: (context, index) {
+                return _buildProductCard(controller.products[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLuxuryPerfumeCollection() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Luxury Perfume Collection',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 255,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.products.length,
+              itemBuilder: (context, index) {
+                return _buildProductCard(controller.products[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDarkPerfumes() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Dark Perfumes Collection',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 255,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.darkPerfumes.length,
+              itemBuilder: (context, index) {
+                return _buildProductCard(controller.darkPerfumes[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductCard(Map<String, String> product) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -84,7 +152,7 @@ class DashboardView extends GetView<DashboardController> {
               height: 150,
               width: 180,
               child: Image.asset(
-                product['image']!, // Loading image from assets
+                product['image']!,
                 fit: BoxFit.cover,
               ),
             ),
@@ -97,64 +165,15 @@ class DashboardView extends GetView<DashboardController> {
                     product['name']!,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
+                  const SizedBox(height: 5),
                   Text(
                     product['price']!,
                     style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 92, 2, 86), fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: const [
-                      Icon(Icons.star, color: Color.fromARGB(255, 206, 59, 255)),
-                      Icon(Icons.star, color: Color.fromARGB(255, 206, 59, 255)),
-                      Icon(Icons.star, color: Color.fromARGB(255, 206, 59, 255)),
-                      Icon(Icons.star_border, color: Color.fromARGB(255, 206, 59, 255)),
-                      Icon(Icons.star_border, color: Color.fromARGB(255, 206, 59, 255)),
-                    ],
                   ),
                 ],
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProductList() {
-
-    return Obx(
-      () => ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.products.length,
-        itemBuilder: (context, index) {
-          return _buildProductCard(controller.products[index]);
-        },
-      ),
-    );
-  }
-
-  Widget _buildProductCard(Map<String, String> product) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Card(
-        elevation: 4,
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        child: ListTile(
-          leading: Image.asset(
-            product['image']!, // Loading image from assets
-            width: 60,
-            height: 60,
-            fit: BoxFit.cover,
-          ),
-          title: Text(product['name']!),
-          subtitle: Text(product['price']!),
-          // // trailing: ElevatedButton(
-          // //   onPressed: () {
-          // //     // Add navigation or action logic here
-          // //   },
-          // //   child: const Text('View'),
-          // ),
         ),
       ),
     );

@@ -27,10 +27,6 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
 
         final product = controller.productDetails;
         final productImages = (product['productImage'] as List<dynamic>?) ?? [];
-        final price = product['price']?.toDouble() ?? 0.0;
-        final sellingPrice = product['sellingPrice']?.toDouble() ?? 0.0;
-        final discountPercentage =
-            price == 0.0 ? '0.0' : ((price - sellingPrice) / price * 100).toStringAsFixed(1);
 
         Timer.periodic(Duration(seconds: 3), (Timer timer) {
           if (pageController.hasClients) {
@@ -112,36 +108,13 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                 ),
                 const SizedBox(height: 16),
                 // Product Details
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        product['name'] ?? 'N/A',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ),
-                    if (discountPercentage != "0.0")
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 224, 151, 213),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          '$discountPercentage% OFF',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                  ],
+                Text(
+                  product['name'] ?? 'N/A',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -170,7 +143,9 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {controller.addToCart();},
+                    onPressed: () {
+                      controller.addToCart();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 244, 210, 242),
                       padding: EdgeInsets.symmetric(vertical: 12),
@@ -185,7 +160,7 @@ class ProductDetailsView extends GetWidget<ProductDetailsController> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                // Buy Now Button
+                // Buy Now Button (commented out)
                 // SizedBox(
                 //   width: double.infinity,
                 //   child: ElevatedButton(
