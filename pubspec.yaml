@@ -40,4 +40,3 @@ flutter:
     - assets/images/dash.png
     - assets/icons/logo.png
   uses-material-design: true
-
