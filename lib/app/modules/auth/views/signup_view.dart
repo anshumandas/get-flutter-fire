@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../constants.dart';
+import '../../../routes/app_routes.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../controllers/auth_controller.dart';
 
@@ -97,7 +98,7 @@ class SignUpView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () => Get.toNamed('/login'),
+                onPressed: () => Get.toNamed(AppRoutes.login),
                 child: Text(
                   'Already have an account? Log in',
                   style: TextStyle(

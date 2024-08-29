@@ -6,7 +6,7 @@ import '../modules/auth/views/signup_view.dart';
 class AppRoutes {
   static const String login = '/login';
   static const String signup = '/signup';
-  static const String main = '/main'; // MainView route for managing navigation
+  static const String main = '/main';
 
   static final routes = [
     GetPage(
@@ -19,7 +19,7 @@ class AppRoutes {
     ),
     GetPage(
       name: main,
-      page: () => MainView(), // MainView manages Home, Search, Ranking, Profile
+      page: () => MainView(),
     ),
   ];
 }

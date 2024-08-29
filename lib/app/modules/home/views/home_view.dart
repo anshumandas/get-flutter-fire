@@ -94,12 +94,6 @@ class HomeView extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.snackbar('Action', 'Floating action button pressed', snackPosition: SnackPosition.BOTTOM);
-        },
-        child: Icon(Icons.add),
-      ),
     );
   }
 }

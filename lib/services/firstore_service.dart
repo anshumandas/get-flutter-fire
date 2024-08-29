@@ -13,13 +13,22 @@ class FirestoreService {
     }
   }
 
-  Future<void> updateUserData(String name, String email, String imageUrl) async {
+  Future<void> updateUserData({
+    required String name,
+    required String email,
+    required String phoneNumber,
+    String imageUrl = 'https://via.placeholder.com/150',
+    bool isEmailVerified = false,
+  }) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       await _firestore.collection('users').doc(user.uid).update({
         'name': name,
         'email': email,
+        'phoneNumber': phoneNumber,
         'imageUrl': imageUrl,
+        'createdAt': FieldValue.serverTimestamp(),
+        'isEmailVerified': isEmailVerified,
       });
     } else {
       throw Exception('No user logged in');
