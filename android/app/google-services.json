@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "168247508765",
+    "project_id": "eduryde",
+    "storage_bucket": "eduryde.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168247508765:android:85850294d429dee738ebf4",
+        "android_client_info": {
+          "package_name": "com.example.eduryde"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168247508765-408n259mv1608rm6fg9vr55sshd4jub7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaJt7zrKMTZSYJz6vD2CTOA-8HdZ3ghII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "168247508765-408n259mv1608rm6fg9vr55sshd4jub7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "168247508765-tcoltq95g1oahsg25428mmqv3aj16j8a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eduryde"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
