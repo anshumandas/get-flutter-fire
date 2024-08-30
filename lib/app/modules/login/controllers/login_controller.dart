@@ -1,20 +1,18 @@
 import 'package:get/get.dart';
-
+import 'package:flutter/material.dart';
 import '../../../../services/auth_service.dart';
 
 class LoginController extends GetxController {
-  static AuthService get to => Get.find();
+  final AuthService _authService = Get.find<AuthService>();
 
-  final Rx<bool> showReverificationButton = Rx(false);
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-  bool get isRobot => AuthService.to.robot.value == true;
+  void login() {
+    _authService.signIn(emailController.text, passwordController.text);
+  }
 
-  set robot(bool v) => AuthService.to.robot.value = v;
-
-  bool get isLoggedIn => AuthService.to.isLoggedInValue;
-
-  bool get isAnon => AuthService.to.isAnon;
-
-  bool get isRegistered =>
-      AuthService.to.registered.value || AuthService.to.isEmailVerified;
+  void goToRegister() {
+    Get.toNamed('/register');
+  }
 }

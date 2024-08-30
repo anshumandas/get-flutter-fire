@@ -1,20 +1,11 @@
 import 'package:get/get.dart';
+import '../../../../services/auth_service.dart';
 
 class SettingsController extends GetxController {
-  //TODO: Implement SettingsController
+  final AuthService _authService = Get.find<AuthService>();
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  void signOut() async {
+    await _authService.signOut();
+    Get.offAllNamed('/login');
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
 }
