@@ -1,54 +1,67 @@
-// ignore_for_file: non_constant_identifier_names, constant_identifier_names
-
 part of 'app_pages.dart';
 // DO NOT EDIT. This is code generated via package:get_cli/get_cli.dart
 
 abstract class Routes {
   static const HOME = _Paths.HOME;
-  // static String PROFILE = Screen.PROFILE.fullPath;
-  // static String SETTINGS = Screen.SETTINGS.fullPath;
-  static String LOGIN = Screen.LOGIN.route;
-  static String REGISTER = Screen.REGISTER.route;
-  // static String DASHBOARD = Screen.DASHBOARD.fullPath;
-  // static String PRODUCTS = Screen.PRODUCTS.fullPath;
-  // static String CART = Screen.CART.fullPath;
-  // static String CHECKOUT = Screen.CHECKOUT.fullPath;
-  // static const CATEGORIES = _Paths.HOME + _Paths.CATEGORIES;
-  // static const TASKS = _Paths.HOME + _Paths.TASKS;
-  // static const USERS = _Paths.HOME + _Paths.USERS;
-  // static const MY_PRODUCTS = _Paths.HOME + _Paths.MY_PRODUCTS;
+  static const LOGIN = Screen.LOGIN.route;
+  static const REGISTER = Screen.REGISTER.route;
 
-  static String PRODUCT_DETAILS(String productId) =>
+  // Example of a secure route requiring authentication
+  static String adminDashboard(String adminId) =>
+      AuthGuard.isAuthenticated && AuthGuard.userRole == 'admin'
+          ? '${Screen.ADMIN_DASHBOARD.route}/$adminId'
+          : LOGIN_THEN('${Screen.ADMIN_DASHBOARD.route}/$adminId');
+
+  static String productDetails(String productId) =>
       '${Screen.PRODUCTS.route}/$productId';
-  static String CART_DETAILS(String productId) =>
+  static String cartDetails(String productId) =>
       '${Screen.CART.route}/$productId';
-  static String TASK_DETAILS(String taskId) => '${Screen.TASKS.route}/$taskId';
-  static String USER_PROFILE(String uId) => '${Screen.USERS.route}/$uId';
+  static String taskDetails(String taskId) =>
+      '${Screen.TASKS.route}/$taskId';
+  static String userProfile(String uId) =>
+      '${Screen.USERS.route}/$uId';
 
   Routes._();
-  static String LOGIN_THEN(String afterSuccessfulLogin) =>
+
+  static String loginThen(String afterSuccessfulLogin) =>
       '${Screen.LOGIN.route}?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
-  static String REGISTER_THEN(String afterSuccessfulLogin) =>
+  static String registerThen(String afterSuccessfulLogin) =>
       '${Screen.REGISTER.route}?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
+
+  // Example of a secure route requiring authentication
+  static String secureRoute(String route, {String role = 'user'}) {
+    if (AuthGuard.isAuthenticated && AuthGuard.hasRole(role)) {
+      return route;
+    }
+    return LOGIN_THEN(route);
+  }
 }
 
-// Keeping this as Get_Cli will require it. Any addition can later be added to Screen
+// Retain this as Get_Cli might require it for route management
 abstract class _Paths {
-  static const String HOME = '/home';
-  // static const DASHBOARD = '/dashboard';
-  // static const PRODUCTS = '/products';
-  // static const PROFILE = '/profile';
-  // static const SETTINGS = '/settings';
-  // static const PRODUCT_DETAILS = '/:productId';
-  // static const CART_DETAILS = '/:productId';
-  // static const LOGIN = '/login';
-  // static const CART = '/cart';
-  // static const CHECKOUT = '/checkout';
-  // static const REGISTER = '/register';
-  // static const CATEGORIES = '/categories';
-  // static const TASKS = '/tasks';
-  // static const TASK_DETAILS = '/:taskId';
-  // static const USERS = '/users';
-  // static const USER_PROFILE = '/:uId';
-  // static const MY_PRODUCTS = '/my-products';
+  static const HOME = '/home';
+  static const ADMIN_DASHBOARD = '/admin-dashboard';
+}
+
+class AuthGuard {
+  static bool isAuthenticated = false; // This should be dynamically set based on user auth state
+  static String userRole = 'guest'; // This should be set based on logged-in user's role
+
+  static bool hasRole(String role) {
+    // Implement your role-checking logic here
+    return role == userRole;
+  }
+}
+
+// This class can be expanded to include JWT validation, token expiration checks, etc.
+class AuthService {
+  static bool validateToken(String token) {
+    // Add JWT or any other token validation logic here
+    return true; // Dummy implementation
+  }
+
+  static void logRouteAccess(String route) {
+    // Implement logging of route access for monitoring and security purposes
+    print('Route accessed: $route');
+  }
 }
