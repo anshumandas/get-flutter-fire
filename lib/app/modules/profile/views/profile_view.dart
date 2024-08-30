@@ -102,10 +102,8 @@ class ProfileView extends GetView<ProfileController> {
                   //Upload to Store
                   String? dest = await controller.uploadFile(path);
                   //attach it to User imageUrl
-                  if (dest != null) {
-                    await controller.updatePhotoURL(dest);
-                  }
-                }
+                  await controller.updatePhotoURL(dest!);
+                                }
               })
             ],
           )
