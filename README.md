@@ -4,4 +4,4 @@ An open source reverse ridesharing for college students, now rebuilt and refacto
 
 #Use the old version here:
 
-eduryde.web.app
+https://eduryde.web.app
