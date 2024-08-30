@@ -31,7 +31,7 @@ class RootView extends GetView<RootController> {
                   )
                 : IconButton(
                     icon: ImageIcon(
-                      const AssetImage("icons/logo.png"),
+                      const AssetImage("assets/icons/logo.png"),
                       color: Colors.grey.shade800,
                     ),
                     onPressed: () => AuthService.to.isLoggedInValue

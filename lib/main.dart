@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'app/widgets/responsive_menu.dart';
 import 'app/routes/app_pages.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
@@ -17,6 +16,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Initialize ThemeController here
   final ThemeController themeController = Get.put(ThemeController());
 
   runApp(
@@ -27,7 +27,8 @@ void main() async {
             () {
               Get.put(AuthService());
               Get.lazyPut<ThemeController>(
-                  () => ThemeController()); // Add ThemeController binding
+                () => ThemeController(),
+              );
             },
           ),
           getPages: AppPages.routes,
@@ -35,11 +36,20 @@ void main() async {
               ? ThemeMode.dark
               : ThemeMode.light,
           theme: ThemeData(
+            colorScheme: themeController.selectedPersona.value.colorScheme,
+            bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor:
+                  themeController.selectedPersona.value.colorScheme.surface,
+            ),
             highlightColor: Colors.black.withOpacity(0.5),
-            bottomSheetTheme:
-                const BottomSheetThemeData(surfaceTintColor: Colors.blue),
           ),
-          darkTheme: ThemeData.dark(),
+          darkTheme: ThemeData.dark().copyWith(
+            colorScheme: themeController.selectedPersona.value.colorScheme,
+            bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor:
+                  themeController.selectedPersona.value.colorScheme.surface,
+            ),
+          ),
         )),
   );
 }
