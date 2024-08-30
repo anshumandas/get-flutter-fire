@@ -1,7 +1,10 @@
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../controllers/profile_controller.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ProfileView extends StatelessWidget {
   final ProfileController _controller = Get.put(ProfileController());
@@ -30,11 +33,29 @@ class ProfileView extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: 20),
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(
-                  _controller.userData['imageUrl'] ?? 'https://via.placeholder.com/150',
-                ),
+              FutureBuilder<File?>(
+                future: _getLocalImageFile(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.grey,
+                    );
+                  } else if (snapshot.hasData && snapshot.data != null) {
+                    return CircleAvatar(
+                      radius: 50,
+                      backgroundImage: FileImage(snapshot.data!),
+                    );
+                  } else {
+                    return CircleAvatar(
+                      radius: 50,
+                      backgroundImage: NetworkImage(
+                        _controller.userData['imageUrl'] ??
+                            'https://via.placeholder.com/150',
+                      ),
+                    );
+                  }
+                },
               ),
               SizedBox(height: 20),
               Text(
@@ -62,10 +83,23 @@ class ProfileView extends StatelessWidget {
     );
   }
 
+  Future<File?> _getLocalImageFile() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String localPath = '${appDocDir.path}/user_${user.uid}.jpg';
+      File localFile = File(localPath);
+      if (localFile.existsSync()) {
+        return localFile;
+      }
+    }
+    return null;
+  }
+
   void _showEditDialog(BuildContext context) {
     final nameController = TextEditingController(text: _controller.userData['name']);
     final emailController = TextEditingController(text: _controller.userData['email']);
-    final imageController = TextEditingController(text: _controller.userData['imageUrl']);
+    File? _selectedImage;
 
     showDialog(
       context: context,
@@ -78,12 +112,15 @@ class ProfileView extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  onTap: () => _pickImage(context, imageController),
+                  onTap: () async {
+                    _selectedImage = await _pickImage(context);
+                  },
                   child: CircleAvatar(
                     radius: 40,
-                    backgroundImage: imageController.text.isEmpty
-                        ? NetworkImage('https://via.placeholder.com/150')
-                        : NetworkImage(imageController.text),
+                    backgroundImage: _selectedImage != null
+                        ? FileImage(_selectedImage!)
+                        : NetworkImage(_controller.userData['imageUrl'] ?? 'https://via.placeholder.com/150')
+                    as ImageProvider,
                     child: Icon(Icons.camera_alt, color: Colors.white.withOpacity(0.7), size: 40),
                   ),
                 ),
@@ -91,8 +128,6 @@ class ProfileView extends StatelessWidget {
                 _buildTextField(nameController, 'Name'),
                 SizedBox(height: 10),
                 _buildTextField(emailController, 'Email'),
-                SizedBox(height: 10),
-                _buildTextField(imageController, 'Image URL'),
               ],
             ),
           ),
@@ -108,7 +143,7 @@ class ProfileView extends StatelessWidget {
                   name: nameController.text,
                   email: emailController.text,
                   phoneNumber: _controller.userData['phoneNumber'] ?? '',
-                  imageUrl: imageController.text,
+                  imageFile: _selectedImage,
                 );
                 Navigator.of(context).pop();
               },
@@ -120,32 +155,30 @@ class ProfileView extends StatelessWidget {
     );
   }
 
+  Future<File?> _pickImage(BuildContext context) async {
+    final ImagePicker _picker = ImagePicker();
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      return File(pickedFile.path);
+    }
+    return null;
+  }
+
   Widget _buildTextField(TextEditingController controller, String label) {
     return TextField(
       controller: controller,
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: Colors.white),
+        labelStyle: TextStyle(color: Colors.grey),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
+          borderSide: BorderSide(color: Colors.grey),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.white),
         ),
       ),
     );
-  }
-
-  Future<void> _pickImage(BuildContext context, TextEditingController imageController) async {
-    final ImagePicker _picker = ImagePicker();
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      // Upload image to a cloud storage service (e.g., Firebase Storage)
-      // and update the URL in Firestore
-      // For this example, just updating the local text field
-      imageController.text = pickedFile.path;
-    }
   }
 }

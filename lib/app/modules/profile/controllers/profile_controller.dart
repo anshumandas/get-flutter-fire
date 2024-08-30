@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
 import '../../../../services/firstore_service.dart';
 import '../../../routes/app_routes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileController extends GetxController {
   final FirestoreService _firestoreService = FirestoreService();
@@ -51,14 +52,14 @@ class ProfileController extends GetxController {
     required String name,
     required String email,
     required String phoneNumber,
-    String imageUrl = 'https://via.placeholder.com/150',
+    File? imageFile,
   }) async {
     try {
       await _firestoreService.updateUserData(
         name: name,
         email: email,
         phoneNumber: phoneNumber,
-        imageUrl: imageUrl,
+        imageFile: imageFile,
       );
       fetchUserData(); // Refresh the data after updating
     } catch (e) {
