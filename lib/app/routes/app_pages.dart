@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/products_admin/bindings/products_admin_binding.dart';
+import 'package:get_flutter_fire/app/modules/products_admin/views/products_admin_view.dart';
 
 import '../../models/access_level.dart';
 import '../../models/role.dart';
@@ -71,6 +73,10 @@ class AppPages {
         Screen.SETTINGS.getPage(
           page: () => const SettingsView(),
           binding: SettingsBinding(),
+        ),
+        Screen.PRODUCTS_ADMIN.getPage(
+          page: () => const ProductsAdminView(),
+          binding: ProductsAdminBinding(),
         ),
         Screen.HOME.getPage(
           page: () => const HomeView(),
@@ -145,7 +151,7 @@ class AppPages {
                   binding: TaskDetailsBinding(),
                 ),
               ],
-            ),
+            )
           ],
         )
       ],

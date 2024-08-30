@@ -17,7 +17,7 @@ class ProductsController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    loadDemoProductsFromSomeWhere();
+    // loadDemoProductsFromSomeWhere();
   }
 
   @override
