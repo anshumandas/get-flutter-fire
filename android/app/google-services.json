@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "3991487808",
+    "project_id": "sharekhanclg",
+    "storage_bucket": "sharekhanclg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3991487808:android:b94b49e0ac05c492ea66a5",
+        "android_client_info": {
+          "package_name": "com.example.sharekhanclg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC36dmVwt-cECpeaH0sbgotmoqNYkdk1vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
