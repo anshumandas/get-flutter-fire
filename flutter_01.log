@@ -1,0 +1,71 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter run
+
+## exception
+
+RPCError: getVM: (-32000) Service connection disposed
+
+```
+```
+
+## flutter doctor
+
+```
+[32m[✓][39m Flutter (Channel stable, 3.24.0, on Microsoft Windows [Version
+    10.0.22631.4037], locale en-IN)
+    [32m•[39m Flutter version 3.24.0 on channel stable at C:\flutter
+    [32m•[39m Upstream repository https://github.com/flutter/flutter.git
+    [32m•[39m Framework revision 80c2e84975 (4 weeks ago), 2024-07-30 23:06:49 +0700
+    [32m•[39m Engine revision b8800d88be
+    [32m•[39m Dart version 3.5.0
+    [32m•[39m DevTools version 2.37.2
+
+[32m[✓][39m Windows Version (Installed version of Windows is version 10 or higher)
+
+[32m[✓][39m Android toolchain - develop for Android devices (Android SDK version 35.0.0)
+    [32m•[39m Android SDK at C:\Users\SMIT YENKAR\AppData\Local\Android\sdk
+    [32m•[39m Platform android-35, build-tools 35.0.0
+    [32m•[39m Java binary at: C:\Program Files\Android\Android Studio\jbr\bin\java
+    [32m•[39m Java version OpenJDK Runtime Environment (build 17.0.11+0--11852314)
+    [32m•[39m All Android licenses accepted.
+
+[32m[✓][39m Chrome - develop for the web
+    [32m•[39m Chrome at C:\Program Files\Google\Chrome\Application\chrome.exe
+
+[32m[✓][39m Visual Studio - develop Windows apps (Visual Studio Build Tools 2019 16.11.38)
+    [32m•[39m Visual Studio at C:\Program Files (x86)\Microsoft Visual
+      Studio\2019\BuildTools
+    [32m•[39m Visual Studio Build Tools 2019 version 16.11.35026.282
+    [32m•[39m Windows 10 SDK version 10.0.19041.0
+
+[32m[✓][39m Android Studio (version 2024.1)
+    [32m•[39m Android Studio at C:\Program Files\Android\Android Studio
+    [32m•[39m Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    [32m•[39m Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    [32m•[39m Java version OpenJDK Runtime Environment (build 17.0.11+0--11852314)
+
+[32m[✓][39m VS Code (version 1.92.2)
+    [32m•[39m VS Code at C:\Users\SMIT YENKAR\AppData\Local\Programs\Microsoft VS Code
+    [32m•[39m Flutter extension version 3.95.20240801
+
+[32m[✓][39m Connected device (4 available)
+    [32m•[39m sdk gphone16k x86 64 (mobile) • emulator-5554 • android-x64    • Android 15
+      (API 35) (emulator)
+    [32m•[39m Windows (desktop)             • windows       • windows-x64    • Microsoft
+      Windows [Version 10.0.22631.4037]
+    [32m•[39m Chrome (web)                  • chrome        • web-javascript • Google
+      Chrome 128.0.6613.84
+    [32m•[39m Edge (web)                    • edge          • web-javascript • Microsoft
+      Edge 128.0.2739.42
+
+[32m[✓][39m Network resources
+    [32m•[39m All expected network resources are available.
+
+[32m•[39m No issues found!
+```
