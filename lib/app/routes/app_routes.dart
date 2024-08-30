@@ -11,7 +11,8 @@ abstract class Routes {
   static String REGISTER = Screen.REGISTER.route;
   // static String DASHBOARD = Screen.DASHBOARD.fullPath;
   // static String PRODUCTS = Screen.PRODUCTS.fullPath;
-  // static String CART = Screen.CART.fullPath;
+  // uncommenting this
+  // static String CART = Screen.CART.route;
   // static String CHECKOUT = Screen.CHECKOUT.fullPath;
   // static const CATEGORIES = _Paths.HOME + _Paths.CATEGORIES;
   // static const TASKS = _Paths.HOME + _Paths.TASKS;

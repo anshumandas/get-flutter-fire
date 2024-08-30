@@ -4,10 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'app/routes/app_pages.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
+import 'services/theme_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,29 +16,39 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  final ThemeController themeController = Get.put(ThemeController());
+
   runApp(
-    GetMaterialApp.router(
-      debugShowCheckedModeBanner:
-          false, //the debug banner will automatically disappear in prod build
-      title: 'Application',
-      initialBinding: BindingsBuilder(
-        () {
-          Get.put(AuthService());
-        },
-      ),
-      getPages: AppPages.routes,
-      // routeInformationParser: GetInformationParser(
-      //     // initialRoute: Routes.HOME,
-      //     ),
-      // routerDelegate: GetDelegate(
-      //   backButtonPopMode: PopMode.History,
-      //   preventDuplicateHandlingMode:
-      //       PreventDuplicateHandlingMode.ReorderRoutes,
-      // ),
-      theme: ThemeData(
-          highlightColor: Colors.black.withOpacity(0.5),
-          bottomSheetTheme:
-              const BottomSheetThemeData(surfaceTintColor: Colors.blue)),
-    ),
+    Obx(() => GetMaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Application',
+          initialBinding: BindingsBuilder(
+            () {
+              Get.put(AuthService());
+              Get.lazyPut<ThemeController>(
+                () => ThemeController(),
+              );
+            },
+          ),
+          getPages: AppPages.routes,
+          themeMode: themeController.isDarkMode.value
+              ? ThemeMode.dark
+              : ThemeMode.light,
+          theme: ThemeData(
+            colorScheme: themeController.selectedPersona.value.colorScheme,
+            bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor:
+                  themeController.selectedPersona.value.colorScheme.surface,
+            ),
+            highlightColor: Colors.black.withOpacity(0.5),
+          ),
+          darkTheme: ThemeData.dark().copyWith(
+            colorScheme: themeController.selectedPersona.value.colorScheme,
+            bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor:
+                  themeController.selectedPersona.value.colorScheme.surface,
+            ),
+          ),
+        )),
   );
 }

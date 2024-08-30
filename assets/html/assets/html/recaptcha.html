@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>reCAPTCHA</title>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script>
+    function onCaptchaSuccess(response) {
+      if (window.flutter_inappwebview) {
+        window.flutter_inappwebview.callHandler('onCaptchaSuccess', response);
+      }
+    }
+
+    function renderCaptcha() {
+      grecaptcha.render('recaptcha-container', {
+        'sitekey': '6Lc8uDIqAAAAAP8nJXWAWFizFaj4FPysS9fiGq4h',
+        'callback': onCaptchaSuccess
+      });
+    }
+
+    window.onload = renderCaptcha;
+  </script>
+  <style>
+    #recaptcha-container {
+      width: 100%;
+      max-width: 300px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="recaptcha-container"></div>
+</body>
+</html>

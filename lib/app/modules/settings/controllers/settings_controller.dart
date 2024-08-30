@@ -1,20 +1,27 @@
 import 'package:get/get.dart';
+import '/services/theme_controller.dart';
 
 class SettingsController extends GetxController {
-  //TODO: Implement SettingsController
+  final ThemeController themeController = Get.find<ThemeController>();
 
-  final count = 0.obs;
+  // Rx variable to track selected persona
+  var selectedPersona = Persona.French.obs;
+
   @override
   void onInit() {
     super.onInit();
+    // Initialize with the current theme's persona
+    selectedPersona.value = themeController.selectedPersona.value;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  // Method to toggle between dark and light theme
+  void toggleTheme() {
+    themeController.toggleTheme();
   }
 
-  @override
-  void onClose() {}
-  void increment() => count.value++;
+  // Method to update persona selection
+  void updatePersona(Persona persona) {
+    selectedPersona.value = persona;
+    themeController.updatePersona(persona);
+  }
 }

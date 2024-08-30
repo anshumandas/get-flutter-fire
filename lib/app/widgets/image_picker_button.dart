@@ -83,7 +83,12 @@ class ImagePickerButton extends MenuSheetButton<ImageSources> {
     return !(GetPlatform.isAndroid || GetPlatform.isIOS)
         ? TextButton.icon(
             onPressed: () async => callbackFunc(await ImageSources.getFile()),
-            icon: icon,
+            // icon: icon,
+            // 1 Icon fixed Here by using image assets as icon is not a valid parameter for icon argument
+            icon: Image.asset(
+              "assets/icons/logo.png",
+              fit: BoxFit.cover,
+            ),
             label: const Text('Pick an Image'),
           )
         : builder(context);

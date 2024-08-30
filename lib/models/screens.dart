@@ -6,6 +6,32 @@ import 'action_enum.dart';
 import 'access_level.dart';
 import '../../services/auth_service.dart';
 
+class BuyerPersona {
+  final String name;
+  final String imagePath;
+  final String description;
+
+  BuyerPersona({
+    required this.name,
+    required this.imagePath,
+    required this.description,
+  });
+
+  static BuyerPersona modern = BuyerPersona(
+    name: "Modern",
+    imagePath: "assets/personas/modern.png",
+    description: "Modern theme description",
+  );
+
+  static BuyerPersona classic = BuyerPersona(
+    name: "Classic",
+    imagePath: "assets/personas/classic.png",
+    description: "Classic theme description",
+  );
+
+  static List<BuyerPersona> get values => [modern, classic];
+}
+
 enum AccessedVia {
   auto,
   widget, //example: top right button
