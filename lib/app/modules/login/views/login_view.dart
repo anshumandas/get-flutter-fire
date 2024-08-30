@@ -1,3 +1,5 @@
+// ignore_for_file: inference_failure_on_function_invocation
+
 import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../firebase_options.dart';
 
+import '../../../widgets/captcha.dart';
 import '../../../../models/screens.dart';
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
@@ -12,9 +15,18 @@ import '../controllers/login_controller.dart';
 class LoginView extends GetView<LoginController> {
   void showReverificationButton(
       bool show, fba.EmailAuthCredential? credential) {
+    // Below is very important.
+    // See [https://stackoverflow.com/questions/69351845/this-obx-widget-cannot-be-marked-as-needing-to-build-because-the-framework-is-al]
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.showReverificationButton.value = show;
     });
+    //or Future.delayed(Duration.zero, () {
+    // We can get the email and password from the controllers either by making the whole screen from scratch
+    // or probably by add flutter_test find.byKey (hacky)
+    // tried using AuthStateChangeAction<CredentialReceived> instead which is not getting called
+    // Finally Subclassed EmailAuthProvider to handle the same, but that also did not work
+    // So went for server side email sending option
+    //}));
   }
 
   const LoginView({super.key});
@@ -39,7 +51,7 @@ class LoginView extends GetView<LoginController> {
 
   Widget loginScreen(BuildContext context) {
     Widget ui;
-    if (!controller.isLoggedIn) {
+    if (!controller.isLoggedIn && !controller.isRecaptchaVerified.value) {
       ui = !(GetPlatform.isAndroid || GetPlatform.isIOS) && controller.isRobot
           ? recaptcha()
           : SignInScreen(
@@ -84,30 +96,70 @@ class LoginView extends GetView<LoginController> {
   Widget recaptcha() {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () => controller.verifyPhoneNumber(),
-              child: const Text('Verify Phone Number'),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                  child: Text(
+                    "Please verify that you're not a robot",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Captcha((String token) async {
+                  bool isValid = await controller.verifyRecaptcha(token);
+                  if (isValid) {
+                    controller.isRecaptchaVerified.value = true;
+                  } else {
+                    Get.snackbar('Error',
+                        'reCAPTCHA verification failed. Please try again.');
+                  }
+                }),
+                const SizedBox(height: 20),
+                Obx(() {
+                  return ElevatedButton(
+                    onPressed: controller.isRecaptchaVerified.value
+                        ? () {
+                            Get.offNamed(Screen.LOGIN.route);
+                          }
+                        : null,
+                    child: const Text('Submit'),
+                  );
+                }),
+              ],
             ),
-            TextButton(
-              onPressed: () => controller.robot = false,
-              child: const Text("Are you a Robot?"),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
+  /// The following actions are useful here:
+  /// - [AuthStateChangeAction]
+  /// - [AuthCancelledAction]
+  /// - [EmailLinkSignInAction]
+  /// - [VerifyPhoneAction]
+  /// - [SMSCodeRequestedAction]
+
   List<FirebaseUIAction> getActions() {
     return [
-      AuthStateChangeAction<AuthFailed>((context, state) {
-        // Handle AuthFailed state here
-        controller.errorMessage('Authentication failed');
-      }),
-      // Add other actions if needed
+      // AuthStateChangeAction<CredentialReceived>((context, state) {
+      AuthStateChangeAction<AuthFailed>((context, state) => LoginController.to
+          .errorMessage(context, state, showReverificationButton)),
+      // AuthStateChangeAction<SignedIn>((context, state) {
+      //   // This is not required due to the AuthMiddleware
+      // }),
+      // EmailLinkSignInAction((context) {
+      //   final thenTo = Get.rootDelegate.currentConfiguration!.currentPage!
+      //       .parameters?['then'];
+      //   Get.rootDelegate.offNamed(thenTo ?? Routes.PROFILE);
+      // }),
     ];
   }
 }
@@ -138,15 +190,12 @@ class EmailLinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Visibility(
-          visible: show.value,
-          child: Padding(
+        visible: show.value,
+        child: Padding(
             padding: const EdgeInsets.only(top: 16),
             child: ElevatedButton(
-              onPressed: () => LoginController.to
-                  .sendVerificationMail(emailAuth: credential.value),
-              child: const Text('Resend Verification Mail'),
-            ),
-          ),
-        ));
+                onPressed: () => LoginController.to
+                    .sendVerificationMail(emailAuth: credential.value),
+                child: const Text('Resend Verification Mail')))));
   }
 }

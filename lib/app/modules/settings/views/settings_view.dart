@@ -32,7 +32,7 @@ class SettingsView extends GetView<SettingsController> {
             // Persona Selection Cards
             Text(
               'Select Persona:',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 20),
             // Centering and spacing cards
@@ -48,8 +48,8 @@ class SettingsView extends GetView<SettingsController> {
                       onTap: () => controller.updatePersona(persona),
                       child: Obx(
                         () => Container(
-                          width: 150, // Increased width for better appearance
-                          height: 200, // Increased height for better appearance
+                          width: 150,
+                          height: 200,
                           decoration: BoxDecoration(
                             gradient:
                                 themeController.selectedPersona.value == persona
@@ -95,14 +95,14 @@ class SettingsView extends GetView<SettingsController> {
                             children: [
                               Icon(
                                 Icons.person,
-                                size: 50, // Increased icon size
+                                size: 50,
                                 color: persona.colorScheme.onPrimary,
                               ),
                               const SizedBox(height: 10),
                               Text(
                                 persona.name,
                                 style: TextStyle(
-                                  fontSize: 18, // Increased font size for title
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: persona.colorScheme.onPrimary,
                                 ),

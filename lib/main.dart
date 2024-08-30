@@ -16,7 +16,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Initialize ThemeController here
   final ThemeController themeController = Get.put(ThemeController());
 
   runApp(
