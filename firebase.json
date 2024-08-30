@@ -1,0 +1,26 @@
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "my-get-flutter-fire-copy",
+          "configurations": {
+            "android": "1:590917401999:android:40731735b1ab7004d35ffa",
+            "ios": "1:590917401999:ios:0e6a97ed0c288b9fd35ffa",
+            "macos": "1:590917401999:ios:58be1a0f40c90751d35ffa",
+            "web": "1:590917401999:web:324d850113549676d35ffa"
+          }
+        }
+      }
+    }
+  },
+  "emulators": {
+    "singleProjectMode": true,
+    "auth": {
+      "port": 9099
+    },
+    "ui": {
+      "enabled": true
+    }
+  }
+}

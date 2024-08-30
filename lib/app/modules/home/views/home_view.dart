@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../routes/app_pages.dart';
+import 'package:get_flutter_fire/app/routes/app_pages.dart';
 import '../../../widgets/screen_widget.dart';
 import '../controllers/home_controller.dart';
 
