@@ -55,10 +55,11 @@ To use Firebase features in your app, you need to configure Firebase by followin
 
 The emulator allows you to simulate Firebase services locally, such as Firestore, Authentication, and more.
 
-## User Flows
+# User Flows
 
 The app includes four distinct user flows:
 
+## Guest Flow :
 1. **Guest**: Explore the app without logging in. Guests can browse products, view product details, and see limited features.
 <div style="display: flex; align-items: center; justify-content: space-between;">
   <img src="https://github.com/user-attachments/assets/104c86d4-1ded-4a53-b6e9-86c2ac2f1cfd" style="width: 22%; height: auto;" alt="Guest Flow Step 1" />
@@ -78,6 +79,7 @@ The app includes four distinct user flows:
 
 
 
+## Buyer Flow :
 2. **Buyer**: Registered users who can add products to their cart, make purchases, and track orders.
 Sure, here's how you can display the images in a Markdown format with three images in a row, along with proper text captions below each image:
 
@@ -118,7 +120,8 @@ Sure, here's how you can display the images in a Markdown format with three imag
 | **Suport Section** | **Past Queries Section** | **Search for Home** |
 
 
-3. **Seller**: Users who can list products for sale, manage inventory, and fulfill orders.
+## Seller Flow :
+3. **Seller**: Users who can list products for sale, manage inventory, and fulfill orders and he can also act as Buyer 
 <table>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/e6b54ebf-8a84-49ba-95f3-f30037d4ff6b" alt="Seller Profile Page" width="300"/></td>
@@ -152,7 +155,8 @@ Sure, here's how you can display the images in a Markdown format with three imag
 
   
 
-6. **Admin**: Admins have access to manage users, oversee transactions, and monitor app activities.
+## Admin Flow :
+4. **Admin**: Admins have access to manage users, oversee transactions, and monitor app activities and He can also do stuff as a Buyer flow
 <table>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/e5cacf49-995f-4b19-a43a-734a14cd916c" alt="User Added Business Details" width="300"/></td>
