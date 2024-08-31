@@ -1,132 +1,200 @@
-# get-flutter-fire
+---
 
-This codebase provides a boilerplate code utilizing the following three technologies:
+# Flutter Firebase GetX - (Sheru)
 
-1. Flutter 3.0 - For UX and uses Dart languange. See [https://flutter.dev/]
-2. GetX - State management for Flutter. See [https://github.com/jonataslaw/getx/tree/4.6.1]
-3. Firebase - For Backend as a Service. See [https://firebase.google.com/]
-   1. Easy Authentication flow
-   2. Server side functions
-   3. Remote Configurations which can be used for A/B testing
+Welcome to the **Sheru, Your Own Ecommerce Platform**! This application is made on top of the give code structure using flutter-firebase-getx. The flow and structure is maintained throught the app. For better experience and web capabilities, the admin part is made seperately as an admin panel that can be used for controlling the app.
 
-This was created as part of my own learning process and you will find that git commits were made according to the Steps listed below. You can use the git version history to check each commit and learn step by step, as I did.
+<p align="center">
+   <img src="https://github.com/user-attachments/assets/fcd592ef-2f01-46a4-b018-b2fbaaf8d7c7" alt="Screenshot_3" width="300"/>
+  <img src="https://github.com/user-attachments/assets/7ee15bea-a6ef-43a9-a7f5-ea9228d1330b" alt="Screenshot_1" width="300"/>
+</p>
+<p align="center">
+   <img src="https://github.com/user-attachments/assets/9c35c220-1b5a-4c19-8cad-7b7bc9d20133" alt="Screenshot_2" width="300"/>
+  <img src="https://github.com/user-attachments/assets/553c6ab2-9af7-4d3f-bac2-21cf1629dfe5" alt="Screenshot_7" width="300"/> 
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/711866a7-4d77-4895-b3c6-f2f3a75815be" alt="Screenshot_8" width="300"/>
+  <img src="https://github.com/user-attachments/assets/cfd5c330-e358-4390-b52c-fe214912a119" alt="Screenshot_6" width="300"/>
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/8560aaeb-2c51-4988-9196-7705d6098c2f" alt="Screenshot_5" width="300"/>
+   <img src="https://github.com/user-attachments/assets/fdcd7634-9439-4f61-8fe8-cb2cebcbf379" alt="Screenshot_4" width="300"/>
+</p>
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/b1e43da9-2a92-477f-899f-87d34da47ae5" alt="Screenshot_14" width="300"/>
+  <img src="https://github.com/user-attachments/assets/6977cc2d-657e-4353-a09d-809de96c6215" alt="Screenshot_13" width="300"/>
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/4d379e2c-a052-46ea-bc1f-6daadcf0dc58" alt="Screenshot_9" width="300"/>
+  <img src="https://github.com/user-attachments/assets/74d8e460-511c-4bb9-a59d-88d6cc5b6d5d" alt="Screenshot_10" width="300"/>
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b9cd7e6e-0384-4422-b1e4-2d8b5c6d3e29" alt="Screenshot_11" width="300"/>
+  <img src="https://github.com/user-attachments/assets/b447e1e2-156a-43db-97ce-963dc17b6705" alt="Screenshot_12" width="300"/>
+</p>
 
-I am also using this codebase as an experiment towards hiring people (freshers especially but not limited to them) for my development team. If you are in Mumbai and are interested to join my team, you can use this codebase in the following manner:
+## Getting Started
 
-* Fork the codebase
-* Add your own firebase_options.dart (follow steps and see firebase_options.template)
-* **Build your own application using this as a base (integrating any existing project of yours also works)**, or complete a TODO or fix a bug (only if you have no other ideas)
-* Send me a Pull Request. Mention a way of connecting with you in the commit message along with details of commit. Also modify ReadMe to say what you have changed in detail.
-* I will go through the request and then connect with you if I find the entry to be interesting and take an interview round.
+### 1. Add the Android Folder
 
-## The Steps
+If your project doesn't already include an `android` folder, you can generate it by running the following command in your main project directory:
 
-Step 1: Use Get CLI [https://pub.dev/packages/get_cli]
+```bash
+flutter create .
+```
 
-`get create project`
+### 2. Firebase Setup
 
-Step 2: Copy code from [https://github.com/jonataslaw/getx/tree/4.6.1/example_nav2/lib]
+To fully leverage Firebase features within your app, you’ll need to configure Firebase. Choose one of the following methods:
 
-Step 3: Integrate FlutterFire Authentication
+#### Option A: Add `firebase.json` File
 
-- Tutorials [https://firebase.google.com/codelabs/firebase-auth-in-flutter-apps#0] for inspiration
-- Firebase Documentation [https://firebase.google.com/docs/auth/flutter/start]
-- Blog [www.medium.com/TBD]
-- To compile the code ensure that you generate your own firebase_options.dart by running
+1. Download the `firebase.json` configuration file from the Firebase Console.
+2. Place the file in the root directory of your project.
+3. Alternatively, you can use the Firebase CLI to configure Firebase.
 
-  `flutterfire configure`
+#### Option B: Use Firebase Emulator
 
-Step 4: Add Google OAuth [https://firebase.google.com/codelabs/firebase-auth-in-flutter-apps#6]. Note ensure you do the steps for Android and iOS as the code for it is not in Github
+Set up the Firebase Emulator to simulate Firebase services locally:
 
-Step 5: Add Guest User/Anonymous login with a Cart and Checkout use case [https://firebase.google.com/docs/auth/flutter/anonymous-auth]
+1. Install the Firebase CLI if you haven't already:
+   ```bash
+   npm install -g firebase-tools
+   ```
 
-* delete unlinked anonymous user post logout
+2. Initialize Firebase in your project:
+   ```bash
+   firebase init
+   ```
 
-Step 6: Add ImagePicker and Firebase Storage for profile image
+3. Start the Firebase Emulator with Initial Data:
+   ```bash
+   firebase emulators:start --import=./emulator-data
+   ```
 
-* Create PopupMenu button for web [https://api.flutter.dev/flutter/material/PopupMenuButton-class.html]
-* BottomSheet for phones and single file button for desktops
-* GetX and Image Picker [https://stackoverflow.com/questions/66559553/flutter-imagepicker-with-getx]
-* Add FilePicker [https://medium.com/@onuaugustine07/pick-any-file-file-picker-flutter-f82c0144e27c]
-* Firebase Storage [https://mercyjemosop.medium.com/select-and-upload-images-to-firebase-storage-flutter-6fac855970a9] and [https://firebase.google.com/docs/storage/flutter/start]
+### 3. OTP Verification and Notifications
 
-  Modify the Firebase Rules
-  `service firebase.storage { match /b/{bucket}/o { match /{allPaths=**} { allow write: if request.auth.uid != null; allow read: if true; } } }`
+![image](https://github.com/user-attachments/assets/272b99cb-efeb-4052-ba31-59bb4e23b340)
+![image](https://github.com/user-attachments/assets/81ffa5c3-a239-40e8-9a89-5f15ef63054f)
 
-  Fix CORS [https://stackoverflow.com/questions/37760695/firebase-storage-and-access-control-allow-origin]
-* PList additions [https://medium.com/unitechie/flutter-tutorial-image-picker-from-camera-gallery-c27af5490b74]
 
-Step 7: Additional Auth flow items
+This app integrates OTP verification and real-time notifications using Firebase Authentication and Firebase Functions. These features are also supported when running the app with Firebase Emulators.
 
-1. Add a Change Password Screen. The Flutter Fire package does not have this screen.
-2. TODO: Add ReCaptcha to login flow for password authentication for Web only
-   * Phone Auth on Web has a ReCaptcha already [https://firebase.flutter.dev/docs/auth/phone/]. Tried to use that library but it is very cryptic.
-   * Use the following instead [https://stackoverflow.com/questions/60675575/how-to-implement-recaptcha-into-a-flutter-app] or [https://medium.com/cloudcraftz/securing-your-flutter-web-app-with-google-recaptcha-b556c567f409] or [https://pub.dev/packages/g_recaptcha_v3]
-3. TODO: Ensure Reset Password has Email verification
-4. TODO: Add Phone verification [https://firebase.google.com/docs/auth/flutter/phone-auth]
-   * See [https://github.com/firebase/flutterfire/issues/4189].
-5. TODO: Add 2FA with SMS Pin. This screen is available in the Flutter Fire package
+#### OTP Verification:
+- **Simulate OTP Verification**: With the Firebase Auth Emulator, you can test the OTP verification process without needing an actual phone number. This helps in testing the entire user authentication flow during development.
 
-Step 8: Add Firebase Emulator to test on laptop instead of server so that we can use Functions without upgrading the plan to Blaze. See [https://firebase.google.com/docs/emulator-suite/install_and_configure]
+#### Notifications:
+- **Real-time Notifications**: Firebase Functions, in conjunction with the Firebase Emulator, allow you to trigger notifications for various events (e.g., order status updates). This enables you to develop and test notification workflows without interacting with the live Firebase environment.
 
-Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we need to use Firebase Functions. Instead using Emulator.
 
-1. In Emulator we can add user via http://127.0.0.1:4000/auth and add custom claim via UI as  {"role":"admin"}. The effect is shown via Product page in Nav instead of Cart page for admin user.
-2. Add Function to add the custom claim to make the first user the admin using the Admin SDK
-3. Registeration form to collect some data post signUp and enforce email verification from Client side.
+### 4. App Code Structure and Completed Features
 
-   * Note! for Emulator check the console to verify using the link provided as email is not sent.
-4. Enforcing verify email using a button which appears when SignIn fails due to non verification.
+The app's code structure follows a modular approach, with separate directories for different features and user flows. The following features have been implemented:
 
-   * Fixed the error handling message during login.
-   * Coverted server side to Typescript
-   * Enabled Resend verification mail button
-     * Approach 1 - Use Email Link Authentication and signIn, assuming it marks email as verified also. We cannot send the verification mail as is, since that can be sent only if signed in (which was allowed only for first login post signup)
-       * Refer https://firebase.google.com/docs/auth/flutter/email-link-auth
-       * TODO Enable Deep Linking: According to https://firebase.google.com/docs/dynamic-links/flutter/receive, the Flutter feature is being deprecated and we should use the AppLinks (Android), UniversalLinks(iOS) instead. Leaving this for future as adding complexity.
-       * We could use the server side handling instead of deep linking. See [https://firebase.google.com/docs/auth/custom-email-handler?hl=en&authuser=0#web]. However, this requires changing the email template for the URL which is not possible in Emulator. Using the continueURL instead does not work as oobCode is already expired. This handling also uses the web client sdk. Thus it is better to go with the below method instead.
-     * Approach 2 - (Hack) send a create request with suffix ".verify" added in email when button clicked. Use the server side beforeCreate to catch this and send verification mail
-       * Note that the Server side beforeCreate function can also bypass user creation till verification but the user record (esp password) needs to be stored anyways, so bypassing user creation is not a good idea. Instead, we should use the verified tag in subsequent processing
-       * Sending emails from server side is possible but by using the web client SDK.
-5. TODO: Other Items
+- **Home Screen**:
+  - **Banners**: Display promotional banners at the top of the screen.
+  - **Product Listings**: Showcase various products across different categories.
+  - **Categories Listing**: Provide users with an easy way to browse products by categories.
 
-   * TODO: Using autocomplete for emails is throwing error log in terminal. No impact but need to fix when all is done.
-   * TODO: Add a job that removes all unverified users after a while automatically. This could be useful if you were victim of bot attacks, but adding the Recaptcha is better precaution. See [https://stackoverflow.com/questions/67148672/how-to-delete-unverified-e-mail-addresses-in-firebase-authentication-flutter/67150606#67150606]
-6. Added Roles of Buyer and Seller.
+- **Cart Flow**:
+  - **Checkout**: Complete the checkout process with selected items.
+  - **Address Selection**: Users can select or add a new address during checkout.
+  - **Payment Method Selection**: Multiple payment methods are supported for a seamless checkout experience.
 
-   1. Added Access level in increasing order of role order => Buyer then Seller then Admin
-   2. Created Navigation for each of Admin, Buyer, Seller screens
-   3. Allowed switch from lower role Navigation to Navigation view till the given role of the user
+- **Past Orders**: View a history of past orders, allowing users to track their previous purchases.
 
-Step 10: Firebase Remote Config for A/B testing. See [https://firebase.google.com/docs/remote-config]
+- **Profile Section**: Manage user profile details, including personal information and settings.
 
-1. Complete the Screen enum based Navigation framework
-2. Config useBottomSheetForProfileOptions for Navigation element to be one of the following
-   * False: Drawer for Account, Settings, Sign Out
-   * True: Hamburger that opens BottomSheet (Context Menu in larger screen) for the same options
-3. TODO: Config for adding Search Bar at the Top vs a Bottom Navigation button
+- **Seller Section**: For users with a seller account, an additional section allows them to add or edit their products, enabling them to manage their listings directly within the app.
+---
 
-Step 11: TODO: CRUD
+# Flutter Firebase E-Commerce Admin Panel
 
-* Users request role upgrade
-* Add this request data to Firebase Datastore
-* Create ListView with slidable tiles for approvals
-* Admin SDK used by admin user via workflow on this request data and is approved from app
-  * Allow a Plan attribute via Custome Claims (e.g. Premium user flag) for Buyer and Seller, to add features which are not Navigation linked. Add a button Upgrade to Plan in Drawer that leads to Payment screen. Also certain aspects of premium plan can be visible that leads to upgrade plan screen via middleware
-* Nested Category, Sub-Category tree creation
+Welcome to the **Flutter Firebase E-Commerce Admin Panel**! This admin panel is designed to provide seamless control over the e-commerce platform, enabling administrators to manage products, sellers, coupons, banners, and more.
 
-Step 12: TODO: Theming and Custom Settings
+## Features Overview
 
-* Add Persona (like that in Netflix) and create a Persona selection only for Buyer Role
-* Add Minimal (Three Color Gradient Pallette) Material Theme. Align it with Persona Templates (like Kids Template in Netflix)
-* Dark theme toggle setting based on each Persona of the logged in User
+### 1. Special Product Management
+- **Upload Special Products**: Administrators can upload exclusive products directly from the admin panel. These products will be highlighted on the platform for special promotions or featured categories.
 
-Step 13: TODO: Large vs Small screen responsiveness
+### 2. Seller Product Approval
+- **Approve Seller Products**: Review and approve products submitted by sellers before they appear on the platform. This ensures quality control and adherence to platform guidelines.
 
-* Drawer: Triggered by Top Left Icon (App Logo). For iOS this icon changes to back button when required. Contains allowed Role List, Screens specified as Drawer. Becomes Left Side Navigation for Horizontal Screens. Can have additional extreme left vertical Navigation Strip. Bottom Navigation Bar also folds into this strip in Horizontal Screens.
-* Top Right Icon: used for Login and post Login triggers BottomSheet/Context Menu for Persona Change, Profile, Settings, Change Password, Logout
-* Search Bar (Toggle Button for phones) on Top Center with Title
-* Status Bottom Bar for desktops only instead of SnackBars
-* FAB vs Main Menu
+### 3. Coupon and Banner Management
+- **Add Coupons**: Create and manage discount coupons to offer special deals and promotions to customers.
+- **Add Banners**: Upload and manage promotional banners that will be displayed throughout the app. Banners can be used to highlight special events, sales, or new arrivals.
 
-Step 14: TODO: Make own login flow screens. Remove firebase library reference from all but auth_service
+### 4. App Management
+- **Comprehensive Control**: The admin panel offers full control over various aspects of the app, allowing administrators to ensure the smooth operation of the platform.
+
+### 5. Export Data as CSV
+- **Admin CSV Export**: Easily export product, seller, or order data as CSV files for analysis or reporting purposes. This feature enables administrators to keep records and perform data-driven decisions.
+
+## Approval Process Explanation
+
+The approval process within the admin panel is critical for maintaining the quality and integrity of the e-commerce platform. When sellers submit new products, these products must first be reviewed by an administrator. Only after approval are the products listed on the platform for customers to purchase. This step ensures that all products meet the platform's standards, helping to maintain a high-quality shopping experience for users.
+
+## Screenshots
+
+Here's a visual overview of the admin panel features:
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c98f5c3f-144d-48a5-827d-31f78f34e2f6" alt="Admin Dashboard" width="600"/>
+  <img src="https://github.com/user-attachments/assets/8cac231d-81d5-475b-8140-a5be247998c7" alt="Product Management" width="600"/>
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/aa4ee0d3-41ca-4f49-9b0e-63c8ad9acc95" alt="Seller Approvals" width="600"/>
+  <img src="https://github.com/user-attachments/assets/e2d1c5ec-5221-4ceb-a3ac-533748e7c15d" alt="Coupon Management" width="600"/>
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/394fb2f3-d930-4d38-9c89-6274b4443137" alt="Banner Management" width="600"/>
+  <img src="https://github.com/user-attachments/assets/5ea2e0ba-c193-4679-8e8b-642bd1af765f" alt="Data Export" width="600"/>
+</p>
+
+## Getting Started
+
+### 1. Prerequisites
+
+- Ensure that the main e-commerce app is set up and configured with Firebase.
+- The admin panel should have the appropriate Firebase configurations (e.g., `firebase.json`) in place to interact with the backend.
+
+### 2. Installation
+
+1. Navigate to the project directory:
+   ```bash
+   cd admin_panel_directory
+   ```
+
+2. Install the required dependencies:
+   ```bash
+   flutter pub get
+   ```
+
+### 3. Running the Admin Panel
+
+To start the admin panel, run the following command:
+
+```bash
+flutter run --web-renderer html
+```
+
+## Usage
+
+- **Special Products**: Use the "Special Products" section to add new items that will be featured on the platform.
+- **Seller Approvals**: Navigate to the "Seller Approvals" section
+
+ to review and approve products submitted by third-party sellers.
+- **Coupons and Banners**: Access the "Coupons" and "Banners" sections to create and manage promotional content.
+- **Export as CSV**: In the admin panel, locate the export functionality to download relevant data as CSV files for offline analysis and reporting.
+
+---
+
+## Submission Details
+- **Name**: Manan Kabra
+- **College**: K.J. Somaiya College of Engineering
+- **Email**: manan.kabra@somaiya.edu
+- **Personal Email**: manankabra200318@gmail.com
+- **Roll No**: 16010421041
+
+
+
