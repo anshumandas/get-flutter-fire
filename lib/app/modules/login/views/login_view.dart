@@ -39,8 +39,8 @@ class LoginView extends GetView<LoginController> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: action == AuthAction.signIn
-          ? const Text('Welcome to Get Flutter Fire, please sign in!')
-          : const Text('New to Get Flutter Fire, please sign up!'),
+          ? const Text('Welcome to Rest Quest, please sign in!')
+          : const Text('New to Rest Quest, please sign up!'),
     );
   }
 
@@ -55,7 +55,7 @@ class LoginView extends GetView<LoginController> {
           ? recaptcha()
           : SignInScreen(
               providers: [
-                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
+                GoogleProvider(clientId: 'YOUR_WEB_CLIENT_ID'),
                 MyEmailAuthProvider(),
               ],
               showAuthActionSwitch: !controller.isRegistered,

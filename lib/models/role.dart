@@ -1,23 +1,13 @@
 import 'screens.dart';
 
-// First tab for all except Admin is Home/Dashboard which is diferrent for each role
-// Admin is User List By Roles with slide to Change Role or Disable
-// Second tab for
-// Guest & Buyer is Public Product List by Category with Slide to Add to Cart
-// Seller is Product List by Category with Add Product FAB leading to Product Form
-// Admin is Category List with Add Category FAB
-// Third tab for
-// Guest is Cart with Guest Auth
-// Buyer is Cart with own Auth
-// Seller is MyProducts
-// Admin is Tasks/Approvals
-// Profile and Settings is in Drawer
+// updated the roles to guest, registeredUser and admin
+// guest can access Home, Search and Profile Screens
+//admin has access to all screens, including managing hotels and users
 
 enum Role {
-  buyer([Screen.DASHBOARD, Screen.PRODUCTS, Screen.CART]),
-  seller([Screen.DASHBOARD, Screen.PRODUCTS, Screen.MY_PRODUCTS]),
-  admin([Screen.USERS, Screen.CATEGORIES, Screen.TASKS]);
-//higher role can assume a lower role
+  guest([Screen.HOME, Screen.PRODUCTS, Screen.LOGIN, Screen.REGISTER, Screen.PROFILE]),
+  registeredUser([Screen.HOME, Screen.PRODUCTS, Screen.CHECKOUT, Screen.PROFILE, Screen.CART]),
+  admin([Screen.USERS, Screen.HOME,Screen.MY_PRODUCTS,Screen.CHECKOUT, Screen.PROFILE, Screen.CATEGORIES,Screen.TASKS]);
 
   const Role(this.permissions);
   final List<Screen>
@@ -25,7 +15,7 @@ enum Role {
 
   static Role fromString(String? name) => (name != null
       ? Role.values.firstWhere((role) => role.name == name)
-      : Role.buyer);
+      : Role.guest);
   bool hasAccess(Role role) => index >= role.index;
   bool hasAccessOf(String role) => index >= fromString(role).index;
 

@@ -11,10 +11,11 @@ import 'menu_sheet_button.dart';
 class LoginWidgets {
   static Widget headerBuilder(context, constraints, shrinkOffset) {
     return Padding(
-      padding: const EdgeInsets.all(20),
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Image.asset('assets/images/flutterfire_300x.png'),
+      padding: const EdgeInsets.all(10),
+      child: SizedBox(
+        width:200,
+        height:200,
+        child: Image.asset('assets/icons/logo.png'),
       ),
     );
   }

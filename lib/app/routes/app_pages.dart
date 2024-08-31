@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../modules/home/views/splash_screen.dart';
 import '../../models/access_level.dart';
 import '../../models/role.dart';
 import '../middleware/auth_middleware.dart';
@@ -38,17 +38,23 @@ import '../modules/users/bindings/users_binding.dart';
 import '../modules/users/views/users_view.dart';
 import '../../models/screens.dart';
 
+
 part 'app_routes.dart';
 part 'screen_extension.dart';
 
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.SPLASH;
 
   //TODO create this using the information from Screen and Role data
   //can use https://pub.dev/packages/freezed
   static final routes = [
+    GetPage(
+      name: Routes.SPLASH,
+      page: () => SplashScreen(),
+      // No binding needed for splash screen if it doesn't use any controller
+    ),
     GetPage(
       name: '/',
       page: () => const RootView(),
@@ -98,9 +104,10 @@ class AppPages {
               binding: ProductsBinding(),
               children: [
                 Screen.PRODUCT_DETAILS.getPages(
-                  page: () => const ProductDetailsView(),
+                  page:() => const ProductDetailsView(),
                   binding: ProductDetailsBinding(),
-                ),
+                )
+
               ],
             ),
             Screen.CATEGORIES.getPage(
@@ -111,12 +118,12 @@ class AppPages {
             Screen.CART.getPage(
               page: () => const CartView(),
               binding: CartBinding(),
-              role: Role.buyer,
+              role: Role.registeredUser,
               children: [
                 Screen.CHECKOUT.getPage(
                   //if this is after cart details, it never gets reached
-                  page: () => const CheckoutView(),
-                  binding: CheckoutBinding(),
+                  page: () => CheckoutView(),
+                  binding: CheckoutBinding()
                 ),
                 Screen.CART_DETAILS.getPages(
                   page: () => const ProductDetailsView(),
@@ -127,7 +134,7 @@ class AppPages {
             Screen.MY_PRODUCTS.getPage(
               page: () => const MyProductsView(),
               binding: MyProductsBinding(),
-              role: Role.seller,
+              role: Role.admin,
               children: [
                 Screen.MY_PRODUCT_DETAILS.getPages(
                   page: () => const ProductDetailsView(),
