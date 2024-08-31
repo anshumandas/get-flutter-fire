@@ -8,23 +8,29 @@ class ProductsAdminView extends GetView<ProductsAdminController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text('Title'),
-              subtitle: Text('Price: 199'),
-              trailing: IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-            );
-          }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
-        onPressed: () {
-          Get.to(AddProductView());
-        },
-        child: Icon(Icons.add),
-      ),
-    );
+    return GetBuilder<ProductsAdminController>(builder: (ctrl) {
+      return Scaffold(
+        body: ListView.builder(
+            itemCount: ctrl.products.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(ctrl.products[index].name ?? ''),
+                subtitle: Text((ctrl.products[index].price ?? '').toString()),
+                trailing: IconButton(
+                    onPressed: () {
+                      ctrl.deleteProduct(ctrl.products[index].id ?? '');
+                    },
+                    icon: Icon(Icons.delete)),
+              );
+            }),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.orange,
+          onPressed: () {
+            Get.to(AddProductView());
+          },
+          child: Icon(Icons.add),
+        ),
+      );
+    });
   }
 }

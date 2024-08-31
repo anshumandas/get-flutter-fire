@@ -1,62 +1,86 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/models/products_admin.dart';
 
 class ProductsAdminController extends GetxController {
-  // List to store products
-  final RxList<Product> products = <Product>[].obs;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late CollectionReference prodCollection;
+  TextEditingController productNameCtrl = TextEditingController();
+  TextEditingController productDescriptionCtrl = TextEditingController();
+  TextEditingController productImgCtrl = TextEditingController();
+  TextEditingController productPriceCtrl = TextEditingController();
+  String category = 'Category';
+  String brand = 'Brand';
+  bool offer = false;
 
-  // Method to fetch all products (for now, we will simulate with a list of sample data)
-  void fetchProducts() {
-    // Simulated fetching of products, replace this with actual API calls
-    List<Product> fetchedProducts = [
-      Product(
-        id: '1',
-        name: 'Laptop',
-        description: 'A high-performance laptop',
-        price: 1200.0,
-        imageUrl: 'https://example.com/laptop.png',
-      ),
-      Product(
-        id: '2',
-        name: 'Smartphone',
-        description: 'A latest-gen smartphone',
-        price: 800.0,
-        imageUrl: 'https://example.com/smartphone.png',
-      ),
-    ];
-
-    // Update the products list
-    products.assignAll(fetchedProducts);
+  List<Product> products = [];
+  @override
+  Future<void> onInit() async {
+    prodCollection = firestore.collection('products');
+    await fetchProducts();
+    super.onInit();
   }
 
-  // Method to add a new product
-  void addProduct(Product product) {
-    // Add the new product to the list
-    products.add(product);
-  }
-
-  // Method to update an existing product
-  void updateProduct(String productId, Product updatedProduct) {
-    int index = products.indexWhere((product) => product.id == productId);
-    if (index != -1) {
-      products[index] = updatedProduct;
+  addProduct() {
+    try {
+      DocumentReference doc = prodCollection.doc();
+      Product product = Product(
+        id: doc.id,
+        name: productNameCtrl.text,
+        category: category,
+        description: productDescriptionCtrl.text,
+        price: double.tryParse(productPriceCtrl.text),
+        brand: brand,
+        image: productImgCtrl.text,
+        offer: offer,
+      );
+      final productJson = product.toJson();
+      doc.set(productJson);
+      Get.snackbar('Success', 'Product Added Successfully',
+          colorText: Colors.green);
+      setDefaultValues();
+      fetchProducts();
+    } on Exception catch (e) {
+      Get.snackbar('Error', e.toString(), colorText: Colors.green);
+      print(e);
     }
   }
 
-  // Method to delete a product by ID
-  void deleteProduct(String productId) {
-    products.removeWhere((product) => product.id == productId);
+  setDefaultValues() {
+    productNameCtrl.clear();
+    productDescriptionCtrl.clear();
+    productPriceCtrl.clear();
+    productImgCtrl.clear();
+    category = 'Category';
+    brand = 'Brand';
+    offer = false;
+    update();
   }
 
-  // Optional: Method to find a product by ID
-  Product? findProductById(String productId) {
-    return products.firstWhereOrNull((product) => product.id == productId);
+  fetchProducts() async {
+    try {
+      QuerySnapshot productSnapshot = await prodCollection.get();
+      final List<Product> retrievedProducts = productSnapshot.docs
+          .map((doc) => Product.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      products.clear();
+      products.assignAll(retrievedProducts);
+    } on Exception catch (e) {
+      Get.snackbar('Error', e.toString(), colorText: Colors.red);
+    } finally {
+      update();
+    }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Fetch products when the controller is initialized
-    fetchProducts();
+  deleteProduct(String id) async {
+    try {
+      await prodCollection.doc(id).delete();
+      fetchProducts();
+      Get.snackbar('Success', 'Products Deleted Successfully',
+          colorText: Colors.green);
+    } on Exception catch (e) {
+      Get.snackbar('Error', e.toString(), colorText: Colors.red);
+    }
   }
 }
