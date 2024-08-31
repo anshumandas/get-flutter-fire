@@ -1,53 +1,83 @@
-// import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../services/auth_service.dart';
-// import '../../../widgets/login_widgets.dart';
 import '../controllers/register_controller.dart';
 
-//ALso add a form to take additional info such as display name of other customer details mapped with uid in Firestore
 class RegisterView extends GetView<RegisterController> {
   const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Add pre verification Form if any. Mostly it can be post verification and can be the Profile or Setting screens
-    try {
-      // using this is causing an error when we send verification mail from server side
-      // if it was initiated once, even when no visible. So we need to dispose when not visible
-      var w =
-          // EmailVerificationScreen(
-          //   headerBuilder: LoginWidgets.headerBuilder,
-          //   sideBuilder: LoginWidgets.sideBuilder,
-          //   actions: [
-          //     EmailVerifiedAction(() {
-          //       AuthService.to.register();
-          //     }),
-          //   ],
-          // );
-          Scaffold(
-        appBar: AppBar(
-          title: const Text('Registeration'),
-          centerTitle: true,
-        ),
-        body: Center(
-            child: Column(children: [
-          const Text(
-            'Please verify your email (check SPAM folder), and then relogin',
-            style: TextStyle(fontSize: 20),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Registration'),
+        centerTitle: true,
+        backgroundColor: Colors.orange,
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.email,
+                size: 80,
+                color: Colors.orange,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Please verify your email (check SPAM folder), and then relogin',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.brown,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => AuthService.to.register(),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
+                child: const Text("Verification Done. Relogin"),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _signInWithGoogle(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue, // Google Sign-In button color
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset('assets/images/google_logo.png', width: 24),
+                    const SizedBox(width: 8),
+                    const Text("Sign in with Google"),
+                  ],
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => AuthService.to.register(),
-            child: const Text("Verification Done. Relogin"),
-          )
-        ])),
-      );
-      return w;
+        ),
+      ),
+    );
+  }
+
+  void _signInWithGoogle() async {
+    try {
+      await AuthService.to.signInWithGoogle();
     } catch (e) {
-      // TODO
+      // Handle errors appropriately, e.g., show an error message
+      Get.snackbar('Sign-In Error', e.toString(), backgroundColor: Colors.red, colorText: Colors.white);
     }
-    return const Scaffold();
   }
 }

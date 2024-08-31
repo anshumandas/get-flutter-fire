@@ -79,7 +79,7 @@ class AppPages {
           ],
           children: [
             Screen.DASHBOARD.getPage(
-              page: () => const DashboardView(),
+              page: () => DashboardView(),
               binding: DashboardBinding(),
             ),
             Screen.USERS.getPage(

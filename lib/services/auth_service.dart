@@ -1,10 +1,9 @@
-// ignore_for_file: avoid_print
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/screens.dart';
 import '../constants.dart';
@@ -14,6 +13,7 @@ class AuthService extends GetxService {
   static AuthService get to => Get.find();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   late Rxn<EmailAuthCredential> credential = Rxn<EmailAuthCredential>();
   final Rxn<User> _firebaseUser = Rxn<User>();
   final Rx<Role> _userRole = Rx<Role>(Role.buyer);
@@ -24,7 +24,7 @@ class AuthService extends GetxService {
   Role get maxRole => _userRole.value;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
     if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
     _firebaseUser.bindStream(_auth.authStateChanges());
@@ -52,8 +52,20 @@ class AuthService extends GetxService {
       ? (user!.displayName ?? user!.email)
       : 'Guest';
 
-  void login() {
-    // this is not needed as we are using Firebase UI for the login part
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleUser = await _googleSignIn.signIn();
+      final GoogleAuth = await GoogleUser!.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: GoogleAuth.accessToken,
+        idToken: GoogleAuth.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+    } catch (e) {
+      print('Google sign-in error: ${e.toString()}');
+    }
   }
 
   void sendVerificationMail({EmailAuthCredential? emailAuth}) async {
@@ -61,13 +73,6 @@ class AuthService extends GetxService {
       if (_auth.currentUser != null) {
         await _auth.currentUser?.sendEmailVerification();
       } else if (emailAuth != null) {
-        // Approach 1: sending email auth link requires deep linking which is
-        // a TODO as the current Flutter methods are deprecated
-        // sendSingInLink(emailAuth);
-
-        // Approach 2: This is a hack.
-        // We are using createUser to send the verification link from the server side by adding suffix .verify in the email
-        // if the user already exists and the password is also same and sign in occurs via custom token on server side
         try {
           await _auth.createUserWithEmailAndPassword(
               email: "${credential.value!.email}.verify",
@@ -84,21 +89,11 @@ class AuthService extends GetxService {
     }
   }
 
-  void sendSingInLink(EmailAuthCredential emailAuth) {
+  void sendSignInLink(EmailAuthCredential emailAuth) {
     var acs = ActionCodeSettings(
-      // URL you want to redirect back to. The domain (www.example.com) for this
-      // URL must be whitelisted in the Firebase Console.
       url:
           '$baseUrl:5001/flutterfast-92c25/us-central1/handleEmailLinkVerification',
-      //     // This must be true if deep linking.
-      //     // If deeplinking. See [https://firebase.google.com/docs/dynamic-links/flutter/receive]
       handleCodeInApp: true,
-      //     iOSBundleId: '$bundleID.ios',
-      //     androidPackageName: '$bundleID.android',
-      //     // installIfNotAvailable
-      //     androidInstallApp: true,
-      //     // minimumVersion
-      //     androidMinimumVersion: '12'
     );
     _auth
         .sendSignInLinkToEmail(email: emailAuth.email, actionCodeSettings: acs)
@@ -109,15 +104,15 @@ class AuthService extends GetxService {
 
   void register() {
     registered.value = true;
-    // logout(); // Uncomment if we need to enforce relogin
     final thenTo =
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate
-        .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
+        .offAndToNamed(thenTo ?? Screen.PROFILE.route); // Profile has the forms
   }
 
   void logout() {
     _auth.signOut();
+    _googleSignIn.signOut(); // Ensure Google Sign-In is also signed out
     if (isAnon) _auth.currentUser?.delete();
     _firebaseUser.value = null;
   }
@@ -158,12 +153,9 @@ class AuthService extends GetxService {
         (BuildContext context, FirebaseAuthException e) {
       final defaultLabels = FirebaseUILocalizations.labelsOf(context);
 
-      // for verification error, also set a boolean flag to trigger button visibility to resend verification mail
       String? verification;
       if (e.code == "internal-error" &&
           e.message!.contains('"status":"UNAUTHENTICATED"')) {
-        // Note that (possibly in Emulator only) the e.email is always coming as null
-        // String? email = e.email ?? parseEmail(e.message!);
         callback(true, credential.value);
         verification =
             "Please verify email id by clicking the link on the email sent";

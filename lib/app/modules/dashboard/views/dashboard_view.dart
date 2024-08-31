@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/dashboard_controller.dart';
+import 'package:audioplayers/audioplayers.dart';  // Import the audioplayers package
 
 class DashboardView extends GetView<DashboardController> {
-  const DashboardView({super.key});
+  // Remove 'const' to avoid issues with non-constant fields
+  DashboardView({Key? key}) : super(key: key);
+
+  final AudioPlayer _audioPlayer = AudioPlayer();  // Create an instance of AudioPlayer
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange.shade50, // Light background color
       appBar: AppBar(
-        title: const Text('Cafe Dashboard'),
+        title: const Text('Cafe App'),
         backgroundColor: Colors.orange,
         elevation: 0,
       ),
@@ -61,11 +65,16 @@ class DashboardView extends GetView<DashboardController> {
         IconButton(
           icon: const Icon(Icons.notifications, color: Colors.brown),
           onPressed: () {
-            // Handle notifications
+            _playNotificationSound();  // Play sound when icon is pressed
           },
         ),
       ],
     );
+  }
+
+  void _playNotificationSound() async {
+    // Load the notification sound and play it
+    await _audioPlayer.play(AssetSource('sounds/notification.mp3'));
   }
 
   Widget _buildFeaturedSection() {
