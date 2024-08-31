@@ -1,6 +1,6 @@
 {
   "project_info": {
-    "project_number": "947336803734",
+    "project_number": "",
     "project_id": "gaurav-sharekhan",
     "storage_bucket": "gaurav-sharekhan.appspot.com"
   },
@@ -28,7 +28,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCo0-kbb5H7DQqkxfRjq6P3XQI33b1Ijp8"
+          "current_key": ""
         }
       ],
       "services": {
