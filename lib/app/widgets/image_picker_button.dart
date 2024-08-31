@@ -74,8 +74,11 @@ class ImagePickerButton extends MenuSheetButton<ImageSources> {
   Iterable<ImageSources> get values => ImageSources.values;
 
   @override
-  void callbackFunc(act) {
-    if (callback != null) callback!(act);
+  void callbackFunc(dynamic act) {
+    if (callback != null) {
+      String? path = act as String?;
+      callback!(path!);
+    }
   }
 
   @override
