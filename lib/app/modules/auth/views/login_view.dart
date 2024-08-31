@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/routes/app_routes.dart';
 
 import '../../../../constants.dart';
 import '../../../widgets/custom_text_field.dart';
@@ -44,7 +45,24 @@ class LoginView extends StatelessWidget {
                 icon: Icons.lock,
                 obscureText: true,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.forgotPassword); // Navigate to the Forgot Password screen
+                  },
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(
+                      color: Colors.blue, // Color for the Forgot Password text
+                      fontSize: 14,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kButtonBackgroundColor,

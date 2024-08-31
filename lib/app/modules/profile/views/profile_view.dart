@@ -28,55 +28,69 @@ class ProfileView extends StatelessWidget {
           return Center(child: CircularProgressIndicator(color: Colors.white));
         }
 
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              SizedBox(height: 20),
-              FutureBuilder<File?>(
-                future: _getLocalImageFile(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.grey,
-                    );
-                  } else if (snapshot.hasData && snapshot.data != null) {
-                    return CircleAvatar(
-                      radius: 50,
-                      backgroundImage: FileImage(snapshot.data!),
-                    );
-                  } else {
-                    return CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(
-                        _controller.userData['imageUrl'] ??
-                            'https://via.placeholder.com/150',
-                      ),
-                    );
-                  }
-                },
-              ),
-              SizedBox(height: 20),
-              Text(
-                _controller.userData['name'] ?? 'No name',
-                style: TextStyle(fontSize: 24, color: Colors.white),
-              ),
-              SizedBox(height: 10),
-              Text(
-                _controller.userData['email'] ?? 'No email',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
-              ),
-              Spacer(),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                FutureBuilder<File?>(
+                  future: _getLocalImageFile(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.grey,
+                      );
+                    } else if (snapshot.hasData && snapshot.data != null) {
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundImage: FileImage(snapshot.data!),
+                      );
+                    } else {
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(
+                          _controller.userData['imageUrl'] ??
+                              'https://via.placeholder.com/150',
+                        ),
+                      );
+                    }
+                  },
                 ),
-                onPressed: _controller.signOut,
-                child: Text('Sign Out', style: TextStyle(color: Colors.white, fontSize: 16)),
-              ),
-            ],
+                SizedBox(height: 20),
+                Text(
+                  _controller.userData['name'] ?? 'No name',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  _controller.userData['email'] ?? 'No email',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                SizedBox(height: 30),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  ),
+                  onPressed: _controller.signOut,
+                  child: Text(
+                    'Sign Out',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       }),
@@ -119,8 +133,8 @@ class ProfileView extends StatelessWidget {
                     radius: 40,
                     backgroundImage: _selectedImage != null
                         ? FileImage(_selectedImage!)
-                        : NetworkImage(_controller.userData['imageUrl'] ?? 'https://via.placeholder.com/150')
-                    as ImageProvider,
+                        : NetworkImage(_controller.userData['imageUrl'] ??
+                        'https://via.placeholder.com/150') as ImageProvider,
                     child: Icon(Icons.camera_alt, color: Colors.white.withOpacity(0.7), size: 40),
                   ),
                 ),

@@ -25,7 +25,6 @@ class AuthController extends GetxController {
       User? user = await _authService.signUpWithEmailPassword(email, password);
       if (user != null) {
         await user.sendEmailVerification();
-
         await _storeUserData(user, name, email, phoneNumber);
 
         Get.snackbar(
@@ -38,33 +37,7 @@ class AuthController extends GetxController {
         Get.offAllNamed(AppRoutes.login);
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Sign up failed: ${e.toString()}',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    }
-  }
-
-  Future<void> _storeUserData(User user, String name, String email, String phoneNumber) async {
-    try {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-        'name': name,
-        'email': email,
-        'phoneNumber': phoneNumber,
-        'imageUrl': 'https://via.placeholder.com/150',
-        'createdAt': FieldValue.serverTimestamp(),
-        'isEmailVerified': false,
-      });
-    } catch (e) {
-      Get.snackbar(
-        'Firestore Error',
-        'Failed to store user data: ${e.toString()}',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      print('Error writing document: $e');
+      _handleError('Sign up failed', e);
     }
   }
 
@@ -85,12 +58,7 @@ class AuthController extends GetxController {
         }
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Login failed: ${e.toString()}',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      _handleError('Login failed', e);
     }
   }
 
@@ -102,12 +70,47 @@ class AuthController extends GetxController {
         Get.offAllNamed(AppRoutes.main);
       }
     } catch (e) {
+      _handleError('Google Sign-In failed', e);
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _authService.signOut();
+      Get.offAllNamed(AppRoutes.login);
+    } catch (e) {
+      _handleError('Sign out failed', e);
+    }
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _authService.sendPasswordResetEmail(email);
       Get.snackbar(
-        'Error',
-        'Google Sign-In failed: ${e.toString()}',
-        backgroundColor: Colors.red,
+        'Reset Link Sent',
+        'A password reset link has been sent to $email.',
+        backgroundColor: Colors.green,
         colorText: Colors.white,
       );
+      Get.offAllNamed(AppRoutes.login);
+    } catch (e) {
+      _handleError('Failed to send reset link', e);
+    }
+  }
+
+  Future<void> _storeUserData(
+      User user, String name, String email, String phoneNumber) async {
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'name': name,
+        'email': email,
+        'phoneNumber': phoneNumber,
+        'imageUrl': 'https://via.placeholder.com/150',
+        'createdAt': FieldValue.serverTimestamp(),
+        'isEmailVerified': false,
+      });
+    } catch (e) {
+      _handleError('Failed to store user data', e);
     }
   }
 
@@ -126,27 +129,17 @@ class AuthController extends GetxController {
         });
       }
     } catch (e) {
-      Get.snackbar(
-        'Firestore Error',
-        'Failed to check/store Google user data: ${e.toString()}',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-      print('Error checking/storing Google user data: $e');
+      _handleError('Failed to check/store Google user data', e);
     }
   }
 
-  Future<void> signOut() async {
-    try {
-      await _authService.signOut();
-      Get.offAllNamed(AppRoutes.login);
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Sign out failed: ${e.toString()}',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    }
+  void _handleError(String message, dynamic e) {
+    Get.snackbar(
+      'Error',
+      '$message: ${e.toString()}',
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+    print('Error: $message: $e');
   }
 }
