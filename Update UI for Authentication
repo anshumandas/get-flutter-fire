@@ -1,0 +1,26 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'auth_service.dart';
+
+class AuthScreen extends StatelessWidget {
+  final AuthService _authService = AuthService();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Sign In')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            User? user = await _authService.signInWithGoogle();
+            if (user != null) {
+              Get.offNamed('/home');  // Navigate to home screen on successful login
+            }
+          },
+          child: Text('Sign in with Google'),
+        ),
+      ),
+    );
+  }
+}
+
