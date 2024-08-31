@@ -14,7 +14,14 @@ class ProductsView extends GetView<ProductsController> {
       floatingActionButton:
           (arg != null && Get.rootDelegate.arguments()["role"] == Role.seller)
               ? FloatingActionButton.extended(
-                  onPressed: controller.loadDemoProductsFromSomeWhere,
+                  onPressed: () {
+                    // Ensure controller is initialized and method exists
+                    if (controller != null) {
+                      controller.loadDemoProductsFromSomeWhere();
+                    } else {
+                      print('Controller is not initialized.');
+                    }
+                  },
                   label: const Text('Add'),
                   backgroundColor: Colors.pinkAccent, // Theme color for FAB
                 )
@@ -44,8 +51,13 @@ class ProductsView extends GetView<ProductsController> {
             child: Obx(
               () => RefreshIndicator(
                 onRefresh: () async {
-                  controller.products.clear();
-                  controller.loadDemoProductsFromSomeWhere();
+                  // Ensure controller is initialized and method exists
+                  if (controller != null) {
+                    controller.products.clear();
+                    controller.loadDemoProductsFromSomeWhere();
+                  } else {
+                    print('Controller is not initialized.');
+                  }
                 },
                 child: GridView.builder(
                   padding: const EdgeInsets.all(16),

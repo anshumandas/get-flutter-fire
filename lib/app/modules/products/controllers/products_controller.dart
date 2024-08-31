@@ -1,21 +1,24 @@
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/settings/controllers/settings_controller.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../../../models/product.dart'; // Ensure this path matches your project structure
+// import '../../../../controllers/settings_controller.dart'; // Import SettingsController
 
 class ProductsController extends GetxController {
   final products = <Product>[].obs;
   final filteredProducts = <Product>[].obs;
   final selectedCategory = ''.obs;
   final cartItems = <CartItem>[].obs;
-  final trendingProducts = <Product>[].obs;  // Add this line for trending products
-  final box = GetStorage();  // Initialize GetStorage for saving cart items
+  final trendingProducts = <Product>[].obs;
+  final box = GetStorage(); // Initialize GetStorage for saving cart items
+  final filters = ['All', 'Male', 'Female', 'Unisex'].obs;
 
-   final filters = ['All', 'Male', 'Female', 'Unisex'].obs;
+  final SettingsController settingsController = Get.find<SettingsController>();
 
   @override
   void onInit() {
     super.onInit();
-    loadDemoProductsFromSomeWhere();
+    loadDemoProducts();
     applyFilter();
   }
 
@@ -74,23 +77,35 @@ class ProductsController extends GetxController {
     applyFilter();
   }
 
-  // Method to load demo products from somewhere
-  void loadDemoProductsFromSomeWhere() {
-    loadDemoProducts(); // Call the actual method to load products
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-    loadDemoProductsFromSomeWhere();
-  }
-
-  // Method to filter products based on selected category
+  // Method to apply filters based on selected category and persona
   void applyFilter() {
-    if (selectedCategory.isEmpty) {
-      filteredProducts.assignAll(products);
+    // Get selected persona from SettingsController
+    final persona = settingsController.selectedPersona.value;
+
+    if (persona == null) {
+      // No persona selected, show all products
+      if (selectedCategory.isEmpty || selectedCategory.value == 'All') {
+        filteredProducts.assignAll(products);
+      } else {
+        filteredProducts.assignAll(products.where((product) => product.category == selectedCategory.value).toList());
+      }
     } else {
-      filteredProducts.assignAll(products.where((product) => product.category == selectedCategory.value).toList());
+      // Persona selected, filter products based on persona
+      final isFemalePersona = persona.name == 'Solitaire Female';
+      final filteredByPersona = products.where((product) {
+        if (isFemalePersona) {
+          return product.category == 'Women' || product.category == 'Unisex';
+        } else {
+          return product.category == 'Men' || product.category == 'Unisex';
+        }
+      }).toList();
+
+      // Apply category filter if not 'All'
+      if (selectedCategory.isEmpty || selectedCategory.value == 'All') {
+        filteredProducts.assignAll(filteredByPersona);
+      } else {
+        filteredProducts.assignAll(filteredByPersona.where((product) => product.category == selectedCategory.value).toList());
+      }
     }
   }
 
@@ -103,6 +118,10 @@ class ProductsController extends GetxController {
   void setCategory(String category) {
     selectedCategory.value = category;
     applyFilter();
+  }
+  // Method to load demo products from somewhere
+  void loadDemoProductsFromSomeWhere() {
+    loadDemoProducts(); // Call the actual method to load products
   }
 
   void addToCart(Product product) {
@@ -147,4 +166,3 @@ class CartItem {
     );
   }
 }
-
