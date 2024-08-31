@@ -6,13 +6,15 @@ environment:
   sdk: '>=3.3.4 <4.0.0'
 
 dependencies: 
+  logger: ^1.1.0
+  g_recaptcha_v3: 0.0.6
   cupertino_icons: ^1.0.6
   get: 4.6.6
   flutter: 
     sdk: flutter
-  firebase_core: ^2.31.0
+  firebase_core: ^2.32.0
   firebase_ui_auth: ^1.14.0
-  firebase_auth: ^4.19.5
+  firebase_auth: ^4.20.0
   google_sign_in: ^6.2.1
   firebase_ui_oauth_google: ^1.3.2
   google_fonts: ^6.2.1
@@ -24,6 +26,8 @@ dependencies:
   firebase_ui_localizations: ^1.12.0
   firebase_remote_config: ^4.4.7
   firebase_analytics: ^10.10.7
+  carousel_slider: ^5.0.0  
+  lottie: ^2.0.0 
 
 dev_dependencies: 
   flutter_lints: 3.0.2
