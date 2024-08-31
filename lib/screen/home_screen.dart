@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/health_summary_widget.dart';
 import '../widgets/notifications_widget.dart';
 import '../widgets/activity_list_widget.dart';
+import '../widgets/health_card_widget.dart';
+import '../widgets/health_metric_widget.dart';
 import '../constants.dart'; // Ensure this contains the necessary constants and configurations.
 
 class HomeScreen extends StatelessWidget {
@@ -81,6 +83,22 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             HealthSummaryWidget(),
+            SizedBox(height: 20),
+            Text(
+              'Health Metrics',
+              style: Theme.of(context).textTheme.headline6?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            SizedBox(height: 10),
+            HealthMetricWidget(
+              metrics: [
+                {'title': 'Steps Today', 'value': '8,765'},
+                {'title': 'Calories Burned', 'value': '620 kcal'},
+                {'title': 'Heart Rate', 'value': '72 bpm'},
+                {'title': 'Sleep Duration', 'value': '7 hrs 30 mins'},
+              ],
+            ),
             SizedBox(height: 20),
             Text(
               'Notifications',
