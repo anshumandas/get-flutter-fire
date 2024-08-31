@@ -5,9 +5,15 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+<<<<<<< HEAD
 
 import '../../../../models/screens.dart';
 // import '../../../controllers/recaptcha_controller.dart';
+=======
+import '../../../../firebase_options.dart';
+
+import '../../../../models/screens.dart';
+>>>>>>> origin/main
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
 
@@ -125,11 +131,14 @@ class LoginView extends GetView<LoginController> {
   }
 }
 
+<<<<<<< HEAD
 class DefaultFirebaseOptions {
   static var webClientId;
 }
 
 
+=======
+>>>>>>> origin/main
 class MyEmailAuthProvider extends EmailAuthProvider {
   @override
   void onCredentialReceived(
@@ -165,6 +174,7 @@ class EmailLinkButton extends StatelessWidget {
                 child: const Text('Resend Verification Mail')))));
   }
 }
+<<<<<<< HEAD
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // // import 'package:app/controllers/recaptcha_controller.dart';
@@ -202,3 +212,5 @@ class EmailLinkButton extends StatelessWidget {
 //     );
 //   }
 // }
+=======
+>>>>>>> origin/main
