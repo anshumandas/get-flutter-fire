@@ -50,6 +50,22 @@ class AppPages {
   //can use https://pub.dev/packages/freezed
   static final routes = [
     GetPage(
+      name: _Paths.HOME,
+      page: () => HomeView(),
+    ),
+    GetPage(
+      name: _Paths.ANOTHER_MODULE,
+      page: () => AnotherView(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => ProfileView(),
+    ),
+    GetPage(
+      name: _Paths.SETTINGS,
+      page: () => SettingsView(),
+    ),
+    GetPage(
       name: '/',
       page: () => const RootView(),
       binding: RootBinding(),
