@@ -41,46 +41,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAYdkSkTt1sMSA6GjyaeGe-omC8P6ipQoE',
-    appId: '1:743218631806:web:4da8da0cebeaa8a3aa742f',
-    messagingSenderId: '743218631806',
-    projectId: 'firstflutterapp-a4b9a',
-    authDomain: 'firstflutterapp-a4b9a.firebaseapp.com',
-    storageBucket: 'firstflutterapp-a4b9a.appspot.com',
+    apiKey: 'YOUR_WEB_API_KEY',
+    appId: 'YOUR_WEB_APP_ID',
+    messagingSenderId: 'YOUR_WEB_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    authDomain: 'YOUR_WEB_AUTH_DOMAIN',
+    storageBucket: 'YOUR_WEB_STORAGE_BUCKET',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBnA3mk2XHGReXTC-R3DPld8DeIHjdxHmA',
-    appId: '1:743218631806:android:263c7a36affcb3a3aa742f',
-    messagingSenderId: '743218631806',
-    projectId: 'firstflutterapp-a4b9a',
-    storageBucket: 'firstflutterapp-a4b9a.appspot.com',
+    apiKey: 'YOUR_ANDROID_API_KEY',
+    appId: 'YOUR_ANDROID_APP_ID',
+    messagingSenderId: 'YOUR_ANDROID_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    storageBucket: 'YOUR_ANDROID_STORAGE_BUCKET',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCekv0wvtfId_1gsPB4Bf0GUnnA2L9i3A4',
-    appId: '1:743218631806:ios:192d611608206b81aa742f',
-    messagingSenderId: '743218631806',
-    projectId: 'firstflutterapp-a4b9a',
-    storageBucket: 'firstflutterapp-a4b9a.appspot.com',
-    iosBundleId: 'mitwpu.edu.in.project1',
+    apiKey: 'YOUR_IOS_API_KEY',
+    appId: 'YOUR_IOS_APP_ID',
+    messagingSenderId: 'YOUR_IOS_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    storageBucket: 'YOUR_IOS_STORAGE_BUCKET',
+    iosBundleId: 'YOUR_IOS_BUNDLE_ID',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCekv0wvtfId_1gsPB4Bf0GUnnA2L9i3A4',
-    appId: '1:743218631806:ios:192d611608206b81aa742f',
-    messagingSenderId: '743218631806',
-    projectId: 'firstflutterapp-a4b9a',
-    storageBucket: 'firstflutterapp-a4b9a.appspot.com',
-    iosBundleId: 'mitwpu.edu.in.project1',
+    apiKey: 'YOUR_MACOS_API_KEY',
+    appId: 'YOUR_MACOS_APP_ID',
+    messagingSenderId: 'YOUR_MACOS_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    storageBucket: 'YOUR_MACOS_STORAGE_BUCKET',
+    iosBundleId: 'YOUR_MACOS_BUNDLE_ID',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAYdkSkTt1sMSA6GjyaeGe-omC8P6ipQoE',
-    appId: '1:743218631806:web:58dbfd20308178deaa742f',
-    messagingSenderId: '743218631806',
-    projectId: 'firstflutterapp-a4b9a',
-    authDomain: 'firstflutterapp-a4b9a.firebaseapp.com',
-    storageBucket: 'firstflutterapp-a4b9a.appspot.com',
+    apiKey: 'YOUR_WINDOWS_API_KEY',
+    appId: 'YOUR_WINDOWS_APP_ID',
+    messagingSenderId: 'YOUR_WINDOWS_MESSAGING_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    authDomain: 'YOUR_WINDOWS_AUTH_DOMAIN',
+    storageBucket: 'YOUR_WINDOWS_STORAGE_BUCKET',
   );
 }
