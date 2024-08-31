@@ -17,7 +17,7 @@ In my previous projects, I utilized the traditional Model-View-Controller (MVC) 
    - Stay updated with the list of the top 100 chess players globally, including their rankings and profiles.
 
 3. **FIDE Search**:
-   - Search for a player's FIDE ID to obtain detailed information about their game history and profile.
+   - Search for a player's FIDE ID to obtain detailed information about their game history and profile. For example, you can check my FIDE ID [25660586](https://www.fide.com/en/players/25660586) and Magnus Carlsen's FIDE ID [1503014](https://www.fide.com/en/players/1503014).
 
 4. **Firebase Authentication**:
    - Secure user authentication using Firebase Auth to ensure a reliable and safe login experience.
@@ -43,6 +43,25 @@ For real-time data integration, the following APIs have been used:
 - [Chess.com API](https://api.chess.com/pub/): Offers real-time chess data, including player profiles and game statistics.
 
 A big thank you to the creators of these APIs for providing such valuable resources.
+
+### Development Environment
+
+This project was developed using the following tools and versions:
+
+- **Flutter**: 3.24.1 • channel stable • [Flutter GitHub Repository](https://github.com/flutter/flutter.git)
+  - Framework • revision 5874a72aa4 (11 days ago) • 2024-08-20 16:46:00 -0500
+  - Engine • revision c9b9d5780d
+  - Tools • Dart 3.5.1 • DevTools 2.37.2
+
+- **Kotlin**: 1.7.10
+- **Groovy**: 3.0.13
+- **Ant**: Apache Ant(TM) version 1.10.11 compiled on July 10 2021
+- **JVM**: 22.0.2 (Oracle Corporation 22.0.2+9-70)
+- **OS**: Windows 11 10.0 amd64
+
+### Stable Release APK
+
+A stable release APK of the app has been added to the `release` folder in this repository. You can download and install it to experience the app without needing to build it from source.
 
 ## How to Get Started
 
