@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../../models/product.dart';
-
+  
 class ProductsController extends GetxController {
   final products = <Product>[].obs;
 

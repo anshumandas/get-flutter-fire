@@ -1,0 +1,29 @@
+{
+    "hosting": {
+      "public": "build/web",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    "flutter": {
+      "platforms": {
+        "dart": {
+          "lib/firebase_options.dart": {
+            "projectId": "sharekhan-prj",
+            "configurations": {
+              "web": "1:255918967492:web:c95765475abe4f1efed791"
+            }
+          }
+        }
+      }
+    }
+  }
+  
