@@ -5,7 +5,7 @@ I have created a shopping Application utilizing the following three technologies
 2. Firebase for the Backend.
 3. GetX for state management.
 
-Created APP Link: https://youtu.be/LdbmzCtcY24 (For more Clarity)
+Created APP Youtube Video Link: https://youtu.be/LdbmzCtcY24 (For more Clarity)
 
 This is my first Flutter App of my career which i have built in 10 days. I followed the readme provided by Sir Anshuman das and i followed a 
 youtube channel i.e "coding with T" www.youtube.com/@CodingwithT for reference.
@@ -35,7 +35,7 @@ As my first flutter project, my learning process began with:
 - This app also has a logout button, which will logout the user from the app.
 - This is the video link of my created app. https://youtu.be/LdbmzCtcY24
 
-Modules:
+**Modules:**
 - Signup.
 - Login.
 - Validation of empty fields and values.
@@ -46,9 +46,10 @@ Modules:
 - User Friendly user interface.
 - Refactored and created separate widgets to reuse in the code.
 
-To be Completed in the coming days:
+**To be Completed in the coming days:**
 - Store Page.
 - Favourite Page.
+- Cart Modules and CRUD Operations.
 - Integrate backend to the pending pages.
 - Testing of the App.
 
