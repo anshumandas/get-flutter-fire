@@ -11,12 +11,20 @@ class AuthService {
   // Method to sign up with email and password
   Future<User?> signUpWithEmailPassword(String email, String password) async {
     try {
+      // Create a user with email and password
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      await sendEmailVerification();
-      return userCredential.user;
+      User? user = userCredential.user;
+      // Debug statement to ensure UID is correct
+      print('Signed up with UID: ${user?.uid}');
+
+      // Send email verification if the user is not null
+      if (user != null) {
+        await user.sendEmailVerification();
+      }
+      return user;
     } catch (e) {
       print('Error signing up with email and password: $e');
       rethrow;
@@ -26,6 +34,7 @@ class AuthService {
   // Method to log in with email and password
   Future<User?> loginWithEmailPassword(String email, String password) async {
     try {
+      // Sign in with email and password
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -53,7 +62,7 @@ class AuthService {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        return null;
+        return null; // The user canceled the sign-in
       }
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -63,8 +72,18 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
+      // Sign in to Firebase using the Google credential
       UserCredential userCredential = await _auth.signInWithCredential(credential);
-      return userCredential.user;
+      User? user = userCredential.user;
+
+      // Debug statement to ensure Google sign-in is successful
+      print('Google signed in with UID: ${user?.uid}');
+
+      if (user != null) {
+        // Handle user data as needed
+      }
+
+      return user;
     } catch (e) {
       print('Error signing in with Google: $e');
       rethrow;

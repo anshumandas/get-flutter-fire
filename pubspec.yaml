@@ -27,6 +27,7 @@ dependencies:
   flutter_native_splash: ^2.4.1
   url_launcher: ^6.1.6
   cloud_firestore: ^4.17.4
+  firebase_app_check: ^0.2.2+7
 
   # Add other Firebase dependencies as needed
 

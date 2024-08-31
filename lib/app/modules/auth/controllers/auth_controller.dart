@@ -14,7 +14,6 @@ class AuthController extends GetxController {
     super.onInit();
     firebaseUser.bindStream(_authService.authStateChanges());
   }
-
   Future<void> signUp({
     required String email,
     required String password,
@@ -23,23 +22,29 @@ class AuthController extends GetxController {
   }) async {
     try {
       User? user = await _authService.signUpWithEmailPassword(email, password);
+
       if (user != null) {
         await user.sendEmailVerification();
+        print('Verification email sent successfully.');
         await _storeUserData(user, name, email, phoneNumber);
-
         Get.snackbar(
           'Verification Email Sent',
           'Please verify your email before logging in.',
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
-
         Get.offAllNamed(AppRoutes.login);
       }
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
+      print('FirebaseAuthException Code: ${e.code}');
       _handleError('Sign up failed', e);
+    } catch (e) {
+      print('Unknown Error: $e');
+      _handleError('An unknown error occurred', e);
     }
   }
+
+
 
   Future<void> login(String email, String password) async {
     try {
@@ -101,16 +106,31 @@ class AuthController extends GetxController {
   Future<void> _storeUserData(
       User user, String name, String email, String phoneNumber) async {
     try {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-        'name': name,
-        'email': email,
-        'phoneNumber': phoneNumber,
-        'imageUrl': 'https://via.placeholder.com/150',
-        'createdAt': FieldValue.serverTimestamp(),
-        'isEmailVerified': false,
-      });
+      print('Storing user data for UID: ${user.uid}'); // Debugging line
+
+      // Check if user data already exists
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+
+      if (!userDoc.exists) {
+        // User data does not exist, store new user data
+        print('No existing user data found, storing new user data.');
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'createdAt': FieldValue.serverTimestamp(),
+          'email': email,
+          'imageUrl': 'https://via.placeholder.com/150',
+          'isEmailVerified': user.emailVerified, // Note: This will be false at signup
+          'name': name,
+          'phoneNumber': phoneNumber,
+        });
+        print('User data stored successfully.');
+      } else {
+        // User data already exists
+        print('User data already exists, no action needed.');
+      }
     } catch (e) {
-      _handleError('Failed to store user data', e);
+      print('Failed to store user data: $e'); // More specific error handling
+      _handleError('Failed to store user data', e); // Use _handleError for consistent error handling
+      rethrow; // Rethrow to let the controller handle it
     }
   }
 
@@ -119,14 +139,18 @@ class AuthController extends GetxController {
       DocumentSnapshot userDoc =
       await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
       if (!userDoc.exists) {
+        print('No existing user data found, storing Google user data.');
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'name': user.displayName ?? 'Anonymous',
           'email': user.email ?? '',
           'phoneNumber': user.phoneNumber ?? '',
           'imageUrl': user.photoURL ?? 'https://via.placeholder.com/150',
           'createdAt': FieldValue.serverTimestamp(),
-          'isEmailVerified': true,
+          'isEmailVerified': user.emailVerified,
         });
+        print('Google user data stored successfully.');
+      } else {
+        print('User data already exists, no action needed.');
       }
     } catch (e) {
       _handleError('Failed to check/store Google user data', e);
