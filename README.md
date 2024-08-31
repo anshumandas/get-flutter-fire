@@ -117,64 +117,6 @@ Sure, here's how you can display the images in a Markdown format with three imag
 | **Suport Section** | **Past Queries Section** | **Search for Home** |
 
 
-
-
-
-
-
-![image](https://github.com/user-attachments/assets/515a4901-f998-4b52-889b-948f7c58607d)
-order confirm screen
-![image](https://github.com/user-attachments/assets/0ca3a516-e7f5-44d4-8c5d-d224075413ce)
-notification on order place
-![image](https://github.com/user-attachments/assets/65600110-6ffb-48f9-a7d8-7f70d844f8bf)
-order section with search and filter working
-![image](https://github.com/user-attachments/assets/3bb04557-98a1-49a4-9173-0a4bee2b7a53)
-![image](https://github.com/user-attachments/assets/3457586f-6fe9-4ca1-89a5-7d27f40ab942)
-![image](https://github.com/user-attachments/assets/f57aff96-1b9a-443b-a3d5-093c2c01f99e)
-profile section
-![image](https://github.com/user-attachments/assets/88eb3632-7ecb-4dc6-be3f-e3677a38bcfe)
-account details section
-![image](https://github.com/user-attachments/assets/507f8df1-1ea1-4a74-91fb-90b2abc37047)
-support section
-![image](https://github.com/user-attachments/assets/d3c3f492-8ab5-401f-9c4d-af2e51fc7cb4)
-past queries section
-![image](https://github.com/user-attachments/assets/6e454140-52e0-4dcf-b119-e7617a57c9e1)
-search from home 
-![image](https://github.com/user-attachments/assets/2c079cb4-edd8-4e0f-a583-66eee2fd31a6)
-user can visit on searched product  from here ontap
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-  
-
 5. **Seller**: Users who can list products for sale, manage inventory, and fulfill orders.
 
   
