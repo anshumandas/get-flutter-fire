@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
@@ -24,7 +22,7 @@ class AuthService extends GetxService {
   Role get maxRole => _userRole.value;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
     if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
     _firebaseUser.bindStream(_auth.authStateChanges());
@@ -52,53 +50,30 @@ class AuthService extends GetxService {
       ? (user!.displayName ?? user!.email)
       : 'Guest';
 
-  void login() {
-    // this is not needed as we are using Firebase UI for the login part
-  }
-
   void sendVerificationMail({EmailAuthCredential? emailAuth}) async {
     if (sendMailFromClient) {
       if (_auth.currentUser != null) {
         await _auth.currentUser?.sendEmailVerification();
       } else if (emailAuth != null) {
-        // Approach 1: sending email auth link requires deep linking which is
-        // a TODO as the current Flutter methods are deprecated
-        // sendSingInLink(emailAuth);
-
-        // Approach 2: This is a hack.
-        // We are using createUser to send the verification link from the server side by adding suffix .verify in the email
-        // if the user already exists and the password is also same and sign in occurs via custom token on server side
         try {
           await _auth.createUserWithEmailAndPassword(
               email: "${credential.value!.email}.verify",
               password: credential.value!.password!);
         } on FirebaseAuthException catch (e) {
-          int i = e.message!.indexOf("message") + 10;
-          int j = e.message!.indexOf('"', i);
           Get.snackbar(
-            e.message!.substring(i, j),
-            'Please verify your email by clicking the link on the Email sent',
+            'Error',
+            'Please verify your email by clicking the link sent to ${e.message}',
           );
         }
       }
     }
   }
 
-  void sendSingInLink(EmailAuthCredential emailAuth) {
+  void sendSignInLink(EmailAuthCredential emailAuth) {
     var acs = ActionCodeSettings(
-      // URL you want to redirect back to. The domain (www.example.com) for this
-      // URL must be whitelisted in the Firebase Console.
       url:
           '$baseUrl:5001/flutterfast-92c25/us-central1/handleEmailLinkVerification',
-      //     // This must be true if deep linking.
-      //     // If deeplinking. See [https://firebase.google.com/docs/dynamic-links/flutter/receive]
       handleCodeInApp: true,
-      //     iOSBundleId: '$bundleID.ios',
-      //     androidPackageName: '$bundleID.android',
-      //     // installIfNotAvailable
-      //     androidInstallApp: true,
-      //     // minimumVersion
-      //     androidMinimumVersion: '12'
     );
     _auth
         .sendSignInLinkToEmail(email: emailAuth.email, actionCodeSettings: acs)
@@ -109,11 +84,9 @@ class AuthService extends GetxService {
 
   void register() {
     registered.value = true;
-    // logout(); // Uncomment if we need to enforce relogin
     final thenTo =
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
-    Get.rootDelegate
-        .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
+    Get.rootDelegate.offAndToNamed(thenTo ?? Screen.PROFILE.route);
   }
 
   void logout() {
@@ -141,12 +114,10 @@ class AuthService extends GetxService {
         'Signed in with temporary account.',
       );
     } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "operation-not-allowed":
-          print("Anonymous auth hasn't been enabled for this project.");
-          break;
-        default:
-          print("Unknown error.");
+      if (e.code == "operation-not-allowed") {
+        print("Anonymous auth hasn't been enabled for this project.");
+      } else {
+        print("Unknown error.");
       }
       Get.back(result: false);
     }
@@ -158,15 +129,11 @@ class AuthService extends GetxService {
         (BuildContext context, FirebaseAuthException e) {
       final defaultLabels = FirebaseUILocalizations.labelsOf(context);
 
-      // for verification error, also set a boolean flag to trigger button visibility to resend verification mail
       String? verification;
       if (e.code == "internal-error" &&
           e.message!.contains('"status":"UNAUTHENTICATED"')) {
-        // Note that (possibly in Emulator only) the e.email is always coming as null
-        // String? email = e.email ?? parseEmail(e.message!);
         callback(true, credential.value);
-        verification =
-            "Please verify email id by clicking the link on the email sent";
+        verification = "Please verify your email by clicking the link sent.";
       } else {
         callback(false, credential.value);
       }
@@ -194,7 +161,7 @@ class MyCredential extends AuthCredential {
   }
 }
 
-parseEmail(String message) {
+String parseEmail(String message) {
   int i = message.indexOf('"message":') + 13;
   int j = message.indexOf('"', i);
   return message.substring(i, j - 1);

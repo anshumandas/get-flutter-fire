@@ -22,7 +22,9 @@ class RootView extends GetView<RootController> {
           appBar: AppBar(
             title: Text(title ?? ''),
             centerTitle: true,
-            leading: GetPlatform.isIOS // Since Web and Android have back button
+            leading: (GetPlatform.isIOS ||
+                        GetPlatform
+                            .isAndroid) // Since Web and Android have back button
                     &&
                     current.locationString.contains(RegExp(r'(\/[^\/]*){3,}'))
                 ? BackButton(
@@ -30,9 +32,8 @@ class RootView extends GetView<RootController> {
                         Get.rootDelegate.popRoute(), //Navigator.pop(context),
                   )
                 : IconButton(
-                    icon: ImageIcon(
-                      const AssetImage("icons/logo.png"),
-                      color: Colors.grey.shade800,
+                    icon: Image(
+                      image: new AssetImage("assets/icons/sharekhan_logo.png"),
                     ),
                     onPressed: () => AuthService.to.isLoggedInValue
                         ? controller.openDrawer()

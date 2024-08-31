@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "784525273637",
+    "project_id": "sharekhan-project",
+    "storage_bucket": "sharekhan-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784525273637:android:c1966d53b8f4eb96626dcc",
+        "android_client_info": {
+          "package_name": "com.example.get_flutter_fire"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784525273637-605r9ms12s7lbjikujvcvb8nsrqbebmr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeBbH7YPz08UZsiirSsJQ0mDtFqYezHsQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784525273637-605r9ms12s7lbjikujvcvb8nsrqbebmr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "784525273637-a5miokt96an7utjtb3dntpaag9ifb9i9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.getFlutterFire"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

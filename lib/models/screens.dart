@@ -101,6 +101,11 @@ enum Screen implements ActionEnum {
       label: "Logout",
       accessor_: AccessedVia.bottomSheet,
       accessLevel: AccessLevel.authenticated),
+  PRODUCTS_ADMIN('/products-admin',
+      icon: Icons.admin_panel_settings,
+      label: "Products List",
+      accessor_: AccessedVia.drawer,
+      accessLevel: AccessLevel.authenticated),
   ;
 
   const Screen(this.path,

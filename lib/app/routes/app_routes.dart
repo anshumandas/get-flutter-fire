@@ -17,7 +17,6 @@ abstract class Routes {
   // static const TASKS = _Paths.HOME + _Paths.TASKS;
   // static const USERS = _Paths.HOME + _Paths.USERS;
   // static const MY_PRODUCTS = _Paths.HOME + _Paths.MY_PRODUCTS;
-
   static String PRODUCT_DETAILS(String productId) =>
       '${Screen.PRODUCTS.route}/$productId';
   static String CART_DETAILS(String productId) =>
