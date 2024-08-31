@@ -1,21 +1,15 @@
-import 'package:flutter/material.dart';
-// import 'package:get/get_utils/src/platform/platform.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-const kPrimaryColor = Color(0xFF6F35A5);
-const kPrimaryLightColor = Color(0xFFF1E6FF);
+// Firebase Instance
+final db = FirebaseFirestore.instance;
+final auth = FirebaseAuth.instance;
+final firestore = FirebaseFirestore.instance;
+final functions = FirebaseFunctions.instance;
 
-const double defaultPadding = 16.0;
+// Database References
+final usersRef = firestore.collection('users');
 
-const useEmulator = false;
-
-const useRecaptcha = false;
-
-const sendMailFromClient =
-    true; // set this true if in server using custom claim status
-
-const emulatorHost =
-    "127.0.0.1"; // GetPlatform.isAndroid ? "10.0.2.2" : "127.0.0.1"; //This is not required due to automaticHostMapping
-
-const baseUrl = useEmulator ? "http://127.0.0.1" : "your domain";
-
-const bundleID = "com.example";
+// Development
+const bool development = !bool.fromEnvironment('dart.vm.product');
