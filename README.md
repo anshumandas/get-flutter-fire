@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Hello! I'm Saubhagya Singh, a Flutter developer with a deep passion for chess.I have been asked to create a flutter app for the 1st round of Sharekhan so I chose to step beyond the conventional approach of creating standard clones or tutorial apps. Instead, I crafted something innovative by leveraging the essence of the boilerplate code provided by Mr. Anshuman Das.
+Hello! I'm Saubhagya Singh, a Flutter developer with a deep passion for chess. I was tasked with creating a Flutter app for the 1st round of Sharekhan, so I chose to go beyond conventional approaches and create something innovative. By leveraging the essence of the boilerplate code provided by Mr. Anshuman Das, I crafted a unique application.
 
 In my previous projects, I utilized the traditional Model-View-Controller (MVC) file system. For this project, however, I embraced a more advanced architecture: Bindings-Views-Controllers (BVC). This sophisticated approach, along with a structured folder system for services and widgets, enables a cleaner and more efficient development process.
 
@@ -27,6 +27,9 @@ In my previous projects, I utilized the traditional Model-View-Controller (MVC) 
 
 6. **Image Picker for Profile Updates**:
    - Use the image picker feature to update and customize your profile picture.
+
+7. **Firestore Integration**:
+   - Store and manage user data, including profile images, using Firestore for a scalable and real-time database solution.
 
 ## Development Insights
 
@@ -61,10 +64,4 @@ This project was developed using the following tools and versions:
 
 ### Stable Release APK
 
-A stable release APK of the app has been added to the `release` folder in this repository. You can download and install it to experience the app without needing to build it from source.
-
-## How to Get Started
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/yourusername/chess-central.git
+A stable release APK of the app has been added to the `stableapks` folder in this repository. You can download and install it to experience the app without needing to build it from source.
