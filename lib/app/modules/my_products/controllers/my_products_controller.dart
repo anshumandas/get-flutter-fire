@@ -4,6 +4,10 @@ class MyProductsController extends GetxController {
   //TODO: Implement MyProductsController
 
   final count = 0.obs;
+<<<<<<< HEAD
+
+
+=======
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +22,7 @@ class MyProductsController extends GetxController {
   void onClose() {
     super.onClose();
   }
+>>>>>>> origin/main
 
   void increment() => count.value++;
 }

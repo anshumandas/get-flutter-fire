@@ -4,6 +4,9 @@ class SettingsController extends GetxController {
   //TODO: Implement SettingsController
 
   final count = 0.obs;
+<<<<<<< HEAD
+
+=======
   @override
   void onInit() {
     super.onInit();
@@ -13,6 +16,7 @@ class SettingsController extends GetxController {
   void onReady() {
     super.onReady();
   }
+>>>>>>> origin/main
 
   @override
   void onClose() {}

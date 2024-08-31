@@ -5,9 +5,15 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+<<<<<<< HEAD
+
+import '../../../../models/screens.dart';
+// import '../../../controllers/recaptcha_controller.dart';
+=======
 import '../../../../firebase_options.dart';
 
 import '../../../../models/screens.dart';
+>>>>>>> origin/main
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
 
@@ -125,6 +131,14 @@ class LoginView extends GetView<LoginController> {
   }
 }
 
+<<<<<<< HEAD
+class DefaultFirebaseOptions {
+  static var webClientId;
+}
+
+
+=======
+>>>>>>> origin/main
 class MyEmailAuthProvider extends EmailAuthProvider {
   @override
   void onCredentialReceived(
@@ -160,3 +174,43 @@ class EmailLinkButton extends StatelessWidget {
                 child: const Text('Resend Verification Mail')))));
   }
 }
+<<<<<<< HEAD
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// // import 'package:app/controllers/recaptcha_controller.dart';
+//
+// import '../../../../controllers/recaptcha_controller.dart';
+//
+// class LoginScreen extends StatelessWidget {
+//   final ReCaptchaController reCaptchaController = Get.put(ReCaptchaController());
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text('Login')),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           children: [
+//             TextField(
+//               decoration: InputDecoration(labelText: 'Email'),
+//             ),
+//             TextField(
+//               decoration: InputDecoration(labelText: 'Password'),
+//               obscureText: true,
+//             ),
+//             SizedBox(height: 20),
+//             Obx(() => reCaptchaController.isVerified.value
+//                 ? ElevatedButton(onPressed: () {}, child: Text('Login'))
+//                 : ElevatedButton(
+//               onPressed: reCaptchaController.verifyRecaptcha,
+//               child: Text('Verify ReCaptcha'),
+//             )),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+=======
+>>>>>>> origin/main

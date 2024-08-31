@@ -4,6 +4,10 @@ class TaskDetailsController extends GetxController {
   //TODO: Implement TaskDetailsController
 
   final count = 0.obs;
+<<<<<<< HEAD
+
+
+=======
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +22,7 @@ class TaskDetailsController extends GetxController {
   void onClose() {
     super.onClose();
   }
+>>>>>>> origin/main
 
   void increment() => count.value++;
 }
