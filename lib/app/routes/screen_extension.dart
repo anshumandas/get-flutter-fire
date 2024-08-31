@@ -100,7 +100,7 @@ extension ScreenExtension on Screen {
           AccessLevel.public => null,
           AccessLevel.guest => [EnsureAuthOrGuestMiddleware()],
           AccessLevel.authenticated => [EnsureAuthedAndNotGuestMiddleware()],
-          AccessLevel.roleBased => [EnsureRoleMiddleware(role ?? Role.buyer)],
+          AccessLevel.roleBased => [EnsureRoleMiddleware(role ?? Role.registeredUser)],
           AccessLevel.masked => throw UnimplementedError(), //not for screens
           AccessLevel.secret => throw UnimplementedError(), //not for screens
           AccessLevel.notAuthed => [EnsureNotAuthedOrGuestMiddleware()],

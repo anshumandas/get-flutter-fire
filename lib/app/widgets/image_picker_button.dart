@@ -4,18 +4,19 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../models/action_enum.dart';
 import 'menu_sheet_button.dart';
 
-enum ImageSources implements ActionEnum {
+enum ImageSources {
   camera(Icons.camera, 'Camera'),
   gallery(Icons.photo_library, 'Gallery'),
   file(Icons.file_upload, 'File');
 
   const ImageSources(this.icon, this.label);
 
-  @override
-  Future<dynamic> doAction() async {
+  final IconData? icon;
+  final String? label;
+
+  Future<String?> doAction() async {
     switch (this) {
       case ImageSources.camera:
         return await getImage(ImageSource.camera);
@@ -24,14 +25,9 @@ enum ImageSources implements ActionEnum {
       case ImageSources.file:
         return await getFile();
       default:
+        return null;
     }
-    return null;
   }
-
-  @override
-  final IconData? icon;
-  @override
-  final String? label;
 
   static Future<String?> getImage(ImageSource imageSource) async {
     final pickedFile = await ImagePicker().pickImage(source: imageSource);
@@ -53,7 +49,6 @@ enum ImageSources implements ActionEnum {
       GetStorage().write(fileName, fileBytes);
 
       return fileName;
-      //result.files.single.path;//is causing issues for Web, see https://github.com/miguelpruivo/flutter_file_picker/wiki/FAQ
     } else {
       Get.snackbar('Error', 'Image Not Selected');
       return null;
@@ -61,31 +56,57 @@ enum ImageSources implements ActionEnum {
   }
 }
 
-class ImagePickerButton extends MenuSheetButton<ImageSources> {
-  final ValueSetter<String>? callback;
+class ImagePickerButton extends StatelessWidget {
+  final ValueSetter<String?>? callback;
 
-  const ImagePickerButton(
-      {super.key,
-      super.icon = const Icon(Icons.image),
-      super.label = 'Pick an Image',
-      this.callback});
+  const ImagePickerButton({
+    Key? key,
+    this.callback,
+  }) : super(key: key);
 
-  @override
-  Iterable<ImageSources> get values => ImageSources.values;
-
-  @override
-  void callbackFunc(act) {
-    if (callback != null) callback!(act);
+  void callbackFunc(String? act) {
+    if (callback != null && act != null) {
+      callback!(act);
+    } else if (act == null) {
+      Get.snackbar('Error', 'No image selected.');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return !(GetPlatform.isAndroid || GetPlatform.isIOS)
+    return !GetPlatform.isAndroid && !GetPlatform.isIOS
         ? TextButton.icon(
-            onPressed: () async => callbackFunc(await ImageSources.getFile()),
-            icon: icon,
-            label: const Text('Pick an Image'),
-          )
-        : builder(context);
+      onPressed: () async => callbackFunc(await ImageSources.getFile()),
+      icon: const Icon(Icons.image),
+      label: const Text('Pick an Image'),
+    )
+        : IconButton(
+      icon: const Icon(Icons.image),
+      onPressed: () async {
+        final result = await showModalBottomSheet<ImageSources>(
+          context: context,
+          builder: (context) => _buildBottomSheet(),
+        );
+        if (result != null) {
+          final actionResult = await result.doAction();
+          callbackFunc(actionResult);
+        }
+      },
+    );
+  }
+
+  Widget _buildBottomSheet() {
+    return SizedBox(
+      height: 180,
+      child: ListView(
+        children: ImageSources.values.map((source) {
+          return ListTile(
+            leading: Icon(source.icon),
+            title: Text(source.label ?? ''),
+            onTap: () => Get.back(result: source),
+          );
+        }).toList(),
+      ),
+    );
   }
 }

@@ -19,7 +19,7 @@ class ScreenWidget extends StatelessWidget {
     super.key,
     required this.body,
     required this.screen,
-    this.role = Role.buyer,
+    this.role = Role.guest,
     this.delegate,
     this.currentRoute,
     this.appBar,
