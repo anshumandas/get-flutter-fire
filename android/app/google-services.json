@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1091785317203",
+    "project_id": "sheru-2eb0f",
+    "storage_bucket": "sheru-2eb0f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091785317203:android:8903f5a04aebcb58649fa6",
+        "android_client_info": {
+          "package_name": "com.example.get_flutter_fire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdliZ_GAfcFAjalNUKtw_xIt4LJc_jVSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
