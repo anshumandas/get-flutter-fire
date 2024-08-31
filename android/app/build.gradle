@@ -1,0 +1,54 @@
+plugins {
+    id "com.android.application"
+    // Firebase configuration
+    id 'com.google.gms.google-services'
+    id "kotlin-android"
+    // Flutter plugin must be applied last
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+android {
+    namespace = "com.example.streakzy1"
+    compileSdk = 34  // You can set this to the latest stable version
+    ndkVersion = "21.4.7075529"  // Use a compatible NDK version for your project
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    defaultConfig {
+        applicationId = "com.example.streakzy1"
+        minSdk = 23
+        targetSdk = 33  // Ensure this matches your project's requirements
+        versionCode = 1  // Increment this for each release
+        versionName = "1.0"  // Update this for each release
+    }
+
+    buildTypes {
+        release {
+            // Enable code shrinking
+            minifyEnabled true
+            // Enable resource shrinking
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig = signingConfigs.debug  // Ensure proper signing config for release builds
+        }
+
+        debug {
+            // If you want to disable resource shrinking in debug builds
+            shrinkResources false
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+// Add the Google services plugin at the end
+apply plugin: 'com.google.gms.google-services'

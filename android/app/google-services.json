@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "990280739621",
+    "project_id": "streakzy-c7799",
+    "storage_bucket": "streakzy-c7799.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990280739621:android:3f80cd9d3339a15f4948cc",
+        "android_client_info": {
+          "package_name": "com.example.streakzy1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990280739621-2ntla1mk45t8qbvnbi3f2f686gm5g764.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.streakzy1",
+            "certificate_hash": "9dbfaae4911a7e24431cdcdc0bbd5f27d17b3eed"
+          }
+        },
+        {
+          "client_id": "990280739621-r4m77d7gj5adf50ko6cfne6o5pibghcr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZbLU-L5jP2OAXrSZJ3otcz26YSgq3LuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "990280739621-r4m77d7gj5adf50ko6cfne6o5pibghcr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "990280739621-35kq82ekqdeluq5dra26jgvvv78clt98.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.streakzy1"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990280739621:android:5e7cc1d8abaeb5264948cc",
+        "android_client_info": {
+          "package_name": "com.streakzy.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990280739621-3g4uamvu2j51181g1bn3b5lh390ku72u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.streakzy.app",
+            "certificate_hash": "9dbfaae4911a7e24431cdcdc0bbd5f27d17b3eed"
+          }
+        },
+        {
+          "client_id": "990280739621-r4m77d7gj5adf50ko6cfne6o5pibghcr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZbLU-L5jP2OAXrSZJ3otcz26YSgq3LuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "990280739621-r4m77d7gj5adf50ko6cfne6o5pibghcr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "990280739621-35kq82ekqdeluq5dra26jgvvv78clt98.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.streakzy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
