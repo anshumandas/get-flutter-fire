@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/cart/controllers/cart_controller.dart';
 import 'package:get_flutter_fire/app/modules/products/views/products_descriptions_view.dart';
 import 'package:get_flutter_fire/app/widgets/drop_down_button.dart';
 import 'package:get_flutter_fire/app/widgets/drop_down_checklist.dart';
@@ -13,6 +14,7 @@ class ProductsView extends GetView<ProductsController> {
 
   @override
   Widget build(BuildContext context) {
+    var cartController = Get.find<CartController>();
     return GetBuilder<ProductsController>(builder: (ctrl) {
       return RefreshIndicator(
         onRefresh: () async {
@@ -66,7 +68,7 @@ class ProductsView extends GetView<ProductsController> {
               child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.8,
+                      childAspectRatio: 0.6,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8),
                   itemCount: ctrl.productsInUI.length,
@@ -76,6 +78,21 @@ class ProductsView extends GetView<ProductsController> {
                       imageUrl: ctrl.productsInUI[index].image ?? 'url',
                       price: ctrl.productsInUI[index].price ?? 200,
                       offerTag: '20% off',
+                      quantity: ctrl.productQuantities[
+                          ctrl.productsInUI[index]]!, // Show product quantity
+                      onIncrease: () {
+                        ctrl.incrementProductQuantity(ctrl.productsInUI[index]);
+                        cartController.addToCart(ctrl.productsInUI[index], 1);
+                      },
+                      onDecrease: () {
+                        if (ctrl.productQuantities[ctrl.productsInUI[index]]! >
+                            0) {
+                          ctrl.decrementProductQuantity(
+                              ctrl.productsInUI[index]);
+                          cartController
+                              .removeFromCart(ctrl.productsInUI[index]);
+                        }
+                      },
                       productTap: () {
                         Get.to(
                           ProductsDescriptionsView(

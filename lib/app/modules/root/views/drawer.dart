@@ -38,12 +38,32 @@ class DrawerWidget extends StatelessWidget {
         height: 100,
         color: Colors.red,
         //adding content in the highlighted part of the drawer
-        child: Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-                margin: const EdgeInsets.only(left: 15),
-                child: const Text('User Name', //Profile Icon also
-                    style: TextStyle(fontWeight: FontWeight.bold)))),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                backgroundImage: AuthService.to.user != null &&
+                        AuthService.to.user!.photoURL != null
+                    ? NetworkImage(AuthService.to.user!.photoURL!)
+                    : null,
+                child: AuthService.to.user == null ||
+                        AuthService.to.user!.photoURL == null
+                    ? Icon(Icons.person, color: Colors.grey[800])
+                    : null,
+                radius: 30,
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text('${AuthService.to.userName}', // Profile Icon also
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ),
+          ],
+        ),
       )
     ];
 

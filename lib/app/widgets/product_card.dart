@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard(
-      {super.key,
-      required this.name,
-      required this.imageUrl,
-      required this.offerTag,
-      required this.price,
-      required this.productTap});
+  const ProductCard({
+    super.key,
+    required this.name,
+    required this.imageUrl,
+    required this.offerTag,
+    required this.price,
+    required this.quantity,
+    required this.onIncrease,
+    required this.onDecrease,
+    required this.productTap,
+  });
+
   final String name;
   final String imageUrl;
   final double price;
   final String offerTag;
+  final int quantity;
+  final Function onIncrease;
+  final Function onDecrease;
   final Function productTap;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -32,38 +41,49 @@ class ProductCard extends StatelessWidget {
                   imageUrl,
                   fit: BoxFit.cover,
                   width: double.maxFinite,
-                  height: 120,
+                  height: 170,
+                  // alignment: Alignment.topCenter,
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               Text(
                 name,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               Text(
                 'Rs. $price',
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(
-                height: 4,
-              ),
+              const SizedBox(height: 4),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(4)),
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(4),
+                ),
                 child: Text(
                   offerTag,
                   style: const TextStyle(color: Colors.white),
                 ),
-              )
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () => onDecrease(),
+                    icon: const Icon(Icons.remove),
+                  ),
+                  Text(quantity.toString()),
+                  IconButton(
+                    onPressed: () => onIncrease(),
+                    icon: const Icon(Icons.add),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

@@ -115,7 +115,7 @@ class AppPages {
               binding: CategoriesBinding(),
             ),
             Screen.CART.getPage(
-              page: () => CartView(),
+              page: () => const CartView(),
               binding: CartBinding(),
               role: Role.buyer,
               children: [

@@ -7,6 +7,8 @@ import '../../../../services/auth_service.dart';
 import '../controllers/cart_controller.dart';
 
 class CartView extends GetView<CartController> {
+  const CartView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CartController>(builder: (cartController) {

@@ -8,9 +8,14 @@ class ProductsController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late CollectionReference prodCollection;
   late CollectionReference categoryCollection;
+
   List<Product> products = [];
   List<Product> productsInUI = [];
   List<ProductCategory> categories = [];
+
+  // Map to track quantities of each product in the UI
+  RxMap<Product, int> productQuantities = <Product, int>{}.obs;
+
   @override
   Future<void> onInit() async {
     prodCollection = firestore.collection('products');
@@ -20,6 +25,7 @@ class ProductsController extends GetxController {
     super.onInit();
   }
 
+  // Fetch products from Firestore
   fetchProducts() async {
     try {
       QuerySnapshot productSnapshot = await prodCollection.get();
@@ -30,6 +36,13 @@ class ProductsController extends GetxController {
       products.assignAll(retrievedProducts);
       productsInUI.clear();
       productsInUI.assignAll(products);
+
+      // Initialize product quantities to 0 for all products
+      for (var product in products) {
+        if (!productQuantities.containsKey(product)) {
+          productQuantities[product] = 0;
+        }
+      }
     } on Exception catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     } finally {
@@ -37,6 +50,7 @@ class ProductsController extends GetxController {
     }
   }
 
+  // Fetch categories from Firestore
   fetchCategory() async {
     try {
       QuerySnapshot categorySnapshot = await categoryCollection.get();
@@ -53,6 +67,7 @@ class ProductsController extends GetxController {
     }
   }
 
+  // Filter products by category
   filterByCategory(String category) {
     productsInUI.clear();
     productsInUI =
@@ -60,6 +75,7 @@ class ProductsController extends GetxController {
     update();
   }
 
+  // Filter products by brand
   filterByBrand(List<String> brands) {
     if (brands.isEmpty) {
       productsInUI = products;
@@ -70,6 +86,7 @@ class ProductsController extends GetxController {
     update();
   }
 
+  // Sort products by price
   sortByPrice({required bool ascending}) {
     List<Product> sortedProducts = List<Product>.from(productsInUI);
     sortedProducts.sort((a, b) => ascending
@@ -77,5 +94,20 @@ class ProductsController extends GetxController {
         : b.price!.compareTo(a.price!));
     productsInUI = sortedProducts;
     update();
+  }
+
+  // Increment the quantity of a product
+  void incrementProductQuantity(Product product) {
+    productQuantities[product] = (productQuantities[product]!) + 1;
+    update();
+  }
+
+  // Decrement the quantity of a product
+  void decrementProductQuantity(Product product) {
+    final currentQuantity = productQuantities[product]!;
+    if (currentQuantity > 0) {
+      productQuantities[product] = currentQuantity - 1;
+      update();
+    }
   }
 }
