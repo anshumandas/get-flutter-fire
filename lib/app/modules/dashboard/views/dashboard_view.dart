@@ -52,7 +52,7 @@ class DashboardView extends GetView<DashboardController> {
               scrollDirection: Axis.horizontal,
               itemCount: controller.trendingProducts.length,
               itemBuilder: (context, index) {
-                return _buildProductCard(controller.trendingProducts[index]);
+                return _buildProductCardWithRating(controller.trendingProducts[index]);
               },
             ),
           ),
@@ -168,7 +168,65 @@ class DashboardView extends GetView<DashboardController> {
                   const SizedBox(height: 5),
                   Text(
                     product['price']!,
-                    style: const TextStyle(fontSize: 14, color: Color.fromARGB(255, 92, 2, 86), fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 92, 2, 86),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductCardWithRating(Map<String, String> product) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        elevation: 4,
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 150,
+              width: 180,
+              child: Image.asset(
+                product['image']!,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product['name']!,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: const [
+                      Icon(Icons.star, color: Colors.amber, size: 16),
+                      Icon(Icons.star, color: Colors.amber, size: 16),
+                      Icon(Icons.star, color: Colors.amber, size: 16),
+                      Icon(Icons.star, color: Colors.amber, size: 16),
+                      Icon(Icons.star_border, color: Colors.amber, size: 16),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    product['price']!,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 92, 2, 86),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),

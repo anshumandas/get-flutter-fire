@@ -46,7 +46,7 @@ class CartCard extends GetWidget<CartController> {
                   
                   SizedBox(height: 30),
                   Text(
-                    '\$${(cartItem.product.price * cartItem.quantity.value).toStringAsFixed(2)}',
+                    '\₹${(cartItem.product.price * cartItem.quantity.value).toStringAsFixed(2)}',
                     style: TextStyle(fontSize: 14, color: Colors.green),
                   ),
                 ],

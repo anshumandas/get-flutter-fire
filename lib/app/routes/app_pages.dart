@@ -69,7 +69,7 @@ class AppPages {
           binding: ProfileBinding(),
         ),
         Screen.SETTINGS.getPage(
-          page: () => const SettingsView(),
+          page: () =>  SettingsView(),
           binding: SettingsBinding(),
         ),
         Screen.HOME.getPage(

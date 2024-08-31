@@ -110,7 +110,7 @@ class AuthService extends GetxService {
     }
   }
 
-  void sendSingInLink(EmailAuthCredential emailAuth) {
+   void sendSignInLink(EmailAuthCredential emailAuth) {
     var acs = ActionCodeSettings(
       url:
           '$baseUrl:5001/flutterfast-92c25/us-central1/handleEmailLinkVerification',
@@ -131,23 +131,14 @@ class AuthService extends GetxService {
         .offAndToNamed(thenTo ?? Screen.PROFILE.route); // Profile has the forms
   }
 
-  void logout() async {
-    try {
-      if (_auth.currentUser != null) {
-        if (_auth.currentUser!.isAnonymous) {
-          await _auth.currentUser!.delete();
-        }
-        await _auth.signOut();
-      }
-
-      _firebaseUser.value = null;
-      _userRole.value = Role.buyer;
-
-      Get.offAllNamed(Routes.LOGIN);
-    } catch (e) {
-      print("Error during logout: $e");
-    }
+  void logout() {
+    _auth.signOut();
+    if (isAnon) _auth.currentUser?.delete();
+    _firebaseUser.value = null;
   }
+
+
+
 
   Future<bool?> guest() async {
     return await Get.defaultDialog(

@@ -44,7 +44,7 @@ class CartView extends GetView<CartController> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Total: \$${controller.total.toStringAsFixed(2)}'),
+                          Text('Total: \₹${controller.total.toStringAsFixed(2)}'),
                           Text('Number of items: ${controller.itemCount}'),
                         ],
                       ),
