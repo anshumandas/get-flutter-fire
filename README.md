@@ -1,5 +1,9 @@
 # get-flutter-fire
 
+CONTRIBUTOR: Vaishvi Jigneshkumar Parikh
+COLLEGE NAME: MIT World Peace University
+CONTACT DETAILS: 1032211203@mitwpu.edu.in
+
 This codebase provides a boilerplate code utilizing the following three technologies:
 
 1. Flutter 3.0 - For UX and uses Dart languange. See [https://flutter.dev/]
