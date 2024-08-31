@@ -1,43 +1,86 @@
-name: get_flutter_fire
+name: streakzy
+description: "A new Flutter project."
+
 version: 1.0.0+1
-publish_to: none
-description: Boilerplate for Flutter with GetX, showing sample utilization of Firebase capabilities
-environment: 
-  sdk: '>=3.3.4 <4.0.0'
 
-dependencies: 
-  cupertino_icons: ^1.0.6
-  get: 4.6.6
-  flutter: 
+environment:
+  sdk: ^3.5.0
+
+
+dependencies:
+  flutter:
     sdk: flutter
-  firebase_core: ^2.31.0
-  firebase_ui_auth: ^1.14.0
-  firebase_auth: ^4.19.5
-  google_sign_in: ^6.2.1
-  firebase_ui_oauth_google: ^1.3.2
-  google_fonts: ^6.2.1
-  firebase_storage: ^11.7.5
-  image_picker: ^1.1.1
-  file_picker: ^8.0.3
-  path: ^1.9.0
+
+  #utility Packages
+  http: ^1.1.0
+  intl: ^0.18.1
+  logger: ^2.0.1
+  lottie: ^3.1.2
+  connectivity_plus: ^5.0.1
+  url_launcher: ^6.1.12
+  flutter_native_splash: ^2.4.1
+  smooth_page_indicator: ^1.2.0+3
+  carousel_slider: ^5.0.0
+
+
+  iconsax: ^0.0.8
+  cupertino_icons: ^1.0.8
+  get: ^4.6.5
   get_storage: ^2.1.1
-  firebase_ui_localizations: ^1.12.0
-  firebase_remote_config: ^4.4.7
-  firebase_analytics: ^10.10.7
 
-dev_dependencies: 
-  flutter_lints: 3.0.2
-  flutter_test: 
+ #firebase
+  firebase_core: ^3.3.0
+  firebase_auth: ^5.1.4
+  cloud_firestore: ^5.2.1
+  google_sign_in: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
     sdk: flutter
 
-flutter: 
-  fonts:
-    - family: SocialIcons
-      fonts:
-        - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
-  assets:
-    - assets/images/flutterfire_300x.png
-    - assets/images/dash.png
-    - assets/icons/logo.png
+
+  flutter_lints: ^4.0.0
+
+
+flutter:
+
   uses-material-design: true
 
+  assets:
+    - assets/logos/google-icon.png
+    - assets/logos/facebook-icon.png
+    - assets/icons/
+    - assets/images/on_boarding_images/
+    - assets/logos/
+    - assets/images/animations/
+    - assets/images/animations/checked.gif
+    - assets/icons/categories/icons8-bowling-64.png
+    - assets/icons/categories/icons8-shoes-64.png
+    - assets/icons/categories/
+    - assets/images/banners/
+    - assets/images/products/
+    - assets/images/content/
+#    - assets/fonts/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Black.ttf
+          weight: 400
+
+        - asset: assets/fonts/Poppins-BlackItalic.ttf
+          weight: 400
+
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 400
+
+        - asset: assets/fonts/Poppins-BoldItalic.ttf
+          weight: 400
+
+        - asset: assets/fonts/Poppins-ExtraBold.ttf
+          weight: 400
+
+        - asset: assets/fonts/Poppins-ExtraBoldItalic.ttf
+          weight: 400
+
+ 
