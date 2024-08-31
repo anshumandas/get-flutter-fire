@@ -1,44 +1,59 @@
-// ignore_for_file: inference_failure_on_instance_creation
-
+import 'package:budget_worker/Dashboard.dart';
+import 'package:budget_worker/LoginScreen.dart';
+import 'package:budget_worker/firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
-import 'app/routes/app_pages.dart';
-import 'firebase_options.dart';
-import 'services/auth_service.dart';
+import 'HomePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(MyApp());
+}
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  runApp(
-    GetMaterialApp.router(
-      debugShowCheckedModeBanner:
-          false, //the debug banner will automatically disappear in prod build
-      title: 'Application',
-      initialBinding: BindingsBuilder(
-        () {
-          Get.put(AuthService());
-        },
-      ),
-      getPages: AppPages.routes,
-      // routeInformationParser: GetInformationParser(
-      //     // initialRoute: Routes.HOME,
-      //     ),
-      // routerDelegate: GetDelegate(
-      //   backButtonPopMode: PopMode.History,
-      //   preventDuplicateHandlingMode:
-      //       PreventDuplicateHandlingMode.ReorderRoutes,
-      // ),
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
       theme: ThemeData(
-          highlightColor: Colors.black.withOpacity(0.5),
-          bottomSheetTheme:
-              const BottomSheetThemeData(surfaceTintColor: Colors.blue)),
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blueGrey,
+      ),
+      home: const MainPage(),
+    );
+  }
+}
+
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    body: StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context , snapshot){
+        if(snapshot.hasData){
+          return const Dashboard();
+        }
+        else{
+          return const LoginScreen();
+        }
+      },
     ),
   );
 }
