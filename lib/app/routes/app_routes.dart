@@ -1,54 +1,73 @@
-// ignore_for_file: non_constant_identifier_names, constant_identifier_names
-
-part of 'app_pages.dart';
-// DO NOT EDIT. This is code generated via package:get_cli/get_cli.dart
-
 abstract class Routes {
-  static const HOME = _Paths.HOME;
-  // static String PROFILE = Screen.PROFILE.fullPath;
-  // static String SETTINGS = Screen.SETTINGS.fullPath;
-  static String LOGIN = Screen.LOGIN.route;
-  static String REGISTER = Screen.REGISTER.route;
-  // static String DASHBOARD = Screen.DASHBOARD.fullPath;
-  // static String PRODUCTS = Screen.PRODUCTS.fullPath;
-  // static String CART = Screen.CART.fullPath;
-  // static String CHECKOUT = Screen.CHECKOUT.fullPath;
-  // static const CATEGORIES = _Paths.HOME + _Paths.CATEGORIES;
-  // static const TASKS = _Paths.HOME + _Paths.TASKS;
-  // static const USERS = _Paths.HOME + _Paths.USERS;
-  // static const MY_PRODUCTS = _Paths.HOME + _Paths.MY_PRODUCTS;
-
-  static String PRODUCT_DETAILS(String productId) =>
-      '${Screen.PRODUCTS.route}/$productId';
-  static String CART_DETAILS(String productId) =>
-      '${Screen.CART.route}/$productId';
-  static String TASK_DETAILS(String taskId) => '${Screen.TASKS.route}/$taskId';
-  static String USER_PROFILE(String uId) => '${Screen.USERS.route}/$uId';
-
   Routes._();
-  static String LOGIN_THEN(String afterSuccessfulLogin) =>
-      '${Screen.LOGIN.route}?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
-  static String REGISTER_THEN(String afterSuccessfulLogin) =>
-      '${Screen.REGISTER.route}?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
+  static const SPLASH = _Paths.SPLASH;
+  static const WELCOME = _Paths.WELCOME;
+  static const LOGIN = _Paths.LOGIN;
+  static const OTP = _Paths.OTP;
+  static const REGISTER = _Paths.REGISTER;
+  static const ADDRESS = _Paths.ADDRESS;
+  static const ROOT = _Paths.ROOT;
+  //HOME ROUTES
+  static const CATEGORIES = _Paths.CATEGORIES;
+  static const SEARCH = _Paths.SEARCH;
+//profile routes
+  static const ACCOUNT_DETAILS = _Paths.ACCOUNT_DETAILS;
+  static const MANAGE_ADDRESS = _Paths.MANAGE_ADDRESS;
+  static const ADD_ADDRESS = _Paths.ADD_ADDRESS;
+  static const CONTACT = _Paths.CONTACT;
+  static const PAST_QUERIES = _Paths.PAST_QUERIES;
+  //Cart Routes
+  static const CART = _Paths.CART;
+
+  //Order
+  static const ORDER_CONFIRMED = _Paths.ORDER_CONFIRMED;
+  static const ORDER_DETAILS = _Paths.ORDER_DETAILS;
+
+  //Admin
+  static const UPLOAD_BANNERS = _Paths.UPLOAD_BANNERS;
+  static const EDIT_BANNER = _Paths.EDIT_BANNER;
+  static const APPROVE_SELLERS = _Paths.APPROVE_SELLERS;
+
+  static const PRODUCT_DETAILS = _Paths.PRODUCT_DETAILS;
+  static const PRODUCTS_LISTING = _Paths.PRODUCTS_LISTING;
+
+  static const ADD_CATEGORY = _Paths.ADD_CATEGORY;
+
+  static const VIEW_CATEGORIES = _Paths.VIEW_CATEGORIES;
 }
 
-// Keeping this as Get_Cli will require it. Any addition can later be added to Screen
 abstract class _Paths {
-  static const String HOME = '/home';
-  // static const DASHBOARD = '/dashboard';
-  // static const PRODUCTS = '/products';
-  // static const PROFILE = '/profile';
-  // static const SETTINGS = '/settings';
-  // static const PRODUCT_DETAILS = '/:productId';
-  // static const CART_DETAILS = '/:productId';
-  // static const LOGIN = '/login';
-  // static const CART = '/cart';
-  // static const CHECKOUT = '/checkout';
-  // static const REGISTER = '/register';
-  // static const CATEGORIES = '/categories';
-  // static const TASKS = '/tasks';
-  // static const TASK_DETAILS = '/:taskId';
-  // static const USERS = '/users';
-  // static const USER_PROFILE = '/:uId';
-  // static const MY_PRODUCTS = '/my-products';
+  static const String SPLASH = '/';
+  static const String WELCOME = '/welcome';
+  static const String LOGIN = '/login';
+  static const String OTP = '/otp';
+  static const String REGISTER = '/register';
+  static const String ADDRESS = '/address';
+  static const String ROOT = '/root';
+
+  //home routes
+  static const CATEGORIES = '/categories';
+  static const SEARCH = '/search';
+  //Profile Routes
+  static const ACCOUNT_DETAILS = '/account_details';
+  static const MANAGE_ADDRESS = '/manage_address';
+  static const ADD_ADDRESS = '/add_address';
+  static const CONTACT = '/contact';
+  static const PAST_QUERIES = '/past_queries';
+  //Cart Routes
+  static const CART = '/cart';
+
+  //Order
+  static const ORDER_CONFIRMED = '/order_confirmed';
+  static const ORDER_DETAILS = '/order_details';
+
+  //admin
+  static const UPLOAD_BANNERS = '/upload_banners';
+  static const EDIT_BANNER = '/edit_banner';
+  static const APPROVE_SELLERS = '/approve_sellers';
+  static const ADD_CATEGORY = '/add_category';
+  static const VIEW_CATEGORIES = '/view_categories';
+
+  static const PRODUCT_DETAILS = '/product/:id';
+  static const PRODUCTS_LISTING = '/products';
 }
