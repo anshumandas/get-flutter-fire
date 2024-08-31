@@ -1,35 +1,39 @@
 import 'screens.dart';
 
-// First tab for all except Admin is Home/Dashboard which is diferrent for each role
-// Admin is User List By Roles with slide to Change Role or Disable
-// Second tab for
-// Guest & Buyer is Public Product List by Category with Slide to Add to Cart
-// Seller is Product List by Category with Add Product FAB leading to Product Form
-// Admin is Category List with Add Category FAB
-// Third tab for
-// Guest is Cart with Guest Auth
-// Buyer is Cart with own Auth
-// Seller is MyProducts
-// Admin is Tasks/Approvals
-// Profile and Settings is in Drawer
+// Adding Persona Enum
+enum Persona {
+  Adult,
+  Kids,
+  Teen,
+}
 
+// First tab for all except Admin is Home/Dashboard which is different for each role
 enum Role {
-  buyer([Screen.DASHBOARD, Screen.PRODUCTS, Screen.CART]),
-  seller([Screen.DASHBOARD, Screen.PRODUCTS, Screen.MY_PRODUCTS]),
-  admin([Screen.USERS, Screen.CATEGORIES, Screen.TASKS]);
-//higher role can assume a lower role
+  Guest,
+  Buyer(Persona persona), // Added Persona for Buyer role
+  Seller,
+  Admin,
+}
 
-  const Role(this.permissions);
-  final List<Screen>
-      permissions; //list of screens, with accessLevel = roleBased, visible for the role
+// Role-based screens
+final Map<Role, List<Screens>> roleScreens = {
+  Role.Guest: [Screens.Home, Screens.Categories, Screens.Cart],
+  Role.Buyer: [Screens.Home, Screens.Categories, Screens.Cart, Screens.MyOrders], // Buyer role screens
+  Role.Seller: [Screens.Home, Screens.Products, Screens.Sales],
+  Role.Admin: [Screens.Users, Screens.Categories, Screens.Orders],
+};
 
-  static Role fromString(String? name) => (name != null
-      ? Role.values.firstWhere((role) => role.name == name)
-      : Role.buyer);
-  bool hasAccess(Role role) => index >= role.index;
-  bool hasAccessOf(String role) => index >= fromString(role).index;
-
-  List<Screen> get tabs => permissions
-      .where((screen) => screen.accessor_ == AccessedVia.navigator)
-      .toList(); //the ones in tab
+// Function to get screens based on role and persona
+List<Screens> getScreensForRole(Role role) {
+  switch (role) {
+    case Role.Buyer:
+      if (role.persona == Persona.Kids) {
+        return [Screens.KidsHome, Screens.KidsCategories, Screens.Cart, Screens.MyOrders];
+      } else if (role.persona == Persona.Teen) {
+        return [Screens.TeenHome, Screens.TeenCategories, Screens.Cart, Screens.MyOrders];
+      }
+      return roleScreens[Role.Buyer];
+    default:
+      return roleScreens[role];
+  }
 }
