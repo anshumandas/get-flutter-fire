@@ -65,3 +65,9 @@ This project was developed using the following tools and versions:
 ### Stable Release APK
 
 A stable release APK of the app has been added to the `stableapks` folder in this repository. You can download and install it to experience the app without needing to build it from source.
+
+## Contact Me
+For any questions or feedback, please reach out to me at:
+
+Email: saubhagyasingh65@gmail.com
+WhatsApp: 7007084088
