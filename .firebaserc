@@ -1,0 +1,10 @@
+{
+  "projects": {
+    "default": "gaurav-sharekhan",
+    "local": "gaurav-sharekhan",
+    "dev": "gaurav-sharekhan"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}

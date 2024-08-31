@@ -36,16 +36,21 @@ class DrawerWidget extends StatelessWidget {
     List<Widget> list = [
       Container(
         height: 100,
-        color: Colors.red,
+        color: Colors.blueAccent,
         //adding content in the highlighted part of the drawer
         child: Align(
             alignment: Alignment.centerLeft,
             child: Container(
                 margin: const EdgeInsets.only(left: 15),
-                child: const Text('User Name', //Profile Icon also
-                    style: TextStyle(fontWeight: FontWeight.bold)))),
-      )
-    ];
+              child: Text(
+                '${AuthService.to.userName}',
+                style: const TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+        )
+        )
+      ];
 
     if (AuthService.to.maxRole.index > 1) {
       for (var i = 0; i <= AuthService.to.maxRole.index; i++) {
@@ -54,7 +59,7 @@ class DrawerWidget extends StatelessWidget {
           title: Text(
             role.name,
             style: const TextStyle(
-              color: Colors.blue,
+              color: Colors.orangeAccent,
             ),
           ),
           onTap: () {

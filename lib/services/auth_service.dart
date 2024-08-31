@@ -5,7 +5,9 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
+import '../app/routes/app_pages.dart';
 import '../models/screens.dart';
 import '../constants.dart';
 import '../models/role.dart';
@@ -14,6 +16,7 @@ class AuthService extends GetxService {
   static AuthService get to => Get.find();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   late Rxn<EmailAuthCredential> credential = Rxn<EmailAuthCredential>();
   final Rxn<User> _firebaseUser = Rxn<User>();
   final Rx<Role> _userRole = Rx<Role>(Role.buyer);
@@ -28,7 +31,7 @@ class AuthService extends GetxService {
     super.onInit();
     if (useEmulator) _auth.useAuthEmulator(emulatorHost, 9099);
     _firebaseUser.bindStream(_auth.authStateChanges());
-    _auth.authStateChanges().listen((User? user) {
+    _auth.userChanges().listen((User? user) {
       if (user != null) {
         user.getIdTokenResult().then((token) {
           _userRole.value = Role.fromString(token.claims?["role"]);
@@ -48,8 +51,8 @@ class AuthService extends GetxService {
 
   bool get isAnon => user != null && user!.isAnonymous;
 
-  String? get userName => (user != null && !user!.isAnonymous)
-      ? (user!.displayName ?? user!.email)
+  String? get userName => (user != null)
+      ? (user!.displayName ?? (user!.isAnonymous ? 'Guest' : user!.email))
       : 'Guest';
 
   void login() {
@@ -116,11 +119,34 @@ class AuthService extends GetxService {
         .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
   }
 
-  void logout() {
-    _auth.signOut();
-    if (isAnon) _auth.currentUser?.delete();
-    _firebaseUser.value = null;
+  // Updated logout function
+  Future<void> logout() async {
+    User? user = _auth.currentUser; // Get the current user
+
+    if (user != null && user.isAnonymous) {
+      // If the user is anonymous, delete the user itself
+      try {
+        await user.delete(); // Delete the anonymous user
+        print("Anonymous user deleted successfully.");
+      } catch (error) {
+        print("Error deleting anonymous user: $error");
+        // Handle the error, such as notifying the user or logging the issue
+      }
+    } else {
+      // If the user is not anonymous, just sign them out
+      await _auth.signOut();
+      print("Non-anonymous user signed out successfully.");
+    }
+
+
+    // post on login page after logout
+    Get.rootDelegate.toNamed(Screen.HOME.route);
+
+    // Reset user value if needed (if using a reactive approach)
+    //_firebaseUser.value = null; // Uncomment if you're using a reactive approach
+
   }
+
 
   Future<bool?> guest() async {
     return await Get.defaultDialog(
@@ -180,6 +206,50 @@ class AuthService extends GetxService {
             'Oh no! Something went wrong.',
       };
     };
+  }
+
+  Future<void> pnVerify(
+      String phoneNumber,
+      Function(String) onCodeSent,
+      Function(String) onVerificationCompleted) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // Sign in the user automatically once verification is completed
+        await _auth.signInWithCredential(credential);
+        _firebaseUser.value = _auth.currentUser;
+        // Notify the caller that verification is completed
+        onVerificationCompleted(_auth.currentUser?.uid ?? '');
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        // Display an error message if verification fails
+        Get.snackbar('Error', 'Failed to verify phone number: ${e.message}');
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        // Return the verification ID to the caller
+        onCodeSent(verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Handle the timeout of auto-retrieval
+      },
+    );
+  }
+
+  Future<void> pnsignin(
+      String verificationId, String smsCode) async {
+    try {
+      // Create a credential for sign-in using the provided verification ID and SMS code
+      final credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
+      // Attempt to sign in with the generated credential
+      await _auth.signInWithCredential(credential);
+      _firebaseUser.value = _auth.currentUser;
+    } catch (e) {
+      // Show an error message if sign-in fails
+      Get.snackbar('Error', 'Sign-in process failed: $e');
+    }
   }
 }
 

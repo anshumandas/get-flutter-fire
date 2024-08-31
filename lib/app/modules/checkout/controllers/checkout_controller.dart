@@ -1,23 +1,25 @@
 import 'package:get/get.dart';
+import '../../cart/controllers/cart_controller.dart'; // Ensure this import is correct
 
 class CheckoutController extends GetxController {
-  //TODO: Implement CheckoutController
+  final cartController = Get.find<CartController>();
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  double get totalAmount {
+    return cartController.cartItems.fold<double>(
+      0.0,
+          (sum, item) => sum + (item.product.price * item.quantity),
+    );
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void proceedToPayment() {
+    // Implement payment logic here
+    // For now, just print a message
+    Get.snackbar('Checkout', 'Proceeding to payment.');
   }
 
   @override
   void onClose() {
+    Get.printInfo(info: 'CheckoutController: onClose');
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

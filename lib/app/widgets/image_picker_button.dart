@@ -75,8 +75,13 @@ class ImagePickerButton extends MenuSheetButton<ImageSources> {
 
   @override
   void callbackFunc(act) {
-    if (callback != null) callback!(act);
+    if (callback != null) {
+      callback!(act);
+    } else {
+      Get.snackbar('Error', 'Callback function is null');
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -18,4 +18,4 @@ const emulatorHost =
 
 const baseUrl = useEmulator ? "http://127.0.0.1" : "your domain";
 
-const bundleID = "com.example";
+const bundleID = "com.example.getFlutterFireMain";

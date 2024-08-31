@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "947336803734",
+    "project_id": "gaurav-sharekhan",
+    "storage_bucket": "gaurav-sharekhan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947336803734:android:173321ec60181ff6f099b7",
+        "android_client_info": {
+          "package_name": "com.gauravsharekhan.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "947336803734-cbhiv7ga899csh4rm7a5e5mcj610k1p6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gauravsharekhan.app",
+            "certificate_hash": "8a5d8a95d3c01bbe4722bc814969b73055fd7eca"
+          }
+        },
+        {
+          "client_id": "947336803734-aip85el0eqi4i14j2n0uc0sf98503brk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo0-kbb5H7DQqkxfRjq6P3XQI33b1Ijp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "947336803734-aip85el0eqi4i14j2n0uc0sf98503brk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "947336803734-neu0h1o17rub7rie5dp055hq5m1o9rn5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sharekhan.getFlutterFireMain"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
