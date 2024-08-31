@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "454225435556",
+    "project_id": "nancy-app-cca62",
+    "storage_bucket": "nancy-app-cca62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454225435556:android:2595b518d049a37da43f31",
+        "android_client_info": {
+          "package_name": "com.nancy.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454225435556-1uhsoveijds7eogkl6vc78l51v26oaul.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nancy.app",
+            "certificate_hash": "4335f5cde84455e76069780f4e1ec6dd0308ba1b"
+          }
+        },
+        {
+          "client_id": "454225435556-l2kos64fi84t12eac3ulqrbrdnepnrv8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOyvD91rLLZ0nUTxC70b5uM2pR2KIsxrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454225435556-7knndu3td7cso0tkndh1dvou6g4ib7re.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "454225435556-8jkgu2a15hau84dfr71mh61dh0c29mf3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nancy.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

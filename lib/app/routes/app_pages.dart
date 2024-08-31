@@ -69,7 +69,7 @@ class AppPages {
           binding: ProfileBinding(),
         ),
         Screen.SETTINGS.getPage(
-          page: () => const SettingsView(),
+          page: () =>  SettingsView(),
           binding: SettingsBinding(),
         ),
         Screen.HOME.getPage(
@@ -109,7 +109,7 @@ class AppPages {
               binding: CategoriesBinding(),
             ),
             Screen.CART.getPage(
-              page: () => const CartView(),
+              page: () =>  CartView(),
               binding: CartBinding(),
               role: Role.buyer,
               children: [

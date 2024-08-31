@@ -35,6 +35,19 @@ class LoginView extends GetView<LoginController> {
     return Obx(() => loginScreen(context));
   }
 
+  Widget footerBuilder(Rx<bool> show, Rxn<fba.EmailAuthCredential> credential) {
+    return Column(
+      children: [
+        LoginWidgets.footerBuilder(EmailLinkButton(show, credential)),
+        const SizedBox(height: 16), // Add spacing between the terms and the button
+        ElevatedButton(
+          onPressed: () => controller.guestlogin(),
+          child: const Text('Anonymous login'),
+        ),
+      ],
+    );
+  }
+
   Widget subtitleBuilder(context, action) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -42,10 +55,6 @@ class LoginView extends GetView<LoginController> {
           ? const Text('Welcome to Get Flutter Fire, please sign in!')
           : const Text('New to Get Flutter Fire, please sign up!'),
     );
-  }
-
-  Widget footerBuilder(Rx<bool> show, Rxn<fba.EmailAuthCredential> credential) {
-    return LoginWidgets.footerBuilder(EmailLinkButton(show, credential));
   }
 
   Widget loginScreen(BuildContext context) {
@@ -57,6 +66,7 @@ class LoginView extends GetView<LoginController> {
               providers: [
                 GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
                 MyEmailAuthProvider(),
+                PhoneAuthProvider(),
               ],
               showAuthActionSwitch: !controller.isRegistered,
               showPasswordVisibilityToggle: true,
@@ -72,6 +82,8 @@ class LoginView extends GetView<LoginController> {
       ui = RegisterScreen(
         providers: [
           MyEmailAuthProvider(),
+          PhoneAuthProvider(),
+
         ],
         showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
         showPasswordVisibilityToggle: true,
