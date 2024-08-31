@@ -9,6 +9,13 @@ import 'app/routes/app_pages.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
 
+import 'screens/home_screen.dart';
+import 'screens/profile_screen.dart';
+import 'screens/activity_screen.dart';
+import 'screens/settings_screen.dart';
+import 'screens/health_tips_screen.dart';
+import 'screens/chat_screen.dart';
+import 'screens/booking_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();

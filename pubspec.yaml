@@ -10,6 +10,8 @@ dependencies:
   get: 4.6.6
   flutter: 
     sdk: flutter
+    otp: ^3.0.0
+    qr_flutter: ^4.0.0 
   firebase_core: ^2.31.0
   firebase_ui_auth: ^1.14.0
   firebase_auth: ^4.19.5
@@ -24,7 +26,7 @@ dependencies:
   firebase_ui_localizations: ^1.12.0
   firebase_remote_config: ^4.4.7
   firebase_analytics: ^10.10.7
-
+  
 dev_dependencies: 
   flutter_lints: 3.0.2
   flutter_test: 
