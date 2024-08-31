@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "743218631806",
+    "project_id": "firstflutterapp-a4b9a",
+    "storage_bucket": "firstflutterapp-a4b9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743218631806:android:263c7a36affcb3a3aa742f",
+        "android_client_info": {
+          "package_name": "mitwpu.edu.in.project1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnA3mk2XHGReXTC-R3DPld8DeIHjdxHmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
