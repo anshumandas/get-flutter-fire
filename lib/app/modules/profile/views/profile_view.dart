@@ -1,124 +1,198 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../services/auth_service.dart';
-import '../../../../models/screens.dart';
-import '../../../widgets/change_password_dialog.dart';
-import '../../../widgets/image_picker_button.dart';
+import 'package:image_picker/image_picker.dart';
 import '../controllers/profile_controller.dart';
+import 'package:path_provider/path_provider.dart';
 
-class ProfileView extends GetView<ProfileController> {
-  const ProfileView({super.key});
-  ShapeBorder get shape => const CircleBorder();
-  double get size => 120;
-  Color get placeholderColor => Colors.grey;
-
-  Widget _imageFrameBuilder(
-    BuildContext context,
-    Widget? child,
-    int? frame,
-    bool? _,
-  ) {
-    if (frame == null) {
-      return Container(color: placeholderColor);
-    }
-
-    return child!;
-  }
+class ProfileView extends StatelessWidget {
+  final ProfileController _controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => profileScreen());
-  }
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text('Profile', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit, color: Colors.white),
+            onPressed: () => _showEditDialog(context),
+          ),
+        ],
+      ),
+      body: Obx(() {
+        if (_controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator(color: Colors.white));
+        }
 
-  Widget profileScreen() {
-    return AuthService.to.isLoggedInValue
-        ? ProfileScreen(
-            // We are using the Flutter Fire Profile Screen now but will change in subsequent steps.
-            // The issues are highlighted in comments here
-
-            // appBar: AppBar(
-            //   title: const Text('User Profile'),
-            // ),
-            avatar: SizedBox(
-              //null will give the profile image component but it does not refresh the pic when changed
-              height: size,
-              width: size,
-              child: ClipPath(
-                clipper: ShapeBorderClipper(shape: shape),
-                clipBehavior: Clip.hardEdge,
-                child: controller.photoURL != null
-                    ? Image.network(
-                        controller.photoURL!,
-                        width: size,
-                        height: size,
-                        cacheWidth: size.toInt(),
-                        cacheHeight: size.toInt(),
-                        fit: BoxFit.contain,
-                        frameBuilder: _imageFrameBuilder,
-                      )
-                    : Center(
-                        child: Image.asset(
-                          'assets/images/dash.png',
-                          width: size,
-                          fit: BoxFit.contain,
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                FutureBuilder<File?>(
+                  future: _getLocalImageFile(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Colors.grey,
+                      );
+                    } else if (snapshot.hasData && snapshot.data != null) {
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundImage: FileImage(snapshot.data!),
+                      );
+                    } else {
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(
+                          _controller.userData['imageUrl'] ??
+                              'https://via.placeholder.com/150',
                         ),
-                      ),
-              ),
+                      );
+                    }
+                  },
+                ),
+                SizedBox(height: 20),
+                Text(
+                  _controller.userData['name'] ?? 'No name',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  _controller.userData['email'] ?? 'No email',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                SizedBox(height: 30),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  ),
+                  onPressed: _controller.signOut,
+                  child: Text(
+                    'Sign Out',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ],
             ),
-            // showDeleteConfirmationDialog: true, //this does not work properly. Possibly a bug in FlutterFire
-            actions: [
-              SignedOutAction((context) {
-                Get.back();
-                controller.logout();
-                Get.rootDelegate.toNamed(Screen.PROFILE.route);
-                // Navigator.of(context).pop();
-              }),
-              AccountDeletedAction((context, user) {
-                //If we don't include this the button is still shown but no action gets done. Ideally the button should also not be shown. Its a bug in FlutterFire
-                Get.defaultDialog(
-                  //this is only called after the delete is done and not useful for confirmation of the delete action
-                  title: 'Deleted Account of ${user.displayName}',
-                  barrierDismissible: true,
-                  navigatorKey: Get.nestedKey(Screen.HOME.route),
-                );
-              })
-            ],
-            children: [
-              //This is to show that we can add custom content here
-              const Divider(),
-              controller.currentUser?.email != null
-                  ? TextButton.icon(
-                      onPressed: callChangePwdDialog,
-                      label: const Text('Change Password'),
-                      icon: const Icon(Icons.password_rounded),
-                    )
-                  : const SizedBox.shrink(),
-              ImagePickerButton(callback: (String? path) async {
-                if (path != null) {
-                  //Upload to Store
-                  String? dest = await controller.uploadFile(path);
-                  //attach it to User imageUrl
-                  if (dest != null) {
-                    await controller.updatePhotoURL(dest);
-                  }
-                }
-              })
-            ],
-          )
-        : const Scaffold();
+          ),
+        );
+      }),
+    );
   }
 
-  void callChangePwdDialog() {
-    var dlg = ChangePasswordDialog(controller.currentUser!);
-    Get.defaultDialog(
-        title: "Change Password",
-        content: dlg,
-        textConfirm: "Submit",
-        textCancel: "Cancel",
-        onConfirm: dlg.onSubmit);
+  Future<File?> _getLocalImageFile() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String localPath = '${appDocDir.path}/user_${user.uid}.jpg';
+      File localFile = File(localPath);
+      if (localFile.existsSync()) {
+        return localFile;
+      }
+    }
+    return null;
+  }
+
+  void _showEditDialog(BuildContext context) {
+    final nameController = TextEditingController(text: _controller.userData['name']);
+    final emailController = TextEditingController(text: _controller.userData['email']);
+    File? _selectedImage;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.black,
+          title: Text('Edit Profile', style: TextStyle(color: Colors.white)),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    _selectedImage = await _pickImage(context);
+                  },
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: _selectedImage != null
+                        ? FileImage(_selectedImage!)
+                        : NetworkImage(_controller.userData['imageUrl'] ??
+                        'https://via.placeholder.com/150') as ImageProvider,
+                    child: Icon(Icons.camera_alt, color: Colors.white.withOpacity(0.7), size: 40),
+                  ),
+                ),
+                SizedBox(height: 20),
+                _buildTextField(nameController, 'Name'),
+                SizedBox(height: 10),
+                _buildTextField(emailController, 'Email'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel', style: TextStyle(color: Colors.white)),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () {
+                _controller.updateUserData(
+                  name: nameController.text,
+                  email: emailController.text,
+                  phoneNumber: _controller.userData['phoneNumber'] ?? '',
+                  imageFile: _selectedImage,
+                );
+                Navigator.of(context).pop();
+              },
+              child: Text('Save', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<File?> _pickImage(BuildContext context) async {
+    final ImagePicker _picker = ImagePicker();
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      return File(pickedFile.path);
+    }
+    return null;
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label) {
+    return TextField(
+      controller: controller,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.grey),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+      ),
+    );
   }
 }

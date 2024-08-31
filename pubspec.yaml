@@ -2,14 +2,14 @@ name: get_flutter_fire
 version: 1.0.0+1
 publish_to: none
 description: Boilerplate for Flutter with GetX, showing sample utilization of Firebase capabilities
-environment: 
+environment:
   sdk: '>=3.3.4 <4.0.0'
 
-dependencies: 
-  cupertino_icons: ^1.0.6
-  get: 4.6.6
-  flutter: 
+dependencies:
+  flutter:
     sdk: flutter
+  cupertino_icons: ^1.0.6
+  get: ^4.6.6
   firebase_core: ^2.31.0
   firebase_ui_auth: ^1.14.0
   firebase_auth: ^4.19.5
@@ -24,20 +24,29 @@ dependencies:
   firebase_ui_localizations: ^1.12.0
   firebase_remote_config: ^4.4.7
   firebase_analytics: ^10.10.7
+  flutter_native_splash: ^2.4.1
+  url_launcher: ^6.1.6
+  cloud_firestore: ^4.17.4
+  firebase_app_check: ^0.2.2+7
 
-dev_dependencies: 
-  flutter_lints: 3.0.2
-  flutter_test: 
+  # Add other Firebase dependencies as needed
+
+dev_dependencies:
+  flutter_lints: ^3.0.2
+  flutter_test:
     sdk: flutter
 
-flutter: 
+flutter:
+  uses-material-design: true
   fonts:
     - family: SocialIcons
       fonts:
         - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
   assets:
-    - assets/images/flutterfire_300x.png
+    - assets/images/
     - assets/images/dash.png
     - assets/icons/logo.png
-  uses-material-design: true
 
+flutter_native_splash:
+  image: assets/images/splash.png
+  color: "#000000"

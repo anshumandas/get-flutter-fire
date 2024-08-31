@@ -1,14 +1,30 @@
 import 'package:get/get.dart';
+import '../../../../services/Streamer.dart';
+import '../../../../services/Streamer_Service.dart';
 
-import '../../../../models/role.dart';
-import '../../../../services/auth_service.dart';
 
 class HomeController extends GetxController {
-  final Rx<Role> chosenRole = Rx<Role>(AuthService.to.maxRole);
+  final StreamerService _streamerService = StreamerService();
 
-  // Role get role => AuthService.to.maxRole;
+  var streamers = <Streamer>[].obs;
+  var isLoading = true.obs;
+  var error = ''.obs;
 
-  get isBuyer => chosenRole.value == Role.buyer;
+  @override
+  void onInit() {
+    super.onInit();
+    fetchStreamers();
+  }
 
-  get isAdmin => chosenRole.value == Role.admin;
+  void fetchStreamers() async {
+    try {
+      isLoading(true);
+      var fetchedStreamers = await _streamerService.fetchStreamers();
+      streamers.assignAll(fetchedStreamers);
+    } catch (e) {
+      error(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
 }

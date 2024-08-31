@@ -1,62 +1,74 @@
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-
-import 'package:path/path.dart';
-import '../../../../services/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import '../../../../services/firstore_service.dart';
+import '../../../routes/app_routes.dart';
 
 class ProfileController extends GetxController {
-  FirebaseStorage storage = FirebaseStorage.instance;
-  User? currentUser = AuthService.to.user;
-  final Rxn<String> _photoURL = Rxn<String>();
-
-  File? _photo;
-
-  String? get photoURL => _photoURL.value;
+  final FirestoreService _firestoreService = FirestoreService();
+  var userData = {}.obs;
+  RxBool isLoading = true.obs;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
-    _photoURL.value = currentUser!.photoURL;
-    _photoURL.bindStream(currentUser!.photoURL.obs.stream);
+    fetchUserData();
   }
 
-  Future<String?> uploadFile(String path) async {
+  Future<void> fetchUserData() async {
     try {
-      var byt = GetStorage().read(path);
-      if (byt != null) {
-        final fileName = path;
-        final destination = 'profilePics/${currentUser!.uid}';
-
-        final ref = storage.ref(destination).child(fileName);
-        await ref.putData(byt);
-        return "$destination/$fileName";
-      } else {
-        _photo = File(path);
-        if (_photo == null) return null;
-        final fileName = basename(_photo!.path);
-        final destination = 'profilePics/${currentUser!.uid}';
-
-        final ref = storage.ref(destination).child(fileName);
-        await ref.putFile(_photo!);
-        return "$destination/$fileName";
-      }
+      isLoading(true);
+      DocumentSnapshot snapshot = await _firestoreService.getUserData();
+      userData.value = snapshot.data() as Map<String, dynamic>;
     } catch (e) {
-      Get.snackbar('Error', 'Image Not Uploaded as ${e.toString()}');
+      Get.snackbar(
+        'Error',
+        'Failed to fetch user data: ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading(false);
     }
-    return null;
   }
 
-  void logout() {
-    AuthService.to.logout();
+  Future<void> signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Get.offAllNamed(AppRoutes.login);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Sign out failed: ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 
-  Future<void> updatePhotoURL(String dest) async {
-    _photoURL.value = await storage.ref().child(dest).getDownloadURL();
-    await currentUser?.updatePhotoURL(_photoURL.value);
-    Get.snackbar('Success', 'Picture stored and linked');
+  Future<void> updateUserData({
+    required String name,
+    required String email,
+    required String phoneNumber,
+    File? imageFile,
+  }) async {
+    try {
+      await _firestoreService.updateUserData(
+        name: name,
+        email: email,
+        phoneNumber: phoneNumber,
+        imageFile: imageFile,
+      );
+      fetchUserData(); // Refresh the data after updating
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to update user data: ${e.toString()}',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 }
