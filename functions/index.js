@@ -26,12 +26,12 @@ exports.makeFirstUserAdmin = functions.auth.user().onCreate(async (user) => {
 
 // Your Firebase configuration object for the frontend app
 const firebaseConfig = {
-  apiKey: 'AIzaSyCXenT2QPXWNjrYhlX86beBck-GqqTDTbk',
-  appId: '1:947336803734:ios:fff61a3821d2a61bf099b7',
-  messagingSenderId: '947336803734',
+  apiKey: ' ',
+  appId: ' ',
+  messagingSenderId: ' ',
   projectId: 'gaurav-sharekhan',
   storageBucket: 'gaurav-sharekhan.appspot.com',
-  iosClientId: '947336803734-neu0h1o17rub7rie5dp055hq5m1o9rn5.apps.googleusercontent.com',
+  iosClientId: ' ',
   iosBundleId: 'com.sharekhan.getFlutterFireMain',
   authDomain: "gaurav-sharekhan.firebaseapp.com"
 };
