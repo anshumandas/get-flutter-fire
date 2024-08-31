@@ -1,11 +1,7 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../services/auth_service.dart';
-import '../../../../models/screens.dart';
 import '../../../widgets/change_password_dialog.dart';
 import '../../../widgets/image_picker_button.dart';
 import '../controllers/profile_controller.dart';
@@ -25,7 +21,6 @@ class ProfileView extends GetView<ProfileController> {
     if (frame == null) {
       return Container(color: placeholderColor);
     }
-
     return child!;
   }
 
@@ -36,80 +31,137 @@ class ProfileView extends GetView<ProfileController> {
 
   Widget profileScreen() {
     return AuthService.to.isLoggedInValue
-        ? ProfileScreen(
-            // We are using the Flutter Fire Profile Screen now but will change in subsequent steps.
-            // The issues are highlighted in comments here
-
-            // appBar: AppBar(
-            //   title: const Text('User Profile'),
-            // ),
-            avatar: SizedBox(
-              //null will give the profile image component but it does not refresh the pic when changed
-              height: size,
-              width: size,
-              child: ClipPath(
-                clipper: ShapeBorderClipper(shape: shape),
-                clipBehavior: Clip.hardEdge,
-                child: controller.photoURL != null
+        ? Scaffold(
+            appBar: AppBar(
+              title: const Text('Profile'),
+              actions: [
+                if (Theme.of(Get.context!).platform == TargetPlatform.android ||
+                    Theme.of(Get.context!).platform == TargetPlatform.iOS)
+                  IconButton(
+                    icon: const Icon(Icons.camera_alt),
+                    onPressed: () {
+                      _showBottomSheet(Get.context!, controller);
+                    },
+                  )
+                else
+                  PopupMenuButton<String>(
+                    onSelected: (value) {
+                      if (value == 'Select Image') {
+                        controller.pickImage();
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return ['Select Image'].map((String choice) {
+                        return PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(choice),
+                        );
+                      }).toList();
+                    },
+                  ),
+              ],
+            ),
+            body: Center(
+              child: Obx(() {
+                return controller.photoURL != null &&
+                        controller.photoURL!.isNotEmpty
                     ? Image.network(
                         controller.photoURL!,
                         width: size,
                         height: size,
-                        cacheWidth: size.toInt(),
-                        cacheHeight: size.toInt(),
                         fit: BoxFit.contain,
                         frameBuilder: _imageFrameBuilder,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                            child: Image.asset(
+                              'assets/images/dash.png',
+                              width: size,
+                              fit: BoxFit.contain,
+                            ),
+                          );
+                        },
                       )
-                    : Center(
-                        child: Image.asset(
-                          'assets/images/dash.png',
-                          width: size,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                    : Image.asset(
+                        'assets/images/dash.png',
+                        width: size,
+                        fit: BoxFit.contain,
+                      );
+              }),
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (controller.currentUser?.email != null)
+                    TextButton.icon(
+                      onPressed: () => _resetPasswordEmailVerification(),
+                      label: const Text('Reset Password'),
+                      icon: const Icon(Icons.email_rounded),
+                    ),
+                  ImagePickerButton(callback: (String? path) async {
+                    if (path != null) {
+                      String? dest = await controller.uploadFile(path);
+                      if (dest != null) {
+                        await controller.updatePhotoURL(dest);
+                      }
+                    }
+                  }),
+                ],
               ),
             ),
-            // showDeleteConfirmationDialog: true, //this does not work properly. Possibly a bug in FlutterFire
-            actions: [
-              SignedOutAction((context) {
-                Get.back();
-                controller.logout();
-                Get.rootDelegate.toNamed(Screen.PROFILE.route);
-                // Navigator.of(context).pop();
-              }),
-              AccountDeletedAction((context, user) {
-                //If we don't include this the button is still shown but no action gets done. Ideally the button should also not be shown. Its a bug in FlutterFire
-                Get.defaultDialog(
-                  //this is only called after the delete is done and not useful for confirmation of the delete action
-                  title: 'Deleted Account of ${user.displayName}',
-                  barrierDismissible: true,
-                  navigatorKey: Get.nestedKey(Screen.HOME.route),
-                );
-              })
-            ],
-            children: [
-              //This is to show that we can add custom content here
-              const Divider(),
-              controller.currentUser?.email != null
-                  ? TextButton.icon(
-                      onPressed: callChangePwdDialog,
-                      label: const Text('Change Password'),
-                      icon: const Icon(Icons.password_rounded),
-                    )
-                  : const SizedBox.shrink(),
-              ImagePickerButton(callback: (String? path) async {
-                if (path != null) {
-                  //Upload to Store
-                  String? dest = await controller.uploadFile(path);
-                  //attach it to User imageUrl
-                  if (dest != null) {
-                    await controller.updatePhotoURL(dest);
-                  }
-                }
-              })
-            ],
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                callChangePwdDialog();
+              },
+              child: const Icon(Icons.lock),
+            ),
           )
-        : const Scaffold();
+        : Scaffold();
+  }
+
+  void _showBottomSheet(BuildContext context, ProfileController controller) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(Icons.photo_library),
+              title: Text('Select from gallery'),
+              onTap: () {
+                controller.pickImage();
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.camera_alt),
+              title: Text('Take a photo'),
+              onTap: () {
+                controller
+                    .pickImage(); // Adjust if you want to add camera option
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _resetPasswordEmailVerification() async {
+    final email = controller.currentUser?.email;
+    if (email != null) {
+      await AuthService.to.sendPasswordResetEmail(email);
+    } else {
+      Get.snackbar(
+        'Error',
+        'No email address found for the current user.',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 3),
+      );
+    }
   }
 
   void callChangePwdDialog() {

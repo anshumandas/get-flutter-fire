@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../controllers/checkout_controller.dart';
 
 class CheckoutView extends GetView<CheckoutController> {
   const CheckoutView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,10 +12,23 @@ class CheckoutView extends GetView<CheckoutController> {
         title: const Text('CheckoutView'),
         centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'CheckoutView is working',
-          style: TextStyle(fontSize: 20),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Total Price: \$${controller.totalPrice.toStringAsFixed(2)}',
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                controller.checkout();
+              },
+              child: const Text('Checkout'),
+            ),
+          ],
         ),
       ),
     );

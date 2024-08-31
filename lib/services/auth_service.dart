@@ -1,14 +1,14 @@
-// ignore_for_file: avoid_print
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' as fbui;
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/models/access_level.dart';
 
 import '../models/screens.dart';
 import '../constants.dart';
 import '../models/role.dart';
+import 'persona_service.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
@@ -32,10 +32,20 @@ class AuthService extends GetxService {
       if (user != null) {
         user.getIdTokenResult().then((token) {
           _userRole.value = Role.fromString(token.claims?["role"]);
+          final personaService = Get.find<PersonaService>();
+          personaService.loadSelectedPersona();
         });
       }
     });
   }
+
+  AccessLevel get accessLevel => user != null
+      ? user!.isAnonymous
+          ? _userRole.value.index > Role.buyer.index
+              ? AccessLevel.roleBased
+              : AccessLevel.authenticated
+          : AccessLevel.guest
+      : AccessLevel.public;
 
   bool get isEmailVerified =>
       user != null && (user!.email == null || user!.emailVerified);
@@ -51,6 +61,9 @@ class AuthService extends GetxService {
   String? get userName => (user != null && !user!.isAnonymous)
       ? (user!.displayName ?? user!.email)
       : 'Guest';
+
+  String? get userPhotoUrl => user?.photoURL;
+  String? get userEmail => user?.email;
 
   void login() {
     // this is not needed as we are using Firebase UI for the login part
@@ -109,11 +122,57 @@ class AuthService extends GetxService {
 
   void register() {
     registered.value = true;
-    // logout(); // Uncomment if we need to enforce relogin
     final thenTo =
         Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
     Get.rootDelegate
         .offAndToNamed(thenTo ?? Screen.PROFILE.route); //Profile has the forms
+  }
+
+  Future<void> signInAnonymously() async {
+    try {
+      final userCredential = await _auth.signInAnonymously();
+      print("Signed in with temporary account.");
+      _firebaseUser.value = userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "operation-not-allowed":
+          print("Anonymous auth hasn't been enabled for this project.");
+          break;
+        default:
+          print("Unknown error: ${e.message}");
+      }
+    }
+  }
+
+  Future<void> linkAnonymousAccountWithCredential(
+      AuthCredential credential) async {
+    try {
+      final userCredential =
+          await _auth.currentUser?.linkWithCredential(credential);
+      print("Anonymous account successfully upgraded");
+      _firebaseUser.value = userCredential?.user;
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "provider-already-linked":
+          print("The provider has already been linked to the user.");
+          break;
+        case "invalid-credential":
+          print("The provider's credential is not valid.");
+          break;
+        case "credential-already-in-use":
+          print(
+              "The account corresponding to the credential already exists, or is already linked to a Firebase User.");
+          break;
+        default:
+          print("Unknown error: ${e.message}");
+      }
+    }
+  }
+
+  Future<void> convertAnonymousAccount(String email, String password) async {
+    final credential =
+        EmailAuthProvider.credential(email: email, password: password);
+    await linkAnonymousAccountWithCredential(credential);
   }
 
   void logout() {
@@ -180,6 +239,25 @@ class AuthService extends GetxService {
             'Oh no! Something went wrong.',
       };
     };
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      Get.snackbar(
+        'Password Reset',
+        'A password reset link has been sent to your email.',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 3),
+      );
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to send password reset email: ${e.message}',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 3),
+      );
+    }
   }
 }
 

@@ -5,9 +5,10 @@ import '../../../../services/auth_service.dart';
 class LoginController extends GetxController {
   static AuthService get to => Get.find();
 
-  final Rx<bool> showReverificationButton = Rx(false);
+  // final Rx<bool> showReverificationButton = Rx(false);
+  var showReverificationButton = false.obs;
 
-  bool get isRobot => AuthService.to.robot.value == true;
+  bool get isRobot => AuthService.to.robot.value == false;
 
   set robot(bool v) => AuthService.to.robot.value = v;
 
