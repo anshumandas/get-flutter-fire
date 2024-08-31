@@ -245,3 +245,28 @@ Future<void> setupTOTP() async {
     return 'retrieved_secret';
   }
 }
+
+String? validatePassword(String password) {
+  final RegExp regex = RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+  if (password.isEmpty) {
+    return 'Please enter a password';
+  } else if (!regex.hasMatch(password)) {
+    return 'Password must be at least 8 characters long, include an uppercase letter, a number, and a special character';
+  }
+  return null;
+}
+
+Future<void> register(String email, String password) async {
+  String? passwordError = validatePassword(password);
+  if (passwordError != null) {
+    Get.snackbar('Error', passwordError);
+    return;
+  }
+
+  try {
+    await _auth.createUserWithEmailAndPassword(email: email, password: password);
+    Get.snackbar('Success', 'Registration successful.');
+  } catch (e) {
+    Get.snackbar('Error', e.toString());
+  }
+}
