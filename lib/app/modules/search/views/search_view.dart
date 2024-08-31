@@ -46,38 +46,61 @@ class SearchView extends StatelessWidget {
             Obx(() {
               if (_searchCtrl.isLoading.value) {
                 return Center(child: CircularProgressIndicator(color: Colors.white));
-              }
-              return Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Display player details
-                      if (_searchCtrl.playerDetails.isNotEmpty) ...[
-                        _buildSectionTitle('Player Details'),
-                        SizedBox(height: 10),
-                        _buildDetailCard(_searchCtrl.playerDetails.value), // Use .value here
-                      ],
-                      SizedBox(height: 20),
-                      // Display history in a scrollable area
-                      if (_searchCtrl.history.isNotEmpty) ...[
-                        _buildSectionTitle('History'),
-                        SizedBox(height: 10),
-                        Container(
-                          height: 200, // Adjust height as needed
-                          child: ListView.builder(
-                            itemCount: _searchCtrl.history.length,
-                            itemBuilder: (context, index) {
-                              final item = _searchCtrl.history[index];
-                              return _buildHistoryCard(item);
-                            },
-                          ),
+              } else if (_searchCtrl.playerDetails.isEmpty && _searchCtrl.history.isEmpty) {
+                // Display an image when no search has been performed or when results are empty
+                return Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/search.gif', // Replace with your image path
+                          width: 150, // Adjust the width as needed
+                          height: 150, // Adjust the height as needed
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'No search results yet.',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                // Display search results
+                return Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Display player details
+                        if (_searchCtrl.playerDetails.isNotEmpty) ...[
+                          _buildSectionTitle('Player Details'),
+                          SizedBox(height: 10),
+                          _buildDetailCard(_searchCtrl.playerDetails.value), // Use .value here
+                        ],
+                        SizedBox(height: 20),
+                        // Display history in a scrollable area
+                        if (_searchCtrl.history.isNotEmpty) ...[
+                          _buildSectionTitle('History'),
+                          SizedBox(height: 10),
+                          Container(
+                            height: 200, // Adjust height as needed
+                            child: ListView.builder(
+                              itemCount: _searchCtrl.history.length,
+                              itemBuilder: (context, index) {
+                                final item = _searchCtrl.history[index];
+                                return _buildHistoryCard(item);
+                              },
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                );
+              }
             }),
           ],
         ),
