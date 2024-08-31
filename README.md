@@ -77,7 +77,8 @@ The app includes four distinct user flows:
 
 
 
-3. **Buyer**: Registered users who can add products to their cart, make purchases, and track orders.
+
+2. **Buyer**: Registered users who can add products to their cart, make purchases, and track orders.
 Sure, here's how you can display the images in a Markdown format with three images in a row, along with proper text captions below each image:
 
 
@@ -117,11 +118,81 @@ Sure, here's how you can display the images in a Markdown format with three imag
 | **Suport Section** | **Past Queries Section** | **Search for Home** |
 
 
-5. **Seller**: Users who can list products for sale, manage inventory, and fulfill orders.
+3. **Seller**: Users who can list products for sale, manage inventory, and fulfill orders.
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/e6b54ebf-8a84-49ba-95f3-f30037d4ff6b" alt="Seller Profile Page" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/c7f1e392-e07f-454e-ace1-4697b36f8eb8" alt="Seller Section of App" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/352f4c18-0cd3-456e-a8d9-e4d094badba9" alt="Add Product Section" width="300"/></td>
+  </tr>
+  <tr>
+    <td><strong>Seller Profile Page</strong></td>
+    <td><strong>Seller Section of App</strong></td>
+    <td><strong>Add Product Section</strong></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/e8eaa353-ff0d-4291-b5e6-e5f3345d4067" alt="Edit Product Section" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/7c83671a-152c-42f9-b6e3-e257df0c2a75" alt="Approval Tick on Appbar" width="300"/></td>
+   
+  </tr>
+  <tr>
+    <td><strong>Edit Product Section</strong></td>
+    <td><strong>Approval Tick on Appbar</strong></td>
+    
+  </tr>
+</table>
+
+
+
+
+
+
+
+
 
   
 
 6. **Admin**: Admins have access to manage users, oversee transactions, and monitor app activities.
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/e5cacf49-995f-4b19-a43a-734a14cd916c" alt="User Added Business Details" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/a483dc11-0e70-46c4-9b7d-0aeeb4a0d0a1" alt="Request Went to Admin" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/927596fc-2267-46fd-95c9-d7fa301ecdeb" alt="Admin Screen" width="300"/></td>
+  </tr>
+  <tr>
+    <td><strong>User Added Business Details</strong></td>
+    <td><strong>Request Went to Admin</strong></td>
+    <td><strong>Admin Screen</strong></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/bdb622ff-9939-4a32-95bc-f1ff6cab2359" alt="Upload Banners" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/5e8fb11d-f6e0-4cfc-a636-3bbfa67e2b4e" alt="Make Banners Active/Inactive" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/9cdb062c-e1cf-49e7-83a5-88df8ba0f374" alt="Add Categories" width="300"/></td>
+  </tr>
+  <tr>
+    <td><strong>Upload Banners</strong></td>
+    <td><strong>Make Banners Active/Inactive</strong></td>
+    <td><strong>Add Categories</strong></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/8d58cae9-3bbb-4653-a54d-948dbdc7a97e" alt="Manage Categories" width="300"/></td>
+    <td><img src="https://github.com/user-attachments/assets/011a4df7-97b0-4e95-8a83-6b24a2d3b13c" alt="Home Screen and Rest Features" width="300"/></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><strong>Manage Categories</strong></td>
+    <td><strong>Home Screen and Rest Features</strong></td>
+    <td></td>
+  </tr>
+</table>
+
+
+
+
+
+
+
+
 
  
 
@@ -145,17 +216,7 @@ To run the app with your data using the Firebase Emulator, or to set up a fresh 
     3. Download the `google-services.json` file and place it in the `android/app` directory.
     4. Manually add initial data to your Firebase project using the Firebase Console.
 
-## Screenshots
 
-Include images of different screens and user flows to provide a visual overview of the app. Add screenshots to the `/images` folder and reference them accordingly in the README file.
-
-## Contributing
-
-If you want to contribute to this project, please fork the repository and submit a pull request. For any questions, feel free to open an issue.
-
-## License
-
-This project is licensed under the MIT License.
 
 ---
 
