@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'package:path/path.dart';
 import '../../../../services/auth_service.dart';
 
@@ -18,13 +17,22 @@ class ProfileController extends GetxController {
   String? get photoURL => _photoURL.value;
 
   @override
-  onInit() {
+  void onInit() {
     super.onInit();
-    _photoURL.value = currentUser!.photoURL;
-    _photoURL.bindStream(currentUser!.photoURL.obs.stream);
+    if (currentUser != null) {
+      _photoURL.value = currentUser!.photoURL;
+      _photoURL.bindStream(currentUser!.photoURL.obs.stream);
+    } else {
+      Get.snackbar('Error', 'No user is currently logged in.');
+    }
   }
 
   Future<String?> uploadFile(String path) async {
+    if (currentUser == null) {
+      Get.snackbar('Error', 'User is not logged in.');
+      return null;
+    }
+
     try {
       var byt = GetStorage().read(path);
       if (byt != null) {
@@ -45,7 +53,7 @@ class ProfileController extends GetxController {
         return "$destination/$fileName";
       }
     } catch (e) {
-      Get.snackbar('Error', 'Image Not Uploaded as ${e.toString()}');
+      Get.snackbar('Error', 'Image Not Uploaded: ${e.toString()}');
     }
     return null;
   }
@@ -55,6 +63,11 @@ class ProfileController extends GetxController {
   }
 
   Future<void> updatePhotoURL(String dest) async {
+    if (currentUser == null) {
+      Get.snackbar('Error', 'User is not logged in.');
+      return;
+    }
+
     _photoURL.value = await storage.ref().child(dest).getDownloadURL();
     await currentUser?.updatePhotoURL(_photoURL.value);
     Get.snackbar('Success', 'Picture stored and linked');

@@ -10,7 +10,8 @@ dependencies:
   get: 4.6.6
   flutter: 
     sdk: flutter
-  firebase_core: ^2.31.0
+  cloud_firestore: ^4.8.1
+  firebase_core: ^2.32.0
   firebase_ui_auth: ^1.14.0
   firebase_auth: ^4.19.5
   google_sign_in: ^6.2.1
@@ -36,8 +37,13 @@ flutter:
       fonts:
         - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf
   assets:
-    - assets/images/flutterfire_300x.png
-    - assets/images/dash.png
-    - assets/icons/logo.png
+    - assets/icons/
+    - assets/Eva/
+    - assets/Fiona/
+    - assets/Flora/
+    - assets/Historia/
+    - assets/Plush/
+    - assets/Stay/
+
   uses-material-design: true
 
