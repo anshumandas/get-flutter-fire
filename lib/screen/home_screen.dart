@@ -9,10 +9,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Health Dashboard'),
+        title: Text(
+          'Health Dashboard',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.blueAccent,
         actions: [
           IconButton(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(Icons.account_circle, size: 30),
             onPressed: () {
               Navigator.pushNamed(context, '/profile');
             },
@@ -20,30 +24,80 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(child: Text('Menu')),
-            ListTile(
-              title: Text('Profile'),
-              onTap: () {
-                Navigator.pushNamed(context, '/profile');
-              },
-            ),
-            ListTile(
-              title: Text('Settings'),
-              onTap: () {
-                Navigator.pushNamed(context, '/settings');
-              },
-            ),
-          ],
+        child: Container(
+          color: Colors.blueGrey[100],
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent,
+                ),
+                child: Text(
+                  'Menu',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.person),
+                title: Text('Profile'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/profile');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/settings');
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Logout'),
+                onTap: () {
+                  // Handle logout
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Health Summary',
+              style: Theme.of(context).textTheme.headline6?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            SizedBox(height: 10),
             HealthSummaryWidget(),
+            SizedBox(height: 20),
+            Text(
+              'Notifications',
+              style: Theme.of(context).textTheme.headline6?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            SizedBox(height: 10),
             NotificationsWidget(),
+            SizedBox(height: 20),
+            Text(
+              'Recent Activities',
+              style: Theme.of(context).textTheme.headline6?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            SizedBox(height: 10),
             Expanded(
               child: ActivityListWidget(),
             ),
@@ -66,8 +120,9 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
         currentIndex: 0,
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.grey,
         onTap: (index) {
-          // Handle navigation
           if (index == 1) {
             Navigator.pushNamed(context, '/activities');
           } else if (index == 2) {
