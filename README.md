@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Hello! I'm Saubhagya Singh, a Flutter developer with a deep passion for chess. When I was tasked with this project by Sharekhan, I chose to step beyond the conventional approach of creating standard clones or tutorial apps. Instead, I crafted something innovative by leveraging the essence of the boilerplate code provided by Mr. Anshuman Das.
+Hello! I'm Saubhagya Singh, a Flutter developer with a deep passion for chess.I have been asked to create a flutter app for the 1st round of Sharekhan so I chose to step beyond the conventional approach of creating standard clones or tutorial apps. Instead, I crafted something innovative by leveraging the essence of the boilerplate code provided by Mr. Anshuman Das.
 
 In my previous projects, I utilized the traditional Model-View-Controller (MVC) file system. For this project, however, I embraced a more advanced architecture: Bindings-Views-Controllers (BVC). This sophisticated approach, along with a structured folder system for services and widgets, enables a cleaner and more efficient development process.
 
