@@ -9,7 +9,7 @@ import '../../../../models/screens.dart';
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
 import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
-const webClientId = "707514322290-gal0s640toeq1h4nq8b1h538n6i7fgmm.apps.googleusercontent.com";
+const webClientId = " ";
 
 
 class LoginView extends GetView<LoginController> {
