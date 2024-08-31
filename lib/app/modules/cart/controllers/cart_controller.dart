@@ -1,23 +1,27 @@
 import 'package:get/get.dart';
+import 'cart_item.dart'; // Adjust the import based on your file structure
 
 class CartController extends GetxController {
-  //TODO: Implement CartController
+  // Observable list of cart items
+  var cartItems = <CartItem>[].obs;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  // Method to add an item to the cart
+  void addToCart(CartItem item) {
+    cartItems.add(item);
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  // Method to remove an item from the cart by ID
+  void removeFromCart(String id) {
+    cartItems.removeWhere((item) => item.id == id);
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  // Method to clear all items from the cart
+  void clearCart() {
+    cartItems.clear();
   }
 
-  void increment() => count.value++;
+  // Method to calculate the total price of items in the cart
+  double getTotalPrice() {
+    return cartItems.fold(0.0, (sum, item) => sum + item.price);
+  }
 }
