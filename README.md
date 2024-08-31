@@ -222,6 +222,3 @@ To run the app with your data using the Firebase Emulator, or to set up a fresh 
 
 
 
----
-
-Feel free to adjust further or add more specific details as needed!
