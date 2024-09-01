@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/admin/controllers/roleupgrade_controller.dart';
+import 'package:get_flutter_fire/app/modules/admin/views/roleupgrade_view.dart';
+import 'package:get_flutter_fire/app/modules/auth/email_link_auth.dart';
+import 'package:get_flutter_fire/app/modules/phone/controllers/phone_verification_controller.dart';
+import 'package:get_flutter_fire/app/modules/phone/views/phone_verification_view.dart';
+import 'package:get_flutter_fire/app/modules/security/two_factor_auth.dart';
+import 'package:get_flutter_fire/app/widgets/password_reset.dart';
 
 import '../../models/access_level.dart';
 import '../../models/role.dart';
@@ -37,6 +44,7 @@ import '../modules/tasks/views/tasks_view.dart';
 import '../modules/users/bindings/users_binding.dart';
 import '../modules/users/views/users_view.dart';
 import '../../models/screens.dart';
+import '../widgets/screen_widget.dart';
 
 part 'app_routes.dart';
 part 'screen_extension.dart';
@@ -44,10 +52,8 @@ part 'screen_extension.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static final INITIAL = Routes.HOME;
 
-  //TODO create this using the information from Screen and Role data
-  //can use https://pub.dev/packages/freezed
   static final routes = [
     GetPage(
       name: '/',
@@ -56,98 +62,223 @@ class AppPages {
       participatesInRootNavigator: true,
       preventDuplicates: true,
       children: [
-        Screen.LOGIN.getPage(
-          page: () => const LoginView(),
+        GetPage(
+          name: Screen.LOGIN.path,
+          page: () => ScreenWidget(
+            screen: Screen.LOGIN,
+            body: const LoginView(),
+          ),
           binding: LoginBinding(),
         ),
-        Screen.REGISTER.getPage(
-          page: () => const RegisterView(),
+        GetPage(
+          name: Screen.REGISTER.path,
+          page: () => ScreenWidget(
+            screen: Screen.REGISTER,
+            body: RegisterView(),
+          ),
           binding: RegisterBinding(),
         ),
-        Screen.PROFILE.getPage(
-          page: () => const ProfileView(),
+        GetPage(
+          name: Screen.PROFILE.path,
+          page: () => ScreenWidget(
+            screen: Screen.PROFILE,
+            body: const ProfileView(),
+          ),
           binding: ProfileBinding(),
         ),
-        Screen.SETTINGS.getPage(
-          page: () => const SettingsView(),
+        GetPage(
+          name: Screen.SETTINGS.path,
+          page: () => ScreenWidget(
+            screen: Screen.SETTINGS,
+            body: const SettingsView(),
+          ),
           binding: SettingsBinding(),
         ),
-        Screen.HOME.getPage(
-          page: () => const HomeView(),
-          bindings: [
-            HomeBinding(),
-          ],
+        GetPage(
+          name: Screen.HOME.path,
+          page: () => ScreenWidget(
+            screen: Screen.HOME,
+            body: const HomeView(),
+          ),
+          binding: HomeBinding(),
           children: [
-            Screen.DASHBOARD.getPage(
-              page: () => const DashboardView(),
+            GetPage(
+              name: Screen.DASHBOARD.path,
+              page: () => ScreenWidget(
+                screen: Screen.DASHBOARD,
+                body: const DashboardView(),
+              ),
               binding: DashboardBinding(),
             ),
-            Screen.USERS.getPage(
-              role: Role.admin,
-              page: () => const UsersView(),
+            GetPage(
+              name: Screen.USERS.path,
+              page: () => ScreenWidget(
+                screen: Screen.USERS,
+                body: const UsersView(),
+                role: Role.admin,
+              ),
               binding: UsersBinding(),
               children: [
-                Screen.USER_PROFILE.getPage(
-                  page: () => const ProfileView(),
+                GetPage(
+                  name: Screen.USER_PROFILE.path,
+                  page: () => ScreenWidget(
+                    screen: Screen.USER_PROFILE,
+                    body: const ProfileView(),
+                  ),
                   binding: ProfileBinding(),
-                )
+                ),
               ],
             ),
-            Screen.PRODUCTS.getPage(
-              page: () => const ProductsView(),
+            GetPage(
+              name: Screen.PRODUCTS.path,
+              page: () => ScreenWidget(
+                screen: Screen.PRODUCTS,
+                body: const ProductsView(),
+              ),
               binding: ProductsBinding(),
               children: [
-                Screen.PRODUCT_DETAILS.getPages(
-                  page: () => const ProductDetailsView(),
+                GetPage(
+                  name: Screen.PRODUCT_DETAILS.path,
+                  page: () => ScreenWidget(
+                    screen: Screen.PRODUCT_DETAILS,
+                    body: const ProductDetailsView(),
+                  ),
                   binding: ProductDetailsBinding(),
                 ),
               ],
             ),
-            Screen.CATEGORIES.getPage(
-              role: Role.admin,
-              page: () => const CategoriesView(),
+            GetPage(
+              name: Screen.CATEGORIES.path,
+              page: () => ScreenWidget(
+                screen: Screen.CATEGORIES,
+                body: const CategoriesView(),
+                role: Role.admin,
+              ),
               binding: CategoriesBinding(),
             ),
-            Screen.CART.getPage(
-              page: () => const CartView(),
+            GetPage(
+              name: Screen.CART.path,
+              page: () => ScreenWidget(
+                screen: Screen.CART,
+                body: const CartView(),
+                role: Role.buyer,
+              ),
               binding: CartBinding(),
-              role: Role.buyer,
               children: [
-                Screen.CHECKOUT.getPage(
-                  //if this is after cart details, it never gets reached
-                  page: () => const CheckoutView(),
+                GetPage(
+                  name: Screen.CHECKOUT.path,
+                  page: () => ScreenWidget(
+                    screen: Screen.CHECKOUT,
+                    body: const CheckoutView(),
+                  ),
                   binding: CheckoutBinding(),
                 ),
-                Screen.CART_DETAILS.getPages(
-                  page: () => const ProductDetailsView(),
+                GetPage(
+                  name: Screen.CART_DETAILS.path,
+                  page: () => ScreenWidget(
+                    screen: Screen.CART_DETAILS,
+                    body: const ProductDetailsView(),
+                  ),
                   binding: ProductDetailsBinding(),
                 ),
               ],
             ),
-            Screen.MY_PRODUCTS.getPage(
-              page: () => const MyProductsView(),
+            GetPage(
+              name: Screen.MY_PRODUCTS.path,
+              page: () => ScreenWidget(
+                screen: Screen.MY_PRODUCTS,
+                body: const MyProductsView(),
+                role: Role.seller,
+              ),
               binding: MyProductsBinding(),
-              role: Role.seller,
               children: [
-                Screen.MY_PRODUCT_DETAILS.getPages(
-                  page: () => const ProductDetailsView(),
+                GetPage(
+                  name: Screen.MY_PRODUCT_DETAILS.path,
+                  page: () => ScreenWidget(
+                    screen: Screen.MY_PRODUCT_DETAILS,
+                    body: const ProductDetailsView(),
+                  ),
                   binding: ProductDetailsBinding(),
                 ),
               ],
             ),
-            Screen.TASKS.getPage(
-              role: Role.admin,
-              page: () => const TasksView(),
+            GetPage(
+              name: Screen.TASKS.path,
+              page: () => ScreenWidget(
+                screen: Screen.TASKS,
+                body: const TasksView(),
+                role: Role.admin,
+              ),
               binding: TasksBinding(),
               children: [
-                Screen.TASK_DETAILS.getPage(
-                  page: () => const TaskDetailsView(),
+                GetPage(
+                  name: Screen.TASK_DETAILS.path,
+                  page: () => ScreenWidget(
+                    screen: Screen.TASK_DETAILS,
+                    body: const TaskDetailsView(),
+                  ),
                   binding: TaskDetailsBinding(),
                 ),
               ],
             ),
+            GetPage(
+              name: '/reset-password',
+              page: () => PasswordResetView(),
+              binding: BindingsBuilder(() {
+                Get.lazyPut<PasswordResetController>(
+                    () => PasswordResetController());
+              }),
+            ),
+            GetPage(
+              name: '/phone-verification',
+              page: () => PhoneVerificationView(),
+              binding: BindingsBuilder(() {
+                Get.lazyPut<PhoneVerificationController>(
+                    () => PhoneVerificationController());
+              }),
+            ),
+            GetPage(
+              name: Screen.PHONE_VERIFICATION.route,
+              page: () => PhoneVerificationView(),
+              binding: BindingsBuilder(() {
+                Get.lazyPut<PhoneVerificationController>(
+                    () => PhoneVerificationController());
+              }),
+            ),
+            GetPage(
+              name: '/two-factor-auth',
+              page: () => TwoFactorAuthView(),
+              binding: BindingsBuilder(() {
+                Get.lazyPut<TwoFactorAuthController>(
+                    () => TwoFactorAuthController());
+              }),
+            ),
+            GetPage(
+              name: '/email-link-auth',
+              page: () => EmailLinkAuthView(),
+              binding: BindingsBuilder(() {
+                Get.lazyPut<EmailLinkAuthController>(
+                    () => EmailLinkAuthController());
+              }),
+            ),
+            GetPage(
+              name: '/role-upgrade-request',
+              page: () => RoleUpgradeRequestView(),
+              binding: BindingsBuilder(() {
+                Get.lazyPut<RoleUpgradeController>(
+                    () => RoleUpgradeController());
+              }),
+            ),
+            GetPage(
+              name: '/role-upgrade-management',
+              page: () => RoleUpgradeManagementView(),
+              binding: BindingsBuilder(() {
+                Get.lazyPut<RoleUpgradeController>(
+                    () => RoleUpgradeController());
+              }),
+            ),
           ],
-        )
+        ),
       ],
     ),
   ];

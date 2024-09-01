@@ -55,14 +55,14 @@ class LoginBottomSheetToggle extends MenuSheetButton<Screen> {
   }
 
   @override
-  Icon? get icon => (AuthService.to.isLoggedInValue)
+  Icon? get icon => (AuthService.to.isLoggedIn)
       ? values.length == 1
           ? const Icon(Icons.logout)
           : const Icon(Icons.menu)
       : const Icon(Icons.login);
 
   @override
-  String? get label => (AuthService.to.isLoggedInValue)
+  String? get label => (AuthService.to.isLoggedIn)
       ? values.length == 1
           ? 'Logout'
           : 'Click for Options'
@@ -79,7 +79,7 @@ class LoginBottomSheetToggle extends MenuSheetButton<Screen> {
     RemoteConfig.instance.then((ins) =>
         ins.addUseBottomSheetForProfileOptionsListener((val) async =>
             {controller.values.value = await Screen.sheet(null)}));
-    return Obx(() => (AuthService.to.isLoggedInValue)
+    return Obx(() => (AuthService.to.isLoggedIn)
         ? builder(context, vals: controller.values.value)
         : !(current.currentPage!.name == Screen.LOGIN.path)
             ? IconButton(

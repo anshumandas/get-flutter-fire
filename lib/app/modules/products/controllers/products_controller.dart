@@ -1,28 +1,32 @@
 import 'package:get/get.dart';
-
-import '../../../../models/product.dart';
+import 'package:get_flutter_fire/models/product.dart';
+import 'package:get_flutter_fire/services/firebase_service.dart';
 
 class ProductsController extends GetxController {
-  final products = <Product>[].obs;
-
-  void loadDemoProductsFromSomeWhere() {
-    products.add(
-      Product(
-        name: 'Product added on: ${DateTime.now().toString()}',
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-      ),
-    );
-  }
+  final FirebaseService _firebaseService = FirebaseService();
+  final RxList<Product> products = <Product>[].obs;
+  final RxBool isLoading = true.obs;
 
   @override
-  void onReady() {
-    super.onReady();
-    loadDemoProductsFromSomeWhere();
+  void onInit() {
+    super.onInit();
+    fetchProducts();
   }
 
-  @override
-  void onClose() {
-    Get.printInfo(info: 'Products: onClose');
-    super.onClose();
+  Future<void> fetchProducts() async {
+    isLoading.value = true;
+    try {
+      products.value = await _firebaseService.getProducts();
+      print('Fetched ${products.length} products');
+    } catch (e) {
+      print('Error fetching products: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void addToCart(Product product) {
+    // Implement add to cart functionality
+    print('Added ${product.name} to cart');
   }
 }

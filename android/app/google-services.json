@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "863426682925",
+    "project_id": "share-17159",
+    "storage_bucket": "share-17159.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863426682925:android:8a493daac20edb26cc98a4",
+        "android_client_info": {
+          "package_name": "com.ex.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863426682925-lv683npmpk0641l27vke60p2ghiaig6r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWb4F2Q2_DS4J3z54uzs201pnNfD96Vj4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863426682925-lv683npmpk0641l27vke60p2ghiaig6r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "863426682925-dp61232jo3quvgu5tfkac7tn0656gnvm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.getFlutterFire"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,44 +1,39 @@
-// ignore_for_file: inference_failure_on_instance_creation
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/routes/app_pages.dart';
+import 'package:get_flutter_fire/firebase_options.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'app/routes/app_pages.dart';
-import 'firebase_options.dart';
+import 'app/modules/cart/controllers/cart_controller.dart';
+import 'app/modules/root/controllers/root_controller.dart';
 import 'services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
     GetMaterialApp.router(
-      debugShowCheckedModeBanner:
-          false, //the debug banner will automatically disappear in prod build
+      debugShowCheckedModeBanner: false,
       title: 'Application',
-      initialBinding: BindingsBuilder(
-        () {
-          Get.put(AuthService());
-        },
-      ),
+      initialBinding: BindingsBuilder(() {
+        Get.put(AuthService(), permanent: true);
+        Get.put(CartController(), permanent: true);
+        Get.put(RootController(), permanent: true);
+      }),
       getPages: AppPages.routes,
-      // routeInformationParser: GetInformationParser(
-      //     // initialRoute: Routes.HOME,
-      //     ),
-      // routerDelegate: GetDelegate(
-      //   backButtonPopMode: PopMode.History,
-      //   preventDuplicateHandlingMode:
-      //       PreventDuplicateHandlingMode.ReorderRoutes,
-      // ),
+      defaultTransition: Transition.fade,
+      routerDelegate: GetDelegate(
+        notFoundRoute: GetPage(
+            name: '/notfound',
+            page: () => Scaffold(body: Center(child: Text('Route not found')))),
+      ),
       theme: ThemeData(
-          highlightColor: Colors.black.withOpacity(0.5),
-          bottomSheetTheme:
-              const BottomSheetThemeData(surfaceTintColor: Colors.blue)),
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
     ),
   );
 }

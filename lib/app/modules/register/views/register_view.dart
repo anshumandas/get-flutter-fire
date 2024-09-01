@@ -1,53 +1,46 @@
-// import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
-import '../../../../services/auth_service.dart';
-// import '../../../widgets/login_widgets.dart';
+import 'package:get_flutter_fire/services/auth_service.dart';
 import '../controllers/register_controller.dart';
 
-//ALso add a form to take additional info such as display name of other customer details mapped with uid in Firestore
 class RegisterView extends GetView<RegisterController> {
-  const RegisterView({super.key});
+  RegisterView({Key? key}) : super(key: key);
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    // Add pre verification Form if any. Mostly it can be post verification and can be the Profile or Setting screens
-    try {
-      // using this is causing an error when we send verification mail from server side
-      // if it was initiated once, even when no visible. So we need to dispose when not visible
-      var w =
-          // EmailVerificationScreen(
-          //   headerBuilder: LoginWidgets.headerBuilder,
-          //   sideBuilder: LoginWidgets.sideBuilder,
-          //   actions: [
-          //     EmailVerifiedAction(() {
-          //       AuthService.to.register();
-          //     }),
-          //   ],
-          // );
-          Scaffold(
-        appBar: AppBar(
-          title: const Text('Registeration'),
-          centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(title: const Text('Register')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () async {
+                await AuthService.to.register(
+                  emailController.text.trim(),
+                  passwordController.text.trim(),
+                );
+              },
+              child: const Text('Register'),
+            ),
+          ],
         ),
-        body: Center(
-            child: Column(children: [
-          const Text(
-            'Please verify your email (check SPAM folder), and then relogin',
-            style: TextStyle(fontSize: 20),
-          ),
-          TextButton(
-            onPressed: () => AuthService.to.register(),
-            child: const Text("Verification Done. Relogin"),
-          )
-        ])),
-      );
-      return w;
-    } catch (e) {
-      // TODO
-    }
-    return const Scaffold();
+      ),
+    );
   }
 }

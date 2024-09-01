@@ -1,5 +1,3 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/services/auth_service.dart';
@@ -34,7 +32,7 @@ class RootView extends GetView<RootController> {
                       const AssetImage("icons/logo.png"),
                       color: Colors.grey.shade800,
                     ),
-                    onPressed: () => AuthService.to.isLoggedInValue
+                    onPressed: () => AuthService.to.isLoggedIn
                         ? controller.openDrawer()
                         : {Screen.HOME.doAction()},
                   ),

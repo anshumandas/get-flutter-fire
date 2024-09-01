@@ -8,7 +8,7 @@ class RegisterController extends GetxController {
     super.onInit();
     // Send email verification and logout
     AuthService.to
-        .sendVerificationMail(); //if we use the EmailVerificationScreen then no need to call this
+        .sendEmailVerification(); //if we use the EmailVerificationScreen then no need to call this
   }
 
   // @override
