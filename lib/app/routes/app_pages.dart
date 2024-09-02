@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+<<<<<<< HEAD
+import 'package:get_flutter_fire/screen/auth/login_screen.dart';
 
 import '../../models/access_level.dart';
 import '../../models/role.dart';
+import '../../screen/auth/login_screen.dart';
+
+=======
+
+import '../../models/access_level.dart';
+import '../../models/role.dart';
+>>>>>>> origin/main
 import '../middleware/auth_middleware.dart';
 import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
@@ -15,7 +24,10 @@ import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
+<<<<<<< HEAD
+=======
 import '../modules/login/views/login_view.dart';
+>>>>>>> origin/main
 import '../modules/my_products/bindings/my_products_binding.dart';
 import '../modules/my_products/views/my_products_view.dart';
 import '../modules/product_details/bindings/product_details_binding.dart';
@@ -37,10 +49,18 @@ import '../modules/tasks/views/tasks_view.dart';
 import '../modules/users/bindings/users_binding.dart';
 import '../modules/users/views/users_view.dart';
 import '../../models/screens.dart';
+<<<<<<< HEAD
+import 'package:firebase_ui_auth/firebase_ui_auth.dart' as firebase_ui_auth;
+import 'package:get_flutter_fire/app/modules/login/views/login_view.dart' as custom_login_view;
+=======
+>>>>>>> origin/main
 
 part 'app_routes.dart';
 part 'screen_extension.dart';
 
+<<<<<<< HEAD
+class AppRoutes {
+=======
 class AppPages {
   AppPages._();
 
@@ -48,6 +68,7 @@ class AppPages {
 
   //TODO create this using the information from Screen and Role data
   //can use https://pub.dev/packages/freezed
+>>>>>>> origin/main
   static final routes = [
     GetPage(
       name: '/',
@@ -56,8 +77,21 @@ class AppPages {
       participatesInRootNavigator: true,
       preventDuplicates: true,
       children: [
+<<<<<<< HEAD
+        // Use custom_login_view.LoginView if needed
+        // GetPage(
+        //   name: '/login',
+        //   page: () => custom_login_view.LoginScreen(), // Use custom implementation
+        //   binding: LoginBinding(),
+        // ),
+        // Example of using firebase_ui_auth.LoginView if needed
+        GetPage(
+          name: '/firebase_login',
+          page: () => const firebase_ui_auth.LoginView(action: firebase_ui_auth.AuthAction.signIn, providers: [],), // Example usage
+=======
         Screen.LOGIN.getPage(
           page: () => const LoginView(),
+>>>>>>> origin/main
           binding: LoginBinding(),
         ),
         Screen.REGISTER.getPage(
@@ -151,4 +185,11 @@ class AppPages {
       ],
     ),
   ];
+<<<<<<< HEAD
+
+  static var INITIAL;
 }
+
+=======
+}
+>>>>>>> origin/main

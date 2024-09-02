@@ -2,9 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+<<<<<<< HEAD
+// import 'package:get_flutter_fire/app/modules/root/views/root_view.dart';
+import 'package:get_flutter_fire/services/auth_service.dart';
+import '../../../../models/screens.dart';
+import '../../../routes/app_pages.dart';
+=======
 import 'package:get_flutter_fire/services/auth_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../models/screens.dart';
+>>>>>>> origin/main
 import '../controllers/root_controller.dart';
 import 'drawer.dart';
 
@@ -42,7 +49,11 @@ class RootView extends GetView<RootController> {
             // automaticallyImplyLeading: false, //removes drawer icon
           ),
           body: GetRouterOutlet(
+<<<<<<< HEAD
+            initialRoute: AppRoutes.INITIAL,
+=======
             initialRoute: AppPages.INITIAL,
+>>>>>>> origin/main
             // anchorRoute: '/',
             // filterPages: (afterAnchor) {
             //   return afterAnchor.take(1);
@@ -62,3 +73,8 @@ class RootView extends GetView<RootController> {
     ]; //TODO add seach button
   }
 }
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> origin/main
