@@ -4,6 +4,10 @@ class CategoriesController extends GetxController {
   //TODO: Implement CategoriesController
 
   final count = 0.obs;
+<<<<<<< HEAD
+
+
+=======
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +22,7 @@ class CategoriesController extends GetxController {
   void onClose() {
     super.onClose();
   }
+>>>>>>> origin/main
 
   void increment() => count.value++;
 }
