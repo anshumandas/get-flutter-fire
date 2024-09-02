@@ -167,9 +167,16 @@ enum Screen implements ActionEnum {
   @override
   Future<dynamic> doAction() async {
     if (this == LOGOUT) {
-      AuthService.to.logout();
+      try {
+        await AuthService.to.logout(); // Call the logout function
+        // Optionally, you can add some logic after logout if needed
+        print("Logout successful");
+      } catch (error) {
+        print("Logout failed: $error");
+        // Optionally, show an error message to the user
+        Get.snackbar("Error", "Logout failed: $error");
+      }
     }
-    Get.rootDelegate.toNamed(route);
   }
 
   Widget? widget(GetNavConfig current) =>

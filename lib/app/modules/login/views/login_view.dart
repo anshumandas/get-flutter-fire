@@ -5,11 +5,12 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../firebase_options.dart';
-
 import '../../../../models/screens.dart';
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
+import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
+const webClientId = " ";
+
 
 class LoginView extends GetView<LoginController> {
   void showReverificationButton(
@@ -35,6 +36,7 @@ class LoginView extends GetView<LoginController> {
     return Obx(() => loginScreen(context));
   }
 
+
   Widget subtitleBuilder(context, action) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -45,7 +47,16 @@ class LoginView extends GetView<LoginController> {
   }
 
   Widget footerBuilder(Rx<bool> show, Rxn<fba.EmailAuthCredential> credential) {
-    return LoginWidgets.footerBuilder(EmailLinkButton(show, credential));
+    return Column(
+      children: [
+        LoginWidgets.footerBuilder(EmailLinkButton(show, credential)),
+        const SizedBox(height: 16), // Add spacing between the terms and the button
+        ElevatedButton(
+          onPressed: () => controller.guestlogin(),
+          child: const Text('Anonymous login'),
+        ),
+      ],
+    );
   }
 
   Widget loginScreen(BuildContext context) {
@@ -54,24 +65,26 @@ class LoginView extends GetView<LoginController> {
       ui = !(GetPlatform.isAndroid || GetPlatform.isIOS) && controller.isRobot
           ? recaptcha()
           : SignInScreen(
-              providers: [
-                GoogleProvider(clientId: DefaultFirebaseOptions.webClientId),
-                MyEmailAuthProvider(),
-              ],
-              showAuthActionSwitch: !controller.isRegistered,
-              showPasswordVisibilityToggle: true,
-              headerBuilder: LoginWidgets.headerBuilder,
-              subtitleBuilder: subtitleBuilder,
-              footerBuilder: (context, action) => footerBuilder(
-                  controller.showReverificationButton,
-                  LoginController.to.credential),
-              sideBuilder: LoginWidgets.sideBuilder,
-              actions: getActions(),
-            );
+        providers: [
+          GoogleProvider(clientId: webClientId),
+          MyEmailAuthProvider(),
+          PhoneAuthProvider(),
+        ],
+        showAuthActionSwitch: !controller.isRegistered,
+        showPasswordVisibilityToggle: true,
+        headerBuilder: LoginWidgets.headerBuilder,
+        subtitleBuilder: subtitleBuilder,
+        footerBuilder: (context, action) => footerBuilder(
+            controller.showReverificationButton,
+            LoginController.to.credential),
+        sideBuilder: LoginWidgets.sideBuilder,
+        actions: getActions(),
+      );
     } else if (controller.isAnon) {
       ui = RegisterScreen(
         providers: [
           MyEmailAuthProvider(),
+          PhoneAuthProvider(),
         ],
         showAuthActionSwitch: !controller.isAnon, //if Anon only SignUp
         showPasswordVisibilityToggle: true,
@@ -96,9 +109,9 @@ class LoginView extends GetView<LoginController> {
     //TODO: Add Recaptcha
     return Scaffold(
         body: TextButton(
-      onPressed: () => controller.robot = false,
-      child: const Text("Are you a Robot?"),
-    ));
+          onPressed: () => controller.robot = false,
+          child: const Text("Are you a Robot?"),
+        ));
   }
 
   /// The following actions are useful here:
@@ -108,29 +121,41 @@ class LoginView extends GetView<LoginController> {
   /// - [VerifyPhoneAction]
   /// - [SMSCodeRequestedAction]
 
+
   List<FirebaseUIAction> getActions() {
     return [
-      // AuthStateChangeAction<CredentialReceived>((context, state) {
-      AuthStateChangeAction<AuthFailed>((context, state) => LoginController.to
-          .errorMessage(context, state, showReverificationButton)),
-      // AuthStateChangeAction<SignedIn>((context, state) {
-      //   // This is not required due to the AuthMiddleware
-      // }),
+      AuthStateChangeAction<AuthFailed>((context, state) {
+        LoginController.to.errorMessage(context, state, showReverificationButton);
+      }),
+      // Custom action to handle reCAPTCHA before login
+      AuthStateChangeAction<SignedIn>((context, state) async {
+        // Execute reCAPTCHA verification
+        final token = await GRecaptchaV3.execute('6Lf14DIqAAAAACuem09M2pNG11N8tb71nficHV4x');
+        if (token != null) {
+          print("ReCaptcha token: $token");
+          // You might want to handle the token here, such as sending it to your server
+          // or using it to verify the user.
+        } else {
+          print("ReCaptcha failed");
+          // Handle reCAPTCHA failure, e.g., show an error message or retry
+        }
+      }),
+      // Other actions
       // EmailLinkSignInAction((context) {
-      //   final thenTo = Get.rootDelegate.currentConfiguration!.currentPage!
-      //       .parameters?['then'];
+      //   final thenTo = Get.rootDelegate.currentConfiguration!.currentPage!.parameters?['then'];
       //   Get.rootDelegate.offNamed(thenTo ?? Routes.PROFILE);
       // }),
     ];
   }
+
 }
 
 class MyEmailAuthProvider extends EmailAuthProvider {
   @override
   void onCredentialReceived(
-    fba.EmailAuthCredential credential,
-    AuthAction action,
-  ) {
+      fba.EmailAuthCredential credential,
+      AuthAction action,
+      ) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       LoginController.to.credential.value = credential;
     });
@@ -143,10 +168,10 @@ class EmailLinkButton extends StatelessWidget {
   final Rxn<fba.EmailAuthCredential> credential;
 
   const EmailLinkButton(
-    this.show,
-    this.credential, {
-    super.key,
-  });
+      this.show,
+      this.credential, {
+        super.key,
+      });
 
   @override
   Widget build(BuildContext context) {

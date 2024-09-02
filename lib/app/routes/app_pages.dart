@@ -9,6 +9,7 @@ import '../modules/cart/views/cart_view.dart';
 import '../modules/categories/bindings/categories_binding.dart';
 import '../modules/categories/views/categories_view.dart';
 import '../modules/checkout/bindings/checkout_binding.dart';
+import '../modules/checkout/controllers/checkout_controller.dart';
 import '../modules/checkout/views/checkout_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
@@ -109,14 +110,16 @@ class AppPages {
               binding: CategoriesBinding(),
             ),
             Screen.CART.getPage(
-              page: () => const CartView(),
+              page: () =>  CartView(),
               binding: CartBinding(),
               role: Role.buyer,
               children: [
                 Screen.CHECKOUT.getPage(
                   //if this is after cart details, it never gets reached
-                  page: () => const CheckoutView(),
-                  binding: CheckoutBinding(),
+                  page: () =>  CheckoutView(),
+                  binding: BindingsBuilder(() {
+                    Get.put(CheckoutController());
+                  }),
                 ),
                 Screen.CART_DETAILS.getPages(
                   page: () => const ProductDetailsView(),
@@ -152,3 +155,4 @@ class AppPages {
     ),
   ];
 }
+

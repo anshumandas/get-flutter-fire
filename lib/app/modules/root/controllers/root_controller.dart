@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 class RootController extends GetxController {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  var isSearching = false.obs;
 
   void openDrawer() {
     scaffoldKey.currentState!.openDrawer();
@@ -10,5 +11,9 @@ class RootController extends GetxController {
 
   void closeDrawer() {
     scaffoldKey.currentState!.openEndDrawer();
+  }
+
+  void toggleSearch() {
+    isSearching.value = !isSearching.value;
   }
 }
