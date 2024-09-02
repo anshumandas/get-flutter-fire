@@ -41,11 +41,53 @@ class CartView extends GetView<CartController> {
             ),
           );
         }
-        return const Center(
-          child: Text(
-            'CartView is working',
-            style: TextStyle(fontSize: 20),
-          ),
+        if (controller.cartItems.isEmpty) {
+          return const Center(child: Text('Your cart is empty'));
+        }
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: controller.cartItems.length,
+                itemBuilder: (context, index) {
+                  final item = controller.cartItems[index];
+                  return ListTile(
+                    title: Text(item.name),
+                    subtitle: Text('Quantity: ${item.quantity}'),
+                    trailing: Text(
+                        '\Rs ${(item.price * item.quantity).toStringAsFixed(2)}'),
+                    leading: IconButton(
+                      icon: const Icon(Icons.remove_circle),
+                      onPressed: () => controller.removeItem(item.productId),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total: \Rs ${controller.totalPrice.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                    onPressed: controller.hasItems
+                        ? () {
+                            // TODO: Implement checkout functionality
+                            Get.snackbar(
+                                'Checkout', 'Proceeding to checkout...');
+                          }
+                        : null,
+                    child: const Text('Checkout'),
+                  ),
+                ],
+              ),
+            ),
+          ],
         );
       }),
     );

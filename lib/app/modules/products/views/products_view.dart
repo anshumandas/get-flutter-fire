@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/modules/cart/controllers/cart_controller.dart';
+import 'package:get_flutter_fire/models/product.dart';
 import '../controllers/products_controller.dart';
 
 class ProductsView extends GetView<ProductsController> {
@@ -7,10 +10,18 @@ class ProductsView extends GetView<ProductsController> {
 
   @override
   Widget build(BuildContext context) {
+    final CartController cartController = Get.find<CartController>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () => Get.toNamed('/cart'),
+          ),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -19,22 +30,151 @@ class ProductsView extends GetView<ProductsController> {
         if (controller.products.isEmpty) {
           return const Center(child: Text('No products available'));
         }
-        return ListView.builder(
+        return GridView.builder(
+          padding: const EdgeInsets.all(8),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
           itemCount: controller.products.length,
           itemBuilder: (context, index) {
             final product = controller.products[index];
-            return ListTile(
-              title: Text(product.name),
-              subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-              leading: product.imageUrl.isNotEmpty
-                  ? Image.network(product.imageUrl,
-                      width: 50, height: 50, fit: BoxFit.cover)
-                  : const Icon(Icons.image_not_supported),
-              onTap: () => controller.addToCart(product),
+            return ProductCard(
+              product: product,
+              onAddToCart: (product, quantity) =>
+                  cartController.addToCart(product, quantity),
             );
           },
         );
       }),
+    );
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  final Product product;
+  final Function(Product, int) onAddToCart;
+
+  const ProductCard({
+    Key? key,
+    required this.product,
+    required this.onAddToCart,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(8)),
+              child: CachedNetworkImage(
+                imageUrl: product.imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) {
+                  print('Error loading image from $url: $error');
+                  return const Icon(Icons.error, size: 50);
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '\Rs ${product.price.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                AddToCartButton(
+                  onAddToCart: (quantity) => onAddToCart(product, quantity),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AddToCartButton extends StatelessWidget {
+  final Function(int) onAddToCart;
+
+  const AddToCartButton({Key? key, required this.onAddToCart})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => _showQuantityDialog(context),
+      child: const Text('Add to Cart'),
+    );
+  }
+
+  void _showQuantityDialog(BuildContext context) {
+    int quantity = 1;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select Quantity'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed:
+                        quantity > 1 ? () => setState(() => quantity--) : null,
+                  ),
+                  Text('$quantity'),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () => setState(() => quantity++),
+                  ),
+                ],
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Add'),
+              onPressed: () {
+                onAddToCart(quantity);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

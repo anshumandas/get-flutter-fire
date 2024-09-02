@@ -277,6 +277,11 @@ class AppPages {
                     () => RoleUpgradeController());
               }),
             ),
+            GetPage(
+              name: Screen.PRODUCTS.path,
+              page: () => const ProductsView(),
+              binding: ProductsBinding(),
+            ),
           ],
         ),
       ],

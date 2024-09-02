@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/models/cart_item.dart';
+import 'package:get_flutter_fire/models/product.dart';
 import 'package:get_flutter_fire/services/auth_service.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -31,14 +32,24 @@ class CartController extends GetxController {
         'cart_$userId', _cartItems.map((item) => item.toJson()).toList());
   }
 
-  void addItem(CartItem item) {
+  void addToCart(Product product, int quantity) {
     final existingItemIndex =
-        _cartItems.indexWhere((i) => i.productId == item.productId);
+        _cartItems.indexWhere((item) => item.productId == product.id);
     if (existingItemIndex != -1) {
-      _cartItems[existingItemIndex].quantity += item.quantity;
+      _cartItems[existingItemIndex].quantity += quantity;
     } else {
-      _cartItems.add(item);
+      _cartItems.add(CartItem(
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: quantity,
+      ));
     }
+    Get.snackbar(
+      'Added to Cart',
+      '${product.name} added to cart',
+      snackPosition: SnackPosition.TOP,
+    );
   }
 
   void removeItem(String productId) {
@@ -73,6 +84,16 @@ class CartController extends GetxController {
         addItem(guestItem);
       }
       _storage.remove('cart_guest');
+    }
+  }
+
+  void addItem(CartItem item) {
+    final existingItemIndex =
+        _cartItems.indexWhere((i) => i.productId == item.productId);
+    if (existingItemIndex != -1) {
+      _cartItems[existingItemIndex].quantity += item.quantity;
+    } else {
+      _cartItems.add(item);
     }
   }
 }
