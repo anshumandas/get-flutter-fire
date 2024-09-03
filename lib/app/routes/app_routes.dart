@@ -16,7 +16,8 @@ abstract class Routes {
       '${Screen.REGISTER.route}?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
 
   // Add these static getters for direct route access
-  static String get HOME => Screen.HOME.route;
+  static const WELCOME = _Paths.WELCOME;
+  static const HOME = _Paths.HOME;
   static String get LOGIN => Screen.LOGIN.route;
   static String get REGISTER => Screen.REGISTER.route;
   static String get PROFILE => Screen.PROFILE.route;
@@ -33,6 +34,9 @@ abstract class Routes {
 
 // Keeping this as Get_Cli will require it. Any addition can later be added to Screen
 abstract class _Paths {
-  static const String HOME = '/home';
+  static const WELCOME = '/welcome';
+  static const HOME = '/home';
+  static const LOGIN = '/login';
+  static const REGISTER = '/register';
   // ... (keep the commented out paths as they are)
 }

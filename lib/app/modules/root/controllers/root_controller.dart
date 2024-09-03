@@ -10,6 +10,12 @@ class RootController extends GetxController {
     // Initialize any necessary data or services here
   }
 
+  Future<RootController> init() async {
+    // Perform any initialization here
+    await Future.delayed(Duration.zero); // Example delay, remove if not needed
+    return this;
+  }
+
   void openDrawer() {
     scaffoldKey.currentState?.openDrawer();
   }

@@ -2,16 +2,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_flutter_fire/app/modules/cart/controllers/cart_controller.dart';
+import 'package:get_flutter_fire/app/modules/categories/controllers/categories_controller.dart';
+import 'package:get_flutter_fire/app/routes/app_pages.dart';
+import 'package:get_flutter_fire/app/widgets/custom_widgets.dart';
 import 'package:get_flutter_fire/models/product.dart';
 import '../controllers/products_controller.dart';
 
 class ProductsView extends GetView<ProductsController> {
-  const ProductsView({Key? key}) : super(key: key);
+  ProductsView({Key? key}) : super(key: key);
+
+  final CategoriesController categoriesController =
+      Get.find<CategoriesController>();
+  final CartController cartController = Get.find<CartController>();
 
   @override
   Widget build(BuildContext context) {
-    final CartController cartController = Get.find<CartController>();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
@@ -23,32 +28,88 @@ class ProductsView extends GetView<ProductsController> {
           ),
         ],
       ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (controller.products.isEmpty) {
-          return const Center(child: Text('No products available'));
-        }
-        return GridView.builder(
-          padding: const EdgeInsets.all(8),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.7,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
+      body: Column(
+        children: [
+          _buildCategoryBar(),
+          Expanded(
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (controller.products.isEmpty) {
+                return const Center(child: Text('No products available'));
+              }
+              return GridView.builder(
+                padding: const EdgeInsets.all(8),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.7,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: controller.products.length,
+                itemBuilder: (context, index) {
+                  final product = controller.products[index];
+                  return ProductCard(
+                    product: product,
+                    onAddToCart: (product, quantity) =>
+                        cartController.addToCart(product, quantity),
+                  );
+                },
+              );
+            }),
           ),
-          itemCount: controller.products.length,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryBar() {
+    return Container(
+      height: 50,
+      child: Obx(() {
+        if (categoriesController.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: categoriesController.categories.length + 1,
           itemBuilder: (context, index) {
-            final product = controller.products[index];
-            return ProductCard(
-              product: product,
-              onAddToCart: (product, quantity) =>
-                  cartController.addToCart(product, quantity),
+            if (index == 0) {
+              return _buildCategoryChip(
+                  'All', '', controller.selectedCategoryId.value.isEmpty);
+            }
+            final category = categoriesController.categories[index - 1];
+            return _buildCategoryChip(
+              category.name,
+              category.id,
+              controller.selectedCategoryId.value == category.id,
             );
           },
         );
       }),
+    );
+  }
+
+  Widget _buildCategoryChip(String label, String categoryId, bool isSelected) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: ChoiceChip(
+        label: Text(label),
+        selected: isSelected,
+        onSelected: (selected) {
+          if (selected) {
+            controller.setSelectedCategory(categoryId);
+          } else {
+            controller.clearCategoryFilter();
+          }
+        },
+        backgroundColor:
+            isSelected ? Theme.of(Get.context!).colorScheme.secondary : null,
+        labelStyle: TextStyle(
+          color: isSelected ? Colors.white : null,
+        ),
+      ),
     );
   }
 }
@@ -118,6 +179,51 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildProductCard(Product product) {
+  return GestureDetector(
+    onTap: () {
+      Get.toNamed(Routes.PRODUCT_DETAILS(product.id));
+    },
+    child: Container(
+      width: 160,
+      margin: EdgeInsets.symmetric(horizontal: 8),
+      child: CustomCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Hero(
+              tag: 'product-${product.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                child: Image.network(
+                  product.imageUrl,
+                  height: 120,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              product.name,
+              style: TextStyle(fontWeight: FontWeight.bold),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(height: 4),
+            Text(
+              '\Rs ${product.price.toStringAsFixed(2)}',
+              style: TextStyle(
+                  color: Get.theme.colorScheme.secondary,
+                  fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 class AddToCartButton extends StatelessWidget {

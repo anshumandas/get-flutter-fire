@@ -14,10 +14,16 @@ class HomeView extends GetView<HomeController> {
           role.tabs.isNotEmpty ? role.tabs[0].route : Screen.DASHBOARD.route;
 
       int currentIndex = role.getCurrentIndexFromRoute(Get.currentRoute);
-      // Ensure currentIndex is within valid range
       currentIndex = currentIndex.clamp(0, role.tabs.length - 1);
 
       return Scaffold(
+        appBar: AppBar(
+          title: Text('Shopping Master'),
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset('assets/icons/Shopping Master1.png'),
+          ),
+        ),
         body: GetRouterOutlet(
           initialRoute: route,
         ),

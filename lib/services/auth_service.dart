@@ -24,18 +24,6 @@ class AuthService extends GetxService {
 
   String? get userName => user?.displayName ?? user?.email ?? 'Guest';
 
-  Future<String> getUserRole() async {
-    if (user == null) return 'guest';
-    DocumentSnapshot userDoc =
-        await _firestore.collection('users').doc(user!.uid).get();
-    return userDoc.get('role') ?? 'user';
-  }
-
-  Future<void> setUserRole(String role) async {
-    if (user == null) throw Exception('No user logged in');
-    await _firestore.collection('users').doc(user!.uid).update({'role': role});
-  }
-
   @override
   void onInit() {
     super.onInit();
@@ -51,6 +39,24 @@ class AuthService extends GetxService {
     }
   }
 
+  Future<bool> checkLoginStatus() async {
+    await Future.delayed(Duration(seconds: 2)); // Simulating a network delay
+    return isLoggedIn && !isAnonymous;
+  }
+
+  Future<String> getUserRole() async {
+    if (user == null) return 'guest';
+    DocumentSnapshot userDoc =
+        await _firestore.collection('users').doc(user!.uid).get();
+    Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
+    return userData?['role'] ?? 'buyer';
+  }
+
+  Future<void> setUserRole(String role) async {
+    if (user == null) throw Exception('No user logged in');
+    await _firestore.collection('users').doc(user!.uid).update({'role': role});
+  }
+
   Future<bool> signInAnonymously() async {
     try {
       await _auth.signInAnonymously();
@@ -61,9 +67,48 @@ class AuthService extends GetxService {
     }
   }
 
+  Future<void> createUserDocument(User user,
+      {String? name, Role role = Role.buyer}) async {
+    DocumentReference userDoc = _firestore.collection('users').doc(user.uid);
+    DocumentSnapshot snapshot = await userDoc.get();
+    if (!snapshot.exists) {
+      await userDoc.set({
+        'role': role.name,
+        'recentlyViewed': [],
+        'email': user.email,
+        'name': name ?? user.displayName ?? 'User',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    }
+  }
+
+  Future<AuthService> init() async {
+    await Future.delayed(Duration.zero);
+    return this;
+  }
+
+  Future<void> register(String email, String password, String name) async {
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await userCredential.user?.updateDisplayName(name);
+      await createUserDocument(userCredential.user!, name: name);
+      await sendEmailVerification();
+    } catch (e) {
+      throw Exception('Error registering: ${e.toString()}');
+    }
+  }
+
   Future<void> signIn(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await createUserDocument(userCredential.user!);
       Role userRole = await fetchUserRoleFromBackend();
       updateUserRole(userRole);
     } catch (e) {
@@ -83,6 +128,7 @@ class AuthService extends GetxService {
       );
 
       final userCredential = await _auth.signInWithCredential(credential);
+      await createUserDocument(userCredential.user!);
       final cartController = Get.find<CartController>();
       await cartController.mergeGuestCart();
       return userCredential;
@@ -101,17 +147,6 @@ class AuthService extends GetxService {
       _userRole.value = Role.buyer;
     } catch (e) {
       throw Exception('Error signing out: ${e.toString()}');
-    }
-  }
-
-  Future<void> register(String email, String password) async {
-    try {
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      registered.value = true;
-      await sendEmailVerification();
-    } catch (e) {
-      throw Exception('Error registering: ${e.toString()}');
     }
   }
 

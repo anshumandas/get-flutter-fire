@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_flutter_fire/app/routes/app_pages.dart';
 import '../../../widgets/screen_widget.dart';
 import '../../../../services/auth_service.dart';
 import '../controllers/cart_controller.dart';
@@ -17,30 +18,6 @@ class CartView extends GetView<CartController> {
         centerTitle: true,
       ),
       body: Obx(() {
-        if (!AuthService.to.isLoggedIn) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                    'Please log in or continue as a guest to view your cart.'),
-                ElevatedButton(
-                  onPressed: () async {
-                    bool success = await AuthService.to.signInAnonymously();
-                    if (success) {
-                      Get.snackbar('Success', 'Signed in as guest');
-                    }
-                  },
-                  child: const Text('Continue as Guest'),
-                ),
-                ElevatedButton(
-                  onPressed: () => Get.rootDelegate.toNamed(Screen.LOGIN.route),
-                  child: const Text('Log In'),
-                ),
-              ],
-            ),
-          );
-        }
         if (controller.cartItems.isEmpty) {
           return const Center(child: Text('Your cart is empty'));
         }
@@ -75,13 +52,33 @@ class CartView extends GetView<CartController> {
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   ElevatedButton(
-                    onPressed: controller.hasItems
-                        ? () {
-                            // TODO: Implement checkout functionality
-                            Get.snackbar(
-                                'Checkout', 'Proceeding to checkout...');
-                          }
-                        : null,
+                    onPressed: () {
+                      if (AuthService.to.isAnonymous) {
+                        Get.dialog(
+                          AlertDialog(
+                            title: Text('Login Required'),
+                            content:
+                                Text('Please login to proceed with checkout.'),
+                            actions: [
+                              TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () => Get.back(),
+                              ),
+                              ElevatedButton(
+                                child: Text('Login'),
+                                onPressed: () {
+                                  Get.back();
+                                  Get.toNamed(Routes.LOGIN);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        // Proceed with checkout
+                        Get.toNamed(Routes.CHECKOUT);
+                      }
+                    },
                     child: const Text('Checkout'),
                   ),
                 ],

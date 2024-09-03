@@ -6,6 +6,8 @@ import 'package:get_flutter_fire/app/modules/auth/email_link_auth.dart';
 import 'package:get_flutter_fire/app/modules/phone/controllers/phone_verification_controller.dart';
 import 'package:get_flutter_fire/app/modules/phone/views/phone_verification_view.dart';
 import 'package:get_flutter_fire/app/modules/security/two_factor_auth.dart';
+import 'package:get_flutter_fire/app/modules/welcome/bindings/welcome_binding.dart';
+import 'package:get_flutter_fire/app/modules/welcome/views/welcome_view.dart';
 import 'package:get_flutter_fire/app/widgets/password_reset.dart';
 
 import '../../models/access_level.dart';
@@ -52,7 +54,7 @@ part 'screen_extension.dart';
 class AppPages {
   AppPages._();
 
-  static final INITIAL = Routes.HOME;
+  static const INITIAL = Routes.WELCOME;
 
   static final routes = [
     GetPage(
@@ -62,6 +64,16 @@ class AppPages {
       participatesInRootNavigator: true,
       preventDuplicates: true,
       children: [
+        GetPage(
+          name: _Paths.WELCOME,
+          page: () => WelcomeView(),
+          binding: WelcomeBinding(),
+        ),
+        GetPage(
+          name: _Paths.HOME,
+          page: () => HomeView(),
+          binding: HomeBinding(),
+        ),
         GetPage(
           name: Screen.LOGIN.path,
           page: () => ScreenWidget(
@@ -133,7 +145,7 @@ class AppPages {
               name: Screen.PRODUCTS.path,
               page: () => ScreenWidget(
                 screen: Screen.PRODUCTS,
-                body: const ProductsView(),
+                body: ProductsView(),
               ),
               binding: ProductsBinding(),
               children: [
@@ -279,7 +291,7 @@ class AppPages {
             ),
             GetPage(
               name: Screen.PRODUCTS.path,
-              page: () => const ProductsView(),
+              page: () => ProductsView(),
               binding: ProductsBinding(),
             ),
           ],

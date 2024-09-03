@@ -26,6 +26,12 @@ class CartController extends GetxController {
     }
   }
 
+  Future<CartController> init() async {
+    // Perform any initialization here
+    await Future.delayed(Duration.zero); // Example delay, remove if not needed
+    return this;
+  }
+
   void _saveCart() {
     final userId = AuthService.to.user?.uid ?? 'guest';
     _storage.write(
