@@ -1,20 +1,84 @@
+import 'package:flutter/material.dart';
+import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 import 'package:get/get.dart';
-
-import '../../../../services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get_flutter_fire/app/modules/cart/controllers/cart_controller.dart';
+import 'package:get_flutter_fire/app/routes/app_pages.dart';
+import 'package:get_flutter_fire/services/auth_service.dart';
 
 class LoginController extends GetxController {
-  static AuthService get to => Get.find();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final RxBool isLoading = false.obs;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthService _authService = Get.find<AuthService>();
 
-  final Rx<bool> showReverificationButton = Rx(false);
+  @override
+  void onInit() {
+    super.onInit();
+    GRecaptchaV3.ready("6Ld2yDMqAAAAAEBDI749ZKIpUi_9P5sEnDqP0piw");
+  }
 
-  bool get isRobot => AuthService.to.robot.value == true;
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
 
-  set robot(bool v) => AuthService.to.robot.value = v;
+  Future<void> performLogin() async {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      Get.snackbar('Error', 'Please enter both email and password');
+      return;
+    }
 
-  bool get isLoggedIn => AuthService.to.isLoggedInValue;
+    isLoading.value = true;
+    try {
+      if (GetPlatform.isWeb) {
+        final result = await GRecaptchaV3.execute('login');
+        if (result == null) {
+          Get.snackbar('Error', 'reCAPTCHA verification failed');
+          return;
+        }
+      }
 
-  bool get isAnon => AuthService.to.isAnon;
+      await _authService.signIn(
+          emailController.text.trim(), passwordController.text.trim());
+      _navigateAfterLogin();
+    } catch (e) {
+      Get.snackbar('Error', 'Login failed: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
-  bool get isRegistered =>
-      AuthService.to.registered.value || AuthService.to.isEmailVerified;
+  void _navigateAfterLogin() {
+    final cartController = Get.find<CartController>();
+    if (cartController.hasItems) {
+      Get.offAllNamed(Routes.CART);
+    } else {
+      Get.offAllNamed(Routes.HOME);
+    }
+  }
+
+  void googleSignIn() async {
+    try {
+      await AuthService.to.signInWithGoogle();
+      _navigateAfterLogin();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    }
+  }
+
+  void navigateToRegister() {
+    Get.toNamed(Routes.REGISTER);
+  }
+
+  void navigateToEmailLinkAuth() {
+    Get.toNamed('/email-link-auth');
+  }
+
+  void navigateToResetPassword() {
+    Get.toNamed('/reset-password');
+  }
 }

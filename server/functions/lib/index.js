@@ -52,3 +52,44 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _ = __importStar(require("./auth"));
 exports.default = _;
 //# sourceMappingURL=index.js.map
+
+
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+const {onRequest} = functions.https;
+const {logger} = functions;
+
+admin.initializeApp();
+
+// Your existing functions here
+// For example:
+// exports.helloWorld = onRequest((request, response) => {
+//   logger.info("Hello logs!", {structuredData: true});
+//   response.send("Hello from Firebase!");
+// });
+
+exports.removeUnverifiedUsers = functions.pubsub.schedule('every 24 hours').onRun(async (context) => {
+  const userCreationThreshold = Date.now() - (7 * 24 * 60 * 60 * 1000); // 7 days ago
+
+  try {
+    const unverifiedUsers = await admin.auth().listUsers()
+      .then((listUsersResult) => {
+        return listUsersResult.users.filter(userRecord => 
+          !userRecord.emailVerified && 
+          userRecord.metadata.creationTime < userCreationThreshold
+        );
+      });
+
+    const deletePromises = unverifiedUsers.map(userRecord => 
+      admin.auth().deleteUser(userRecord.uid)
+    );
+
+    await Promise.all(deletePromises);
+
+    logger.info(`Successfully removed ${unverifiedUsers.length} unverified users.`);
+    return null;
+  } catch (error) {
+    logger.error('Error removing unverified users:', error);
+    return null;
+  }
+});

@@ -67,7 +67,7 @@ enum Screen implements ActionEnum {
       parent: CART,
       accessLevel: AccessLevel.authenticated),
   REGISTER('/register',
-      accessor_: AccessedVia.auto, accessLevel: AccessLevel.authenticated),
+      accessor_: AccessedVia.auto, accessLevel: AccessLevel.public),
   CATEGORIES('/categories',
       icon: Icons.category,
       label: "Categories",
@@ -100,6 +100,18 @@ enum Screen implements ActionEnum {
       icon: Icons.logout,
       label: "Logout",
       accessor_: AccessedVia.bottomSheet,
+      accessLevel: AccessLevel.authenticated),
+  PHONE_VERIFICATION('/phone-verification',
+      icon: Icons.phone,
+      label: "Verify Phone",
+      accessLevel: AccessLevel.authenticated),
+  TWO_FACTOR_AUTH('/two-factor-auth',
+      icon: Icons.security,
+      label: "Two-Factor Authentication",
+      accessLevel: AccessLevel.authenticated),
+  TWO_FACTOR_VERIFY('/two-factor-verify',
+      icon: Icons.security,
+      label: "Verify 2FA",
       accessLevel: AccessLevel.authenticated),
   ;
 
@@ -167,7 +179,7 @@ enum Screen implements ActionEnum {
   @override
   Future<dynamic> doAction() async {
     if (this == LOGOUT) {
-      AuthService.to.logout();
+      AuthService.to.signOut();
     }
     Get.rootDelegate.toNamed(route);
   }

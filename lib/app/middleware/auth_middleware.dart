@@ -1,92 +1,50 @@
-// ignore_for_file: avoid_print
 import 'package:get/get.dart';
-import 'package:get_flutter_fire/models/role.dart';
-import 'package:get_flutter_fire/services/auth_service.dart';
-import 'package:get_flutter_fire/app/routes/app_pages.dart';
+import 'package:get_flutter_fire/models/screens.dart';
+import '../../models/role.dart';
+import '../../services/auth_service.dart';
 
-Future<GetNavConfig?> loginVerify(bool check, GetNavConfig route,
-    Future<GetNavConfig?> Function(GetNavConfig) redirector) async {
-  final newRoute = route.location == Routes.LOGIN
-      ? Routes.LOGIN
-      : Routes.LOGIN_THEN(route.location);
-  if (check) {
-    return GetNavConfig.fromRoute(newRoute);
-  }
-
-  // Below could be used if the login was happening without verification.
-  // This will never get reached if server is sending error in login due to non verification
-  // With customClaims status == "creating", it will reach here for SignUp case only
-  if (!AuthService.to.isEmailVerified && !AuthService.to.registered.value) {
-    return GetNavConfig.fromRoute(route.location == Routes.REGISTER
-        ? Routes.REGISTER
-        : Routes.REGISTER_THEN(route.location));
-  }
-
-  return await redirector(route);
-}
-
-// class EnsureAuthMiddleware extends GetMiddleware {
-//   @override
-//   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
-//     // you can do whatever you want here
-//     // but it's preferable to make this method fast
-
-//     return await loginVerify(
-//         !AuthService.to.isLoggedInValue, route, super.redirectDelegate);
-//   }
-// }
-
-class EnsureNotAuthedOrGuestMiddleware extends GetMiddleware {
-  //AccessLevel.notAuthed
+class EnsureNotAuthedMiddleware extends GetMiddleware {
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
-    if (AuthService.to.isLoggedInValue && !AuthService.to.isAnon) {
-      //NEVER navigate to auth screen, when user is already authed
-      return GetNavConfig.fromRoute(
-          AuthService.to.registered.value ? Routes.HOME : Routes.REGISTER);
+    if (AuthService.to.isLoggedIn && !AuthService.to.user!.isAnonymous) {
+      return GetNavConfig.fromRoute(Screen.HOME.route);
     }
     return await super.redirectDelegate(route);
   }
 }
 
-class EnsureAuthedAndNotGuestMiddleware extends GetMiddleware {
-  //AccessLevel.authenticated
+class EnsureAuthedMiddleware extends GetMiddleware {
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
-    return await loginVerify(
-        !AuthService.to.isLoggedInValue || AuthService.to.isAnon,
-        route,
-        super.redirectDelegate);
+    if (!AuthService.to.isLoggedIn || AuthService.to.user!.isAnonymous) {
+      return GetNavConfig.fromRoute(Screen.LOGIN.route +
+          '?then=${Uri.encodeQueryComponent(route.location)}');
+    }
+    return await super.redirectDelegate(route);
   }
 }
 
 class EnsureRoleMiddleware extends GetMiddleware {
-  //AccessLevel.roleBased
-  Role role;
+  final Role role;
   EnsureRoleMiddleware(this.role);
 
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
-    if (!AuthService.to.isLoggedInValue || !AuthService.to.hasRole(role)) {
-      final newRoute = Routes.LOGIN_THEN(route.location);
-      return GetNavConfig.fromRoute(newRoute);
+    if (!AuthService.to.isLoggedIn || !AuthService.to.hasRole(role)) {
+      return GetNavConfig.fromRoute(Screen.LOGIN.route +
+          '?then=${Uri.encodeQueryComponent(route.location)}');
     }
     return await super.redirectDelegate(route);
   }
 }
 
 class EnsureAuthOrGuestMiddleware extends GetMiddleware {
-  //AccessLevel.guest
   @override
   Future<GetNavConfig?> redirectDelegate(GetNavConfig route) async {
-    // you can do whatever you want here
-    // but it's preferable to make this method fast
-    // In this case this is taking human input and is not fast
-
-    if (!AuthService.to.isLoggedInValue) {
-      bool? value = await AuthService.to.guest();
+    if (!AuthService.to.isLoggedIn) {
+      bool? value = await AuthService.to.signInAnonymously();
       if (value != true) {
-        return GetNavConfig.fromRoute(Routes.LOGIN);
+        return GetNavConfig.fromRoute(Screen.LOGIN.route);
       }
     }
     return await super.redirectDelegate(route);

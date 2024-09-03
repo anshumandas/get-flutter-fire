@@ -7,11 +7,8 @@ import '../../models/screens.dart';
 class ScreenWidget extends StatelessWidget {
   final Widget body;
   final Role? role;
-
   final GetDelegate? delegate;
-
   final GetNavConfig? currentRoute;
-
   final Screen screen;
   final AppBar? appBar;
 
@@ -27,31 +24,11 @@ class ScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int currentIndex =
-        role != null ? role!.getCurrentIndexFromRoute(currentRoute) : 0;
     Iterable<Screen> fabs = screen.fabs;
     return Scaffold(
       body: body,
       appBar: appBar,
-      bottomNavigationBar: (screen.navTabs.isNotEmpty)
-          ? BottomNavigationBar(
-              currentIndex: currentIndex,
-              onTap: (value) {
-                if (delegate != null) {
-                  role!.routeTo(value, delegate!);
-                }
-              },
-              items:
-                  role!.tabs //screen may have more navTabs but we need by role
-                      .map((Screen tab) => BottomNavigationBarItem(
-                            icon: Icon(tab.icon),
-                            label: tab.label,
-                          ))
-                      .toList(),
-            )
-          : null,
       floatingActionButton: fabs.isNotEmpty ? getFAB(fabs) : null,
-      // bottomSheet: //this is used for persistent bar like status bar
     );
   }
 
@@ -70,6 +47,6 @@ class ScreenWidget extends StatelessWidget {
               ),
       );
     }
-    return null; //TODO multi fab button on press
+    return null;
   }
 }

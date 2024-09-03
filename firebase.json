@@ -1,0 +1,56 @@
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "share-17159",
+          "configurations": {
+            "android": "1:863426682925:android:8a493daac20edb26cc98a4",
+            "ios": "1:863426682925:ios:2a41661b56916a73cc98a4",
+            "macos": "1:863426682925:ios:2a41661b56916a73cc98a4",
+            "web": "1:863426682925:web:d44824663b3493c1cc98a4"
+          }
+        }
+      },
+      "android": {
+        "default": {
+          "projectId": "share-17159",
+          "appId": "1:863426682925:android:8a493daac20edb26cc98a4",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "share-17159",
+          "appId": "1:863426682925:ios:2a41661b56916a73cc98a4",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "share-17159",
+          "appId": "1:863426682925:ios:2a41661b56916a73cc98a4",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}

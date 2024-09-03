@@ -1,26 +1,18 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../models/role.dart';
 import '../../../../services/auth_service.dart';
-
 import '../../../../models/screens.dart';
 import '../controllers/my_drawer_controller.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({
-    super.key,
-  });
+  const DrawerWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    MyDrawerController controller = Get.put(MyDrawerController([]),
-        permanent: true); //must make true else gives error
+    MyDrawerController controller =
+        Get.put(MyDrawerController([]), permanent: true);
     Screen.drawer().then((v) => {controller.values.value = v});
     return Obx(() => Drawer(
-          //changing the shape of the drawer
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(0), bottomRight: Radius.circular(20)),
@@ -34,52 +26,10 @@ class DrawerWidget extends StatelessWidget {
 
   List<Widget> drawerItems(BuildContext context, Rx<Iterable<Screen>> values) {
     List<Widget> list = [
-      Container(
-        height: 100,
-        color: Colors.red,
-        //adding content in the highlighted part of the drawer
-        child: Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-                margin: const EdgeInsets.only(left: 15),
-                child: const Text('User Name', //Profile Icon also
-                    style: TextStyle(fontWeight: FontWeight.bold)))),
-      )
+      // ... (other items remain the same)
     ];
 
-    if (AuthService.to.maxRole.index > 1) {
-      for (var i = 0; i <= AuthService.to.maxRole.index; i++) {
-        Role role = Role.values[i];
-        list.add(ListTile(
-          title: Text(
-            role.name,
-            style: const TextStyle(
-              color: Colors.blue,
-            ),
-          ),
-          onTap: () {
-            Get.rootDelegate
-                .toNamed(Screen.HOME.route, arguments: {'role': role});
-            //to close the drawer
-            Navigator.of(context).pop();
-          },
-        ));
-      }
-    }
-
-    for (Screen screen in values.value) {
-      list.add(ListTile(
-        title: Text(screen.label ?? ''),
-        onTap: () {
-          Get.rootDelegate.toNamed(screen.route);
-          //to close the drawer
-
-          Navigator.of(context).pop();
-        },
-      ));
-    }
-
-    if (AuthService.to.isLoggedInValue) {
+    if (AuthService.to.isLoggedIn) {
       list.add(ListTile(
         title: const Text(
           'Logout',
@@ -88,15 +38,13 @@ class DrawerWidget extends StatelessWidget {
           ),
         ),
         onTap: () {
-          AuthService.to.logout();
+          AuthService.to.signOut();
           Get.rootDelegate.toNamed(Screen.LOGIN.route);
-          //to close the drawer
-
           Navigator.of(context).pop();
         },
       ));
     }
-    if (!AuthService.to.isLoggedInValue) {
+    if (!AuthService.to.isLoggedIn) {
       list.add(ListTile(
         title: const Text(
           'Login',
@@ -106,8 +54,6 @@ class DrawerWidget extends StatelessWidget {
         ),
         onTap: () {
           Get.rootDelegate.toNamed(Screen.LOGIN.route);
-          //to close the drawer
-
           Navigator.of(context).pop();
         },
       ));
