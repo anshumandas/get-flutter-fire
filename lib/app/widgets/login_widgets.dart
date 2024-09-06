@@ -1,13 +1,9 @@
-// ignore_for_file: inference_failure_on_function_invocation
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../services/auth_service.dart';
 import '../../models/screens.dart';
-import '../../services/remote_config.dart';
 import 'menu_sheet_button.dart';
-import 'remotely_config.dart';
 
 class LoginWidgets {
   static Widget headerBuilder(context, constraints, shrinkOffset) {
@@ -69,7 +65,7 @@ class LoginBottomSheetToggle extends MenuSheetButton<Screen> {
           : 'Click for Options'
       : 'Login';
 
- @override
+  @override
   void buttonPressed(Iterable<Screen> values) async => values.isEmpty
       ? callbackFunc(await Screen.LOGOUT.doAction())
       : super.buttonPressed(values);
@@ -79,23 +75,21 @@ class LoginBottomSheetToggle extends MenuSheetButton<Screen> {
     MenuItemsController<Screen> controller =
         MenuItemsController<Screen>(const Iterable<Screen>.empty());
     return Obx(() => (AuthService.to.isLoggedInValue)
-        ? RemotelyConfigObx(
-            () => builder(context, vals: controller.values.value),
-            controller,
-            Screen.sheet,
-            Screen.NONE,
-            "useBottomSheetForProfileOptions",
-            Typer.boolean,
-          )
+        ? builder(context, vals: controller.values.value)
         : !(current.currentPage!.name == Screen.LOGIN.path)
             ? IconButton(
                 onPressed: () async {
                   await Screen.LOGIN.doAction();
-                  // controller.toggle(Screen.LOGIN);
                 },
                 icon: Icon(Screen.LOGIN.icon),
                 tooltip: Screen.LOGIN.label,
               )
-            : const SizedBox.shrink()); //should be only for loggedin case
+            : const SizedBox.shrink());
+  }
+
+  Widget builder(BuildContext context, {Iterable<Screen>? vals}) {
+    // Implement the logic that was previously handled by `RemotelyConfigObx`
+    // You might want to directly use GetX or another method to retrieve and handle configuration
+    return SizedBox.shrink(); // Replace with actual implementation
   }
 }

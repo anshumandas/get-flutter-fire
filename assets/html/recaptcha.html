@@ -5,11 +5,9 @@
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <script>
     function onCaptchaSuccess(response) {
-      if (window.flutter_inappwebview) {
-        window.flutter_inappwebview.callHandler('onCaptchaSuccess', response);
-      }
+      window.parent.postMessage({ type: 'captchaSuccess', token: response }, '*');
     }
-    
+
     function renderCaptcha() {
       grecaptcha.render('recaptcha-container', {
         'sitekey': '6LdiBy0qAAAAACWskj0kHMZPXF2AwJUx4NeZhyyZ',

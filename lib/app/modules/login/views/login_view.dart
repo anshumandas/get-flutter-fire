@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../firebase_options.dart';
@@ -8,12 +9,20 @@ import '../../../../models/screens.dart';
 import '../../../widgets/login_widgets.dart';
 import '../controllers/login_controller.dart';
 
+import '../../../widgets/captcha_web.dart' if (dart.library.io) '../../../widgets/captcha.dart';
+
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => loginScreen(context));
+    return Obx(() {
+      if (kIsWeb && !controller.isCaptchaVerified.value) {
+        return Captcha((token) => controller.verifyCaptcha(token));
+      } else {
+        return loginScreen(context);
+      }
+    });
   }
 
   Widget subtitleBuilder(context, action) {
