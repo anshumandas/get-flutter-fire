@@ -84,7 +84,7 @@ class EnsureAuthOrGuestMiddleware extends GetMiddleware {
     // In this case this is taking human input and is not fast
 
     if (!AuthService.to.isLoggedInValue) {
-      bool? value = await AuthService.to.guest();
+      bool? value = await AuthService.to.checkGuestStatus();
       if (value != true) {
         return GetNavConfig.fromRoute(Routes.LOGIN);
       }

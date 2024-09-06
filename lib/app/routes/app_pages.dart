@@ -51,7 +51,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: '/',
-      page: () => const RootView(),
+      page: () => RootView(),
       binding: RootBinding(),
       participatesInRootNavigator: true,
       preventDuplicates: true,
@@ -109,13 +109,13 @@ class AppPages {
               binding: CategoriesBinding(),
             ),
             Screen.CART.getPage(
-              page: () => const CartView(),
+              page: () => CartView(),
               binding: CartBinding(),
               role: Role.buyer,
               children: [
                 Screen.CHECKOUT.getPage(
                   //if this is after cart details, it never gets reached
-                  page: () => const CheckoutView(),
+                  page: () => CheckoutView(),
                   binding: CheckoutBinding(),
                 ),
                 Screen.CART_DETAILS.getPages(

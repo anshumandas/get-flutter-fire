@@ -21,7 +21,7 @@ class HomeView extends GetView<HomeController> {
           screen: screen!,
           body: GetRouterOutlet(
             initialRoute: route,
-            // anchorRoute: Routes.HOME,
+            anchorRoute: Routes.HOME,
             key: Get.nestedKey(route),
           ),
           role: controller.chosenRole.value,

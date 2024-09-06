@@ -5,7 +5,6 @@ import '../../models/action_enum.dart';
 
 class MenuItemsController<T extends ActionEnum> extends GetxController {
   MenuItemsController(Iterable<T> iter) : values = Rx<Iterable<T>>(iter);
-
   final Rx<Iterable<T>> values;
 }
 
@@ -18,7 +17,7 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
       {super.key,
       this.values_,
       this.icon,
-      this.label}); //passing scaffoldKey means that bottomSheet is added to it
+      this.label});
 
   Iterable<T> get values => values_!;
 
@@ -28,7 +27,6 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
       height: 180,
       width: Get.mediaQuery.size.width,
       child: ListView(
-        // mainAxisAlignment: MainAxisAlignment.center,
         children: values
             .map(
               (ActionEnum value) => ListTile(
@@ -54,7 +52,7 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
 
   PopupMenuEntry<T> createPopupMenuItem(dynamic value) => PopupMenuItem<T>(
         value: value,
-        child: Text(value.label ?? ''), //TODO add Icon
+        child: Text(value.label ?? ''),
       );
 
   @override
@@ -62,12 +60,10 @@ class MenuSheetButton<T extends ActionEnum> extends StatelessWidget {
     return builder(context);
   }
 
-//This should be a modal bottom sheet if on Mobile (See https://mercyjemosop.medium.com/select-and-upload-images-to-firebase-storage-flutter-6fac855970a9)
   Widget builder(BuildContext context, {Iterable<T>? vals}) {
     Iterable<T> values = vals ?? values_!;
-    return values.length == 1 ||
+    return values.length <= 1 ||
             Get.mediaQuery.orientation == Orientation.portrait
-        // : Get.context!.isPortrait
         ? (icon != null
             ? IconButton(
                 onPressed: () => buttonPressed(values),
