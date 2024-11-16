@@ -4,10 +4,17 @@ This codebase provides a boilerplate code utilizing the following three technolo
 
 1. Flutter 3.0 - For UX and uses Dart languange. See [https://flutter.dev/]
 2. GetX - State management for Flutter. See [https://github.com/jonataslaw/getx/tree/4.6.1]
-3. Firebase - For Backend as a Service. See [https://firebase.google.com/]
+3. TODO Typescript Express as API server
+
+   1. with user API and lifecycle.
+   2. See [https://github.com/edwinhern/express-typescript-2024]
+   3. Uses Zod for run time type safety
+4. Firebase - For Backend as a Service. See [https://firebase.google.com/]
+
    1. Easy Authentication flow
-   2. Server side functions
+   2. Server side functions that integrates the Express API server
    3. Remote Configurations which can be used for A/B testing
+5. TODO CLI based on https://oclif.io/ with https://github.com/SBoudrias/Inquirer.js to generate both Flutter and Typescript code for the models.
 
 This was created as part of my own learning process and you will find that git commits were made according to the Steps listed below. You can use the git version history to check each commit and learn step by step, as I did.
 

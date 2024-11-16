@@ -3,7 +3,13 @@
     "development"
   ],
   "hints": {
-    "disown-opener": "off",
+    "meta-viewport": "off",
+    "axe/language": [
+      "default",
+      {
+        "html-has-lang": "off"
+      }
+    ],
     "typescript-config/consistent-casing": "off",
     "typescript-config/strict": "off"
   }

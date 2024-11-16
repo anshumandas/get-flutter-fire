@@ -1,4 +1,8 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",    
+    "eslint.workingDirectories": [
+        "./server/express",
+        "./server/firebase/functions",
+    ]
 }

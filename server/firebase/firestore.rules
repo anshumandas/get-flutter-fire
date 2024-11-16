@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // disallowing all client access as we are accessing via admin api only
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
