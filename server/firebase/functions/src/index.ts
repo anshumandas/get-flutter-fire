@@ -13,15 +13,18 @@ import {config} from "./config";
 import * as admin from "firebase-admin";
 admin.initializeApp(config);
 
-import {addUser, beforeSignIn, beforeUserCreated} from "./auth";
+import {addUser, beforeSignIn, beforeUserCreated, checkIfAuthenticated} from "./auth";
 import {https} from "firebase-functions";
 import {express} from "myserver/dist/index";
 import {listeners} from "./firestore";
 
+// add auth middleware to app
+// express.use(checkIfAuthenticated); // this is not getting called
+express.set("checkIfAuthenticated", checkIfAuthenticated);
+
 const app = https.onRequest(express);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const exps:{[key:string]:any} = {
+export {
   app,
   addUser,
   beforeSignIn,
@@ -32,8 +35,7 @@ const exps:{[key:string]:any} = {
 for (const key in listeners) {
   if (Object.prototype.hasOwnProperty.call(listeners, key)) {
     const element = listeners[key];
-    exps[key] = element;
+    exports[key] = element;
   }
 }
 
-export const e = exps;

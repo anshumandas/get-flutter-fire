@@ -6,34 +6,35 @@ import { UserRepository } from "@/api/user/userRepository";
 import { UserService } from "@/api/user/userService";
 import { State, EntryAction } from "@/common/models/enums";
 
-vi.mock("@/api/user/userRepository");
+vi.mock("@/api/user/userRepository"); //This allows testing without actual Database
+export const users = [
+  {      
+    id: "AA",
+    name: "Alice",
+    on: new Date(),
+    type: "User",
+    version: 0,
+    status: State.NEW,
+    by: "0ADMIN",
+    action: EntryAction.CREATE
+  },
+  {
+    id: "BX",
+    name: "Bob",
+    on: new Date(),
+    type: "User",
+    version: 0,
+    status: State.NEW,
+    by: "0ADMIN",
+    action: EntryAction.CREATE
+  },
+];
 
 describe("userService", () => {
   let userServiceInstance: UserService;
   let userRepositoryInstance: UserRepository;
 
-  const mockUsers: User[] = [
-    {      
-      id: "AA",
-      name: "Alice",
-      on: new Date(),
-      type: "User",
-      version: 0,
-      status: State.NEW,
-      by: "0ADMIN",
-      action: EntryAction.CREATE
-    },
-    {
-      id: "BX",
-      name: "Bob",
-      on: new Date(),
-      type: "User",
-      version: 0,
-      status: State.NEW,
-      by: "0ADMIN",
-      action: EntryAction.CREATE
-    },
-  ];
+  const mockUsers: User[] = users;
 
   beforeEach(() => {
     userRepositoryInstance = new UserRepository();

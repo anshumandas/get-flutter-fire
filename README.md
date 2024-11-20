@@ -1,12 +1,12 @@
 # get-flutter-fire
 
-This codebase provides a boilerplate code utilizing the following three technologies:
+This codebase provides a boilerplate code utilizing the following five technologies:
 
 1. Flutter 3.0 - For UX and uses Dart languange. See [https://flutter.dev/]
 2. GetX - State management for Flutter. See [https://github.com/jonataslaw/getx/tree/4.6.1]
-3. TODO Typescript Express as API server
+3. Typescript Express as API server
 
-   1. with user API and lifecycle.
+   1. With user API and lifecycle.
    2. See [https://github.com/edwinhern/express-typescript-2024]
    3. Uses Zod for run time type safety
 4. Firebase - For Backend as a Service. See [https://firebase.google.com/]
@@ -16,15 +16,24 @@ This codebase provides a boilerplate code utilizing the following three technolo
    3. Remote Configurations which can be used for A/B testing
 5. TODO CLI based on https://oclif.io/ with https://github.com/SBoudrias/Inquirer.js to generate both Flutter and Typescript code for the models.
 
+## Motivation
+
 This was created as part of my own learning process and you will find that git commits were made according to the Steps listed below. You can use the git version history to check each commit and learn step by step, as I did.
 
-I am also using this codebase as an experiment towards hiring people (freshers especially but not limited to them) for my development team. If you are in Mumbai and are interested to join my team, you can use this codebase in the following manner:
+I also used this codebase as an experiment towards hiring freshers for my development team. I got great response and several of the PRs are from that process.
+If you are in Mumbai and are interested to join my team, you can still use this codebase in the following manner:
 
 * Fork the codebase
 * Add your own firebase_options.dart (follow steps and see firebase_options.template)
 * **Build your own application using this as a base (integrating any existing project of yours also works)**, or complete a TODO or fix a bug (only if you have no other ideas)
 * Send me a Pull Request. Mention a way of connecting with you in the commit message along with details of commit. Also modify ReadMe to say what you have changed in detail.
 * I will go through the request and then connect with you if I find the entry to be interesting and take an interview round.
+
+## Architecture Note
+
+This first started as Flutter frontend (including GetX framework) with Firebase backend and frontend calling Firebase directly via its client SDKs
+
+Now it is evolving as Flutter frontend with Express backend that runs on Firebase. The code is thus structured to allow decoupling from Firebase in case a different Cloud provider is required in future.
 
 ## The Steps
 
@@ -73,6 +82,11 @@ Step 7: Additional Auth flow items
 4. TODO: Add Phone verification [https://firebase.google.com/docs/auth/flutter/phone-auth]
    * See [https://github.com/firebase/flutterfire/issues/4189].
 5. TODO: Add 2FA with SMS Pin. This screen is available in the Flutter Fire package
+6. TODO: Other items
+   * TODO: Remove Firebase from Flutter client and use just Express API for all backend interactiosn
+   * TODO: Remove FlutterFire & Make own login flow screens
+   * TODO: Using autocomplete for emails is throwing error log in terminal. No impact but need to fix when all is done.
+   * TODO: Add a job that removes all unverified users after a while automatically. This could be useful if you were victim of bot attacks, but adding the Recaptcha is better precaution. See [https://stackoverflow.com/questions/67148672/how-to-delete-unverified-e-mail-addresses-in-firebase-authentication-flutter/67150606#67150606]
 
 Step 8: Add Firebase Emulator to test on laptop instead of server so that we can use Functions without upgrading the plan to Blaze. See [https://firebase.google.com/docs/emulator-suite/install_and_configure]
 
@@ -95,11 +109,7 @@ Step 9: Add User Roles using Custom Claims. This requires upgrade of plan as we 
      * Approach 2 - (Hack) send a create request with suffix ".verify" added in email when button clicked. Use the server side beforeCreate to catch this and send verification mail
        * Note that the Server side beforeCreate function can also bypass user creation till verification but the user record (esp password) needs to be stored anyways, so bypassing user creation is not a good idea. Instead, we should use the verified tag in subsequent processing
        * Sending emails from server side is possible but by using the web client SDK.
-5. TODO: Other Items
-
-   * TODO: Using autocomplete for emails is throwing error log in terminal. No impact but need to fix when all is done.
-   * TODO: Add a job that removes all unverified users after a while automatically. This could be useful if you were victim of bot attacks, but adding the Recaptcha is better precaution. See [https://stackoverflow.com/questions/67148672/how-to-delete-unverified-e-mail-addresses-in-firebase-authentication-flutter/67150606#67150606]
-6. Added Roles of Buyer and Seller.
+5. Added Roles of Buyer and Seller.
 
    1. Added Access level in increasing order of role order => Buyer then Seller then Admin
    2. Created Navigation for each of Admin, Buyer, Seller screens
@@ -113,7 +123,7 @@ Step 10: Firebase Remote Config for A/B testing. See [https://firebase.google.co
    * True: Hamburger that opens BottomSheet (Context Menu in larger screen) for the same options
 3. TODO: Config for adding Search Bar at the Top vs a Bottom Navigation button
 
-Step 11: TODO: CRUD
+Step 11: TODO: CRUD with Express
 
 * Users request role upgrade
 * Add this request data to Firebase Datastore
@@ -135,5 +145,3 @@ Step 13: TODO: Large vs Small screen responsiveness
 * Search Bar (Toggle Button for phones) on Top Center with Title
 * Status Bottom Bar for desktops only instead of SnackBars
 * FAB vs Main Menu
-
-Step 14: TODO: Make own login flow screens. Remove firebase library reference from all but auth_service

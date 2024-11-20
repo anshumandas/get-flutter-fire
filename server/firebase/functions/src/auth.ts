@@ -116,16 +116,6 @@ export const beforeSignIn = functionAuth.user().beforeSignIn((user, _context) =>
   return {};
 });
 
-// TODO: use the below to verify auth token before any CRUD requests in a middleware
-export const verifyIdToken = function(idToken: string) {
-  adminAuth.verifyIdToken(idToken).then((decodedToken) => {
-    if (decodedToken.email_verified) {
-      // Email verified. Grant access.
-    } else {
-      // Email not verified. Ask user to verify email in error response
-    }
-  });
-};
 /**
  * Used to send email from server side
  * @param {*} user
@@ -188,3 +178,67 @@ async function sendCustomVerificationEmail(_email?: string, _link?: string, _loc
   // TODO use nodemailer etc. This will not use Firebase templates
   // We could also see https://canopas.com/how-to-send-emails-using-cloud-functions-firestore-firebase-send-email-ff4702a16fef
 }
+
+import {NextFunction, Request, RequestHandler, Response} from "express";
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    export interface Request {
+      authToken?: string;
+      authId?: string;
+    }
+  }
+}
+
+const getAuthToken = (req: Request, res: Response, next: NextFunction) => {
+  if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
+    req.authToken = req.headers.authorization.split(" ")[1];
+  } else {
+    req.authToken = undefined;
+  }
+  next();
+};
+
+export const checkIfAuthenticated: RequestHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  getAuthToken(req, res, async () => {
+    try {
+      const {authToken} = req;
+      if (authToken) { // this is null if no login
+        const userInfo = await adminAuth.verifyIdToken(authToken);
+        console.log(userInfo);
+        if (userInfo.email_verified) {
+          // Email verified. Grant access.
+          req.authId = userInfo.uid;
+        } else {
+          // Email not verified. Ask user to verify email in error response
+          return res.status(401).send({error: "You are not authorized to make this request"});
+        }
+        return next();
+      } else return res.status(401).send({error: "You are not authorized to make this request"});
+    } catch (e) {
+      return res.status(401).send({error: "You are not authorized to make this request"});
+    }
+  });
+};
+
+export const checkIfAdmin = (req: Request, res: Response, next: NextFunction) => {
+  getAuthToken(req, res, async () => {
+    try {
+      const {authToken} = req;
+      if (authToken) {
+        const userInfo = await adminAuth.verifyIdToken(authToken);
+        if (userInfo.admin === true) {
+          req.authId = userInfo.uid;
+          return next();
+        }
+      }
+    } catch (e) {
+      return res.status(401).send({error: "You are not authorized to make this request"});
+    }
+  });
+};

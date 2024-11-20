@@ -37,4 +37,10 @@ app.use("/users", userRouter);
 // Error handlers
 app.use(errorHandler());
 
+// Remove tracking
+app.disable('x-powered-by'); // See https://expressjs.com/en/advanced/best-practice-security.html
+
+// we can add auth middleware to app in the Firestore specific code after importing.
+// we can also use set authMiddleware such that we can use it in Routers individually instead
+
 export { app, logger };

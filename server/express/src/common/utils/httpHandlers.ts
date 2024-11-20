@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from "express";
+import type {NextFunction, Request, Response} from "express";
 import { StatusCodes } from "http-status-codes";
 import type { ZodError, ZodSchema } from "zod";
 
@@ -18,4 +18,13 @@ export const validateRequest = (schema: ZodSchema) => (req: Request, res: Respon
     const serviceResponse = ServiceResponse.failure(errorMessage, null, statusCode);
     return handleServiceResponse(serviceResponse, res);
   }
+};
+
+export const authorize = (schemaId: string) => (req: Request, res: Response, next: NextFunction) => {
+  // TODO: use Schema ID to check if public data
+  var app = req.app;
+  const func = app.get("checkIfAuthenticated");
+  console.log(func);
+  if (func) func(req, res, next);
+  else next();
 };
